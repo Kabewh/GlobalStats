@@ -1,7 +1,24 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 
 const Homepage = () => {
+    const LOCALHOST = "http://localhost:8000/"
+
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        fetch(LOCALHOST)
+            .then(response => {
+                console.log(response.json())
+                response.json()
+            })
+            .then(data => {
+                console.log(data)
+                setData(data)
+            })
+            .catch(error => console.error(error));
+    }, []);
+
     return (
         <>
             <Navbar />
@@ -14,37 +31,7 @@ const Homepage = () => {
                         <h2 className='c-title'><a href='/demographic'>Demographic</a></h2>
                         <div className="info-item">
                             <h3>Current World Population</h3>
-                            <p>8,030,257,086</p>
-                        </div>
-                        <div className="info-item">
-                            <h3>Births Today</h3>
-                            <p>102,639</p>
-                        </div>
-                        <div className="info-item">
-                            <h3>Deaths Today</h3>
-                            <p>102,235</p>
-                        </div>
-                    </div>
-                    <div className="grid-item">
-                        <h2 className='c-title'><a href='#'>Demographic</a></h2>
-                        <div className="info-item">
-                            <h3>Current World Population</h3>
-                            <p>8,030,257,086</p>
-                        </div>
-                        <div className="info-item">
-                            <h3>Births Today</h3>
-                            <p>102,639</p>
-                        </div>
-                        <div className="info-item">
-                            <h3>Deaths Today</h3>
-                            <p>102,235</p>
-                        </div>
-                    </div>
-                    <div className="grid-item">
-                        <h2 className='c-title'><a href='#'>Demographic</a></h2>
-                        <div className="info-item">
-                            <h3>Current World Population</h3>
-                            <p>8,030,257,086</p>
+                            <p>{data}</p>
                         </div>
                         <div className="info-item">
                             <h3>Births Today</h3>
@@ -56,7 +43,7 @@ const Homepage = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     )
 }
