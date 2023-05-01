@@ -4,20 +4,28 @@ import Navbar from '../components/Navbar'
 const Homepage = () => {
     const LOCALHOST = "http://localhost:8000/"
 
-    const [data, setData] = useState([]);
+    const [population, setPopulation] = useState([]);
+    const [birthsToday, setBirthsToday] = useState([]);
 
     useEffect(() => {
-        fetch(LOCALHOST)
-            .then(response => {
-                console.log(response.json())
-                response.json()
-            })
-            .then(data => {
-                console.log(data)
-                setData(data)
-            })
-            .catch(error => console.error(error));
+        fetchPopulation()
+        fetchBirthsToday()
     }, []);
+
+
+
+    async function fetchPopulation() {
+        const response = await fetch(LOCALHOST + "/population")
+        const jsonData = await response.json()
+        setPopulation(JSON.stringify(jsonData))
+    }
+
+    async function fetchBirthsToday() {
+        const response = await fetch(LOCALHOST + "/birthsToday")
+        console.log(response)
+        const jsonData = await response.json()
+        setBirthsToday(JSON.stringify(jsonData))
+    }
 
     return (
         <>
@@ -31,11 +39,11 @@ const Homepage = () => {
                         <h2 className='c-title'><a href='/demographic'>Demographic</a></h2>
                         <div className="info-item">
                             <h3>Current World Population</h3>
-                            <p>{data}</p>
+                            <p>{population}</p>
                         </div>
                         <div className="info-item">
                             <h3>Births Today</h3>
-                            <p>102,639</p>
+                            <p>{birthsToday}</p>
                         </div>
                         <div className="info-item">
                             <h3>Deaths Today</h3>
