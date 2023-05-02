@@ -8,11 +8,13 @@ import json
 
 def getPopulation(request):
     population = api.current_world_population()['current_world_population']
-    print(population)
     return HttpResponse(json.dumps(population))
 
 def getBirthsToday(request):
     birthsToday = api.births_today()['births_today']
-    # birthsTodayNumber = births_today['']
     print(birthsToday)
     return HttpResponse(json.dumps(birthsToday))
+
+def getDeathsToday(request):
+    deathsToday = api.deaths_today()['deaths_today']
+    return HttpResponse(json.dumps(deathsToday))

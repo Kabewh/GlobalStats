@@ -6,26 +6,49 @@ const Homepage = () => {
 
     const [population, setPopulation] = useState([]);
     const [birthsToday, setBirthsToday] = useState([]);
+    const [simulatedPopulation, setSimulatedPopulation] = useState([]);
+    // const [birthRate, setBirthRate] = useState(0);
+    // const [deathRate, setDeathRate] = useState([]);
+    const birthRate = 0.018;
+    const deathRate = 0.008;
+    var i = 0;
 
     useEffect(() => {
         fetchPopulation()
         fetchBirthsToday()
+        // calculateBirthRate()
+        simulatePopulation()
+        setInterval(() => {
+            simulatePopulation();
+        }, 1001);
     }, []);
-
-
 
     async function fetchPopulation() {
         const response = await fetch(LOCALHOST + "/population")
         const jsonData = await response.json()
         setPopulation(JSON.stringify(jsonData))
+        setSimulatedPopulation(jsonData);
     }
 
     async function fetchBirthsToday() {
         const response = await fetch(LOCALHOST + "/birthsToday")
-        console.log(response)
         const jsonData = await response.json()
         setBirthsToday(JSON.stringify(jsonData))
     }
+
+    // function calculateBirthRate() {
+    //     const rate = (birthsToday / population) * 1000;
+    //     setBirthRate(rate.toFixed(2));
+    // }
+
+    function simulatePopulation() {
+        const netGrowthRate = birthRate - deathRate;
+        const changePerSecond = netGrowthRate * simulatedPopulation / (365 * 24 * 60 * 60);
+        setSimulatedPopulation(simulatedPopulation => simulatedPopulation + Math.round(changePerSecond));
+        console.log(simulatedPopulation)
+
+    }
+
 
     return (
         <>
@@ -39,7 +62,7 @@ const Homepage = () => {
                         <h2 className='c-title'><a href='/demographic'>Demographic</a></h2>
                         <div className="info-item">
                             <h3>Current World Population</h3>
-                            <p>{population}</p>
+                            <p>{simulatedPopulation}</p>
                         </div>
                         <div className="info-item">
                             <h3>Births Today</h3>
@@ -47,7 +70,7 @@ const Homepage = () => {
                         </div>
                         <div className="info-item">
                             <h3>Deaths Today</h3>
-                            <p>102,235</p>
+                            <p>{"102235"}</p>
                         </div>
                     </div>
                 </div>
