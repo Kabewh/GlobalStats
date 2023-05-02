@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
+import { json } from 'react-router-dom';
 
 const Homepage = () => {
     const LOCALHOST = "http://localhost:8000/"
 
     const [population, setPopulation] = useState([]);
-    const [birthsToday, setBirthsToday] = useState([]);
-    const [simulatedPopulation, setSimulatedPopulation] = useState();
+    const [birthsToday, setBirthsToday] = useState(0);
+    const [simulatedPopulation, setSimulatedPopulation] = useState(0);
     // const [birthRate, setBirthRate] = useState(0);
     // const [deathRate, setDeathRate] = useState([]);
 
@@ -19,12 +20,9 @@ const Homepage = () => {
         fetchBirthsToday()
         calculateChangeRate()
         // calculateBirthRate()
-        console.log("end of useEffect")
+        calculateBirthsToday()
     }, []);
 
-    const delay = ms => new Promise(
-        resolve => setTimeout(resolve, ms)
-    );
 
     async function fetchPopulation() {
         const response = await fetch(LOCALHOST + "/population")
@@ -39,20 +37,44 @@ const Homepage = () => {
         setBirthsToday(JSON.stringify(jsonData))
     }
 
-    // function calculateBirthRate() {
-    //     const rate = (birthsToday / population) * 1000;
-    //     setBirthRate(rate.toFixed(2));
-    // }
+    async function calculateBirthsToday() {
+        const response = await fetch(LOCALHOST + "/birthsToday")
+        const jsonData = await response.json()
+        const factor = 1000;
+        const pop = 8030786410;
+        const births = 44757521;
+        setInterval(() => {
+            const changePerSecond = ((births / pop) * factor) / 2;
+            const rounded = changePerSecond.toFixed(2)
+            const intChangePerSecond = parseInt(rounded)
+            const pisamas = Math.round(intChangePerSecond)
+            setBirthsToday(jsonData => parseInt(jsonData) + pisamas);
+        }, 1000)
+    }
 
     async function calculateChangeRate() {
         const response = await fetch(LOCALHOST + "/population")
         const jsonData = await response.json()
         setInterval(() => {
+            // console.log("birthrate: " + birthRate)
+            // console.log("deathrate: " + deathRate)
             const netGrowthRate = birthRate - deathRate;
+            // console.log("netGrowthRRate: " + netGrowthRate);
             const changePerSecond = netGrowthRate * jsonData / (365 * 24 * 60 * 60);
             setSimulatedPopulation(jsonData => jsonData + Math.round(changePerSecond));
         }, 1000)
     }
+    // async function calculateBirthRate() {
+    //     const response = await fetch(LOCALHOST + "/birthsToday")
+    //     const jsonData = await response.json()
+
+    //     const responsePop = await fetch(LOCALHOST + "/population")
+    //     const jsonDataPop = await responsePop.json()
+
+    //     const rate = (jsonData / jsonDataPop) / 1000;
+    //     setBirthRate(rate);
+
+    // }
 
     return (
         <>
