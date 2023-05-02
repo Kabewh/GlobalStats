@@ -6,9 +6,10 @@ const Homepage = () => {
 
     const [population, setPopulation] = useState([]);
     const [birthsToday, setBirthsToday] = useState([]);
-    const [simulatedPopulation, setSimulatedPopulation] = useState([]);
+    const [simulatedPopulation, setSimulatedPopulation] = useState();
     // const [birthRate, setBirthRate] = useState(0);
     // const [deathRate, setDeathRate] = useState([]);
+
     const birthRate = 0.018;
     const deathRate = 0.008;
     var i = 0;
@@ -16,12 +17,14 @@ const Homepage = () => {
     useEffect(() => {
         fetchPopulation()
         fetchBirthsToday()
+        calculateChangeRate()
         // calculateBirthRate()
-        simulatePopulation()
-        setInterval(() => {
-            simulatePopulation();
-        }, 1001);
+        console.log("end of useEffect")
     }, []);
+
+    const delay = ms => new Promise(
+        resolve => setTimeout(resolve, ms)
+    );
 
     async function fetchPopulation() {
         const response = await fetch(LOCALHOST + "/population")
@@ -41,14 +44,15 @@ const Homepage = () => {
     //     setBirthRate(rate.toFixed(2));
     // }
 
-    function simulatePopulation() {
-        const netGrowthRate = birthRate - deathRate;
-        const changePerSecond = netGrowthRate * simulatedPopulation / (365 * 24 * 60 * 60);
-        setSimulatedPopulation(simulatedPopulation => simulatedPopulation + Math.round(changePerSecond));
-        console.log(simulatedPopulation)
-
+    async function calculateChangeRate() {
+        const response = await fetch(LOCALHOST + "/population")
+        const jsonData = await response.json()
+        setInterval(() => {
+            const netGrowthRate = birthRate - deathRate;
+            const changePerSecond = netGrowthRate * jsonData / (365 * 24 * 60 * 60);
+            setSimulatedPopulation(jsonData => jsonData + Math.round(changePerSecond));
+        }, 1000)
     }
-
 
     return (
         <>
