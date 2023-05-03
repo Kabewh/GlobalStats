@@ -7,5 +7,6 @@ urlpatterns = [
     path('population/', views.getPopulation),
     path('birthsToday/', views.getBirthsToday),
     path('deathsToday/', views.getDeathsToday),
+    path('energyUsedToday/', views.getEnergyUsedToday),
     path('admin/', admin.site.urls)
 ]

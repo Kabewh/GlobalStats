@@ -18,3 +18,9 @@ def getBirthsToday(request):
 def getDeathsToday(request):
     deathsToday = api.deaths_today()['deaths_today']
     return HttpResponse(json.dumps(deathsToday))
+
+def getEnergyUsedToday(request):
+    energyUsedToday = api.energy_used_today()['energy_used_today']
+    return HttpResponse(json.dumps(energyUsedToday))
+
+#to be done other routes
