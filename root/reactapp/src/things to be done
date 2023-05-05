@@ -1,0 +1,34 @@
+Prof coordonator: domnul profesor Daniel Pop
+Aplicatia: Live World Statistics
+
+
+++++Ce face aplicatia mea?
+
+}Pe scurt iti afiseaza date demografice, economice si din domeniul sanatatii si al energiei
+in timp real prin manipularea unor seturi de date, pe baza unor formule matematice sau folosind modele de machine learning.
+
+}Exemple? 
+}Economice: Cheltuielile publice in domeniul sanatatii 
+}Sanatate: Numarul de decese in accidente rutiere
+}Energiei: Zile ramase pana la epuizarea resurselor de combustibili fosili 
+
+++++Ce am realizat? 
+
+}Am folosit un api (worldometer) pentru a obtine datele necesare afisarii.
+--De unde sunt luate datele? Surse includ Website-uri oficiale ale Institutiilor Guvernamentale.
+
+}Am realizat afisarea populatiei de pe glob in timp real pe baza unui algoritm
+}ce ia ca parametrii populatia initiala si rata neta de crestere a acesteia.
+
+}Am ales o librarie de diagrame/grafice si am realizat un grafic ce reprezinta
+evolutia populatiei de pe glob din ultimii 71 de ani. (Rechart)
+
+
+++++Ce mai am de realizat?
+
+}Posbilitatea de a urmari populatia mai multor tari de pe glob.
+}Realizarea si imbunatatirea algoritmilor existenti de urmarire in timp real a datelor;
+}Posibilitatea de a personaliza pagina prinicipala dupa preferinta fiecarui utilizator;
+<!-- }Realizarea a mai multor grafice si diagrame -->
+}Finalizarea UI-ului (adaugare informatii relevante)
+<!-- }Realizarea functionalitatii de creare si logare a unui cont; -->

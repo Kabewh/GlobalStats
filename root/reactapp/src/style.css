@@ -2,14 +2,8 @@
     padding: 0;
     box-sizing: border-box;
     margin: 0;
+    font-family: 'Roboto Condensed', sans-serif;
     color: #333;
-}
-
-
-.navbar {
-    width: 100%;
-    height: 50px;
-    background: rgb(173, 173, 173);
 }
 
 .info {
@@ -19,6 +13,7 @@
     justify-content: center;
     text-align: center;
     padding: 4% 5% 7% 5%;
+    font-size: x-large;
 }
 
 .grid-container {
@@ -35,17 +30,20 @@
     width: 500px;
     height: 300px;
     margin-top: 3%;
+    margin-left: -7%;
     /* border: 1px solid #333;
     box-shadow: 10px black; */
 }
+
+
 
 .grid-item {
     display: flex;
     align-items: center;
     justify-content: top;
     flex-direction: column;
-    width: 300px;
-    height: 230px;
+    width: 500px;
+    height: 350px;
     border: 1px solid #333;
     box-shadow: 10px black;
 }
@@ -54,36 +52,85 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 5px;
+    margin-top: 30px;
 }
 
-.info-item p {
+.info-item h3 {
+    margin-top: -2px;
+    font-size: 26px;
+    font-weight: lighter;
+}
+
+.wrap {
     margin-top: 10px;
-    font-size: 22px;
 }
 
+.number {
+    margin-top: 2px;
+    color: #4d4c4c;
+    font-weight: 700;
+    font-family: 'Noto Sans', sans-serif;
+}
+
+.info-item .world {
+    margin-top: 30px;
+    font-size: 55px;
+    color: #4d4c4c;
+    font-weight: 600;
+    font-family: 'Noto Sans', sans-serif;
+}
+
+.info-item .worldpop {
+    margin-top: 60px;
+    font-size: 40px;
+    font-weight: 100;
+}
+
+.info-item .worldpoplabel {
+    margin-top: -15%;
+}
+
+.info-item .worldpoplabel a {
+    color: #af1212;
+    font-weight: 200;
+}
+
+.small-container {
+    margin-top: 130px;
+}
+
+.populationChartLabel {
+    margin-left: -55%;
+}
 
 .c-title :hover {
     color: #af1212;
     transition: 0.2s ease-in-out;
 }
 
+.c-title {
+    margin-top: 10px;
+}
+
 .c-title a {
+    font-size: 35px;
     color: #333;
     text-decoration: none;
     font-weight: bold;
 }
 
-
+.info-item p {
+    font-size: 25px;
+}
 
 
 /* Style the navbar container */
 .navbar {
-    background-color: #fff;
-    height: 50px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: #fff;
+    height: 80px;
     padding: 0 50px;
     box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
 }
@@ -91,6 +138,7 @@
 /* Style the navbar brand */
 .navbar .navbar-brand a {
     color: #333;
+    font-size: 30px;
     text-decoration: none;
     font-weight: bold;
 }
@@ -119,10 +167,9 @@
 .nav-list li a {
     color: #333;
     text-decoration: none;
-    font-size: 18px;
+    font-size: 25px;
     font-weight: bold;
     letter-spacing: 1px;
-    text-transform: uppercase;
     transition: color 0.2s ease-in-out;
 }
 

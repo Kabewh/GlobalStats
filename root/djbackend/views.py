@@ -12,7 +12,6 @@ def getPopulation(request):
 
 def getBirthsToday(request):
     birthsToday = api.births_today()['births_today']
-    print(birthsToday)
     return HttpResponse(json.dumps(birthsToday))
 
 def getDeathsToday(request):
