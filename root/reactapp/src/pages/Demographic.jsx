@@ -91,7 +91,10 @@ const Demographic = () => {
     calculatePopulation()
     // populateChart()
   }, []);
-  // 
+
+  useEffect(() => {
+    fetchCountries()
+  }, [])
   // function populateChart() {
   //   movies.map((movie, index) => {
   //     data.map((item) => {
@@ -122,13 +125,22 @@ const Demographic = () => {
   async function fetchPopulation() {
     const response = await fetch(LOCALHOST + "/population")
     const jsonData = await response.json()
-    console.log(parseInt(localStorage.getItem('population')))
     if (parseInt(localStorage.getItem("population")) == 0) {
       setSimulatedPopulation(jsonData)
 
     } else {
       setSimulatedPopulation(parseInt(localStorage.getItem("population")));
     }
+  }
+
+  //import all countries and their population
+
+  async function fetchCountries() {
+    const response = await fetch('https://countriesnow.space/api/v0.1/countries/population')
+    const jsonData = await response.json()
+    const nigeria = jsonData.data.filter((item) => item.country === 'Nigeria')
+    const nigeriaPopulation = nigeria[0].populationCounts.filter((item) => item.year === 2018)[0].value
+    console.log(nigeriaPopulation)
   }
 
   async function calculatePopulation() {
@@ -142,7 +154,7 @@ const Demographic = () => {
       setChangePerSecond(randomizedValue);
       setSimulatedPopulation(data => data + randomizedValue);
       localStorage.setItem("population", data + randomizedValue)
-      // setSimulatedPopulation(parseInt(localStorage.getItem('population')))
+      setSimulatedPopulation(parseInt(localStorage.getItem('population')))
     }, 1000);
     return () => clearInterval(interval);
   }
