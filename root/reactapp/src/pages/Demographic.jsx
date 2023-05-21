@@ -5,13 +5,6 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts'
 import { read, utils, writeFile } from 'xlsx';
 
 const Demographic = () => {
-  const LOCALHOST = "http://localhost:8000/"
-
-  const [simulatedPopulation, setSimulatedPopulation] = useState(0);
-  const [changePerSecond, setChangePerSecond] = useState(0);
-  const [movies, setMovies] = useState([]);
-  const birthRate = 0.018;
-  const deathRate = 0.008;
   const data = [{ name: '1950', population: 2584034261 },
   { name: '1951', population: 2584034261 },
   { name: '1952', population: 2630861562 },
@@ -86,6 +79,55 @@ const Demographic = () => {
   { name: '2021', population: 7876931987 },
   ];
 
+  const LOCALHOST = "http://localhost:8000/"
+
+  const [simulatedPopulation, setSimulatedPopulation] = useState(0);
+  const [changePerSecond, setChangePerSecond] = useState(0);
+  const [movies, setMovies] = useState([]);
+  const [chinaPopulation, setChinaPopulation] = useState(0);
+  const [indiaPopulation, setIndiaPopulation] = useState(0);
+  const [usaPopulation, setUsaPopulation] = useState(0);
+  const [indonesiaPopulation, setIndonesiaPopulation] = useState(0);
+  const [pakistanPopulation, setPakistanPopulation] = useState(0);
+  const [brazilPopulation, setBrazilPopulation] = useState(0);
+  const [bangladeshPopulation, setBangladeshPopulation] = useState(0);
+  const [russiaPopulation, setRussiaPopulation] = useState(0);
+  const [japanPopulation, setJapanPopulation] = useState(0);
+  const [mexicoPopulation, setMexicoPopulation] = useState(0);
+  const [ethiopiaPopulation, setEthiopiaPopulation] = useState(0);
+  const [philippinesPopulation, setPhilippinesPopulation] = useState(0);
+  const [egyptPopulation, setEgyptPopulation] = useState(0);
+  const [vietnamPopulation, setVietnamPopulation] = useState(0);
+  const [drcongoPopulation, setDrcongoPopulation] = useState(0);
+  const [turkeyPopulation, setTurkeyPopulation] = useState(0);
+  const [iranPopulation, setIranPopulation] = useState(0);
+  const [germanyPopulation, setGermanyPopulation] = useState(0);
+  const [thailandPopulation, setThailandPopulation] = useState(0);
+
+  const [chinaFlag, setChinaFlag] = useState("");
+  const [indiaFlag, setIndiaFlag] = useState("");
+  const [usaFlag, setUsaFlag] = useState("");
+  const [indonesiaFlag, setIndonesiaFlag] = useState("");
+  const [pakistanFlag, setPakistanFlag] = useState("");
+  const [brazilFlag, setBrazilFlag] = useState("");
+  const [bangladeshFlag, setBangladeshFlag] = useState("");
+  const [russiaFlag, setRussiaFlag] = useState("");
+  const [japanFlag, setJapanFlag] = useState("");
+  const [mexicoFlag, setMexicoFlag] = useState("");
+  const [ethiopiaFlag, setEthiopiaFlag] = useState("");
+  const [philippinesFlag, setPhilippinesFlag] = useState("");
+  const [egyptFlag, setEgyptFlag] = useState("");
+  const [vietnamFlag, setVietnamFlag] = useState("");
+  const [drcongoFlag, setDrcongoFlag] = useState("");
+  const [turkeyFlag, setTurkeyFlag] = useState("");
+  const [iranFlag, setIranFlag] = useState("");
+  const [germanyFlag, setGermanyFlag] = useState("");
+  const [thailandFlag, setThailandFlag] = useState("");
+
+
+  const birthRate = 0.018;
+  const deathRate = 0.008;
+
   useEffect(() => {
     fetchPopulation()
     calculatePopulation()
@@ -94,6 +136,7 @@ const Demographic = () => {
 
   useEffect(() => {
     fetchCountries()
+    fetchFlags()
   }, [])
   // function populateChart() {
   //   movies.map((movie, index) => {
@@ -127,7 +170,6 @@ const Demographic = () => {
     const jsonData = await response.json()
     if (parseInt(localStorage.getItem("population")) == 0) {
       setSimulatedPopulation(jsonData)
-
     } else {
       setSimulatedPopulation(parseInt(localStorage.getItem("population")));
     }
@@ -138,9 +180,47 @@ const Demographic = () => {
   async function fetchCountries() {
     const response = await fetch('https://countriesnow.space/api/v0.1/countries/population')
     const jsonData = await response.json()
-    const nigeria = jsonData.data.filter((item) => item.country === 'Nigeria')
-    const nigeriaPopulation = nigeria[0].populationCounts.filter((item) => item.year === 2018)[0].value
-    console.log(nigeriaPopulation)
+
+    setChinaPopulation(jsonData.data.filter((item) => item.country === 'China')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
+    setIndiaPopulation(jsonData.data.filter((item) => item.country === 'India')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
+    setUsaPopulation(jsonData.data.filter((item) => item.country === 'United States')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
+    setIndonesiaPopulation(jsonData.data.filter((item) => item.country === 'Indonesia')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
+    setPakistanPopulation(jsonData.data.filter((item) => item.country === 'Pakistan')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
+    setBrazilPopulation(jsonData.data.filter((item) => item.country === 'Brazil')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
+    setBangladeshPopulation(jsonData.data.filter((item) => item.country === 'Bangladesh')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
+    setJapanPopulation(jsonData.data.filter((item) => item.country === 'Japan')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
+    setMexicoPopulation(jsonData.data.filter((item) => item.country === 'Mexico')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
+    setEthiopiaPopulation(jsonData.data.filter((item) => item.country === 'Ethiopia')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
+    setPhilippinesPopulation(jsonData.data.filter((item) => item.country === 'Philippines')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
+    setEgyptPopulation(jsonData.data.filter((item) => item.country === 'Egypt, Arab Rep.')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
+    setVietnamPopulation(jsonData.data.filter((item) => item.country === 'Vietnam')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
+    setDrcongoPopulation(jsonData.data.filter((item) => item.country === 'Congo, Dem. Rep.')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
+    setTurkeyPopulation(jsonData.data.filter((item) => item.country === 'Turkey')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
+    setGermanyPopulation(jsonData.data.filter((item) => item.country === 'Germany')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
+    setThailandPopulation(jsonData.data.filter((item) => item.country === 'Thailand')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
+  }
+
+  async function fetchFlags() {
+    const response = await fetch('https://countriesnow.space/api/v0.1/countries/flag/images')
+    const jsonData = await response.json()
+    console.log(jsonData)
+    setChinaFlag(jsonData.data.filter((item) => item.name === 'China')[0].flag)
+    setIndiaFlag(jsonData.data.filter((item) => item.name === 'India')[0].flag)
+    setUsaFlag(jsonData.data.filter((item) => item.name === 'United States')[0].flag)
+    setIndonesiaFlag(jsonData.data.filter((item) => item.name === 'Indonesia')[0].flag)
+    setPakistanFlag(jsonData.data.filter((item) => item.name === 'Pakistan')[0].flag)
+    setBrazilFlag(jsonData.data.filter((item) => item.name === 'Brazil')[0].flag)
+    setBangladeshFlag(jsonData.data.filter((item) => item.name === 'Bangladesh')[0].flag)
+    setJapanFlag(jsonData.data.filter((item) => item.name === 'Japan')[0].flag)
+    setMexicoFlag(jsonData.data.filter((item) => item.name === 'Mexico')[0].flag)
+    setEthiopiaFlag(jsonData.data.filter((item) => item.name === 'Ethiopia')[0].flag)
+    setPhilippinesFlag(jsonData.data.filter((item) => item.name === 'Philippines')[0].flag)
+    setEgyptFlag(jsonData.data.filter((item) => item.name === 'Egypt')[0].flag)
+    setVietnamFlag(jsonData.data.filter((item) => item.name === 'Vietnam')[0].flag)
+    setDrcongoFlag(jsonData.data.filter((item) => item.name === 'Congo')[0].flag)
+    setTurkeyFlag(jsonData.data.filter((item) => item.name === 'Turkey')[0].flag)
+    setGermanyFlag(jsonData.data.filter((item) => item.name === 'Germany')[0].flag)
+    setThailandFlag(jsonData.data.filter((item) => item.name === 'Thailand')[0].flag)
   }
 
   async function calculatePopulation() {
@@ -159,8 +239,6 @@ const Demographic = () => {
     return () => clearInterval(interval);
   }
 
-
-
   return (
     <>
       <Navbar />
@@ -170,6 +248,93 @@ const Demographic = () => {
             <p className='worldpoplabel'>Updated with the <a href='https://population.un.org/wpp/'>2022 United Nations Revision</a></p>
             <h2 className='worldpop'>Current World Population</h2>
             <p className='world'>{simulatedPopulation.toLocaleString("en")}</p>
+          </div>
+          <div className="medium-container">
+            {/* <img className='flag' src={chinaFlag} alt="china" /> */}
+            <div className='country-population-1'>
+              <div className='individual-country'>
+                1.
+                <img className='flag' src={chinaFlag} alt="china" />
+                <h5>China</h5><p>{chinaPopulation.toLocaleString("en")}</p>
+              </div>
+              <div className='individual-country'>
+                2.
+                <img className='flag' src={indiaFlag} alt="india" />
+                <h5>India</h5><p> {indiaPopulation.toLocaleString("en")}</p>
+              </div>
+              <div className='individual-country'>
+                3.
+                <img className='flag' src={usaFlag} alt="usa" />
+                <h5>United States</h5><p> {usaPopulation.toLocaleString("en")}</p>
+              </div>
+              <div className='individual-country'>
+                4.
+                <img className='flag' src={indonesiaFlag} alt="indonesia" />
+                <h5>Indonesia</h5><p> {indonesiaPopulation.toLocaleString("en")}</p>
+              </div>
+              <div className='individual-country'>
+                5.
+                <img className='flag' src={pakistanFlag} alt="pakistan" />
+                <h5>Pakistan </h5><p>{pakistanPopulation.toLocaleString("en")}</p>
+              </div>
+              <div className='individual-country'>
+                6.
+                <img className='flag' src={brazilFlag} alt="brazil" />
+                <h5>Brazil</h5><p> {brazilPopulation.toLocaleString("en")}</p>
+              </div>
+              <div className='individual-country'>
+                7.
+                <img className='flag' src={bangladeshFlag} alt="bangladesh" />
+                <h5>Bangladesh </h5><p>{bangladeshPopulation.toLocaleString("en")}</p>
+              </div>
+              <div className='individual-country'>
+                8.
+                <img className='flag' src={japanFlag} alt="japan" />
+                <h5>Japan</h5><p> {japanPopulation.toLocaleString("en")}</p>
+              </div>
+            </div>
+            <div className='country-population-2'>
+              <div className='individual-country'>
+                9.
+                <img className='flag' src={mexicoFlag} alt="mexico" />
+                <h5>Mexico</h5><p> {mexicoPopulation.toLocaleString("en")}</p>
+              </div>
+              <div className='individual-country'>
+                10.
+                <img className='flag' src={ethiopiaFlag} alt="ethiopia" />
+                <h5>Ethiopia</h5><p> {ethiopiaPopulation.toLocaleString("en")}</p>
+              </div>
+              <div className='individual-country'>
+                11.
+                <img className='flag' src={philippinesFlag} alt="philippines" />
+                <h5>Philippine </h5><p>{philippinesPopulation.toLocaleString("en")}</p>
+              </div>
+              <div className='individual-country'>
+                12.
+                <img className='flag' src={egyptFlag} alt="egypt" />
+                <h5>Egypt</h5><p> {egyptPopulation.toLocaleString("en")}</p>
+              </div>
+              <div className='individual-country'>
+                13.
+                <img className='flag' src={vietnamFlag} alt="vietnam" />
+                <h5>Vitenam </h5><p>{vietnamPopulation.toLocaleString("en")}</p>
+              </div>
+              <div className='individual-country'>
+                14.
+                <img className='flag' src={drcongoFlag} alt="drcongo" />
+                <h5>Congo</h5><p> {drcongoPopulation.toLocaleString("en")}</p>
+              </div>
+              <div className='individual-country'>
+                15.
+                <img className='flag' src={turkeyFlag} alt="turkey" />
+                <h5>Turkey</h5><p> {turkeyPopulation.toLocaleString("en")}</p>
+              </div>
+              <div className='individual-country'>
+                16.
+                <img className='flag' src={germanyFlag} alt="germany" />
+                <h5>Germany</h5><p> {germanyPopulation.toLocaleString("en")}</p>
+              </div>
+            </div>
           </div>
           <div className="small-container">
             <p className='populationChartLabel'>World Population: Past, Present</p>

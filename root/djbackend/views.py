@@ -21,5 +21,4 @@ def getDeathsToday(request):
 def getEnergyUsedToday(request):
     energyUsedToday = api.energy_used_today()['energy_used_today']
     return HttpResponse(json.dumps(energyUsedToday))
-
-#to be done other routes
+# #to be done other routes
