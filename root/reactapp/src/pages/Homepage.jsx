@@ -9,6 +9,12 @@ const Homepage = () => {
     const [deathsToday, setDeathsToday] = useState(0);
     const [simulatedPopulation, setSimulatedPopulation] = useState(0);
     const [energyUsedToday, setEnergyUsedToday] = useState(0);
+    const [oilLeft, setOilLeft] = useState(0);
+    const [cigarrettesSmokedToday, setCigarrettesSmokedToday] = useState(0);
+    const [abortionsThisYear, setAbortionsThisYear] = useState(0);
+    const [roadTrafficFatalitiesThisYear, setRoadTrafficFatalitiesThisYear] = useState(0);
+    const [daysToTheEndOfCoal, setDaysToTheEndOfCoal] = useState(0);
+
     // const [birthRate, setBirthRate] = useState(0);
     // const [deathRate, setDeathRate] = useState([]);
     const [changePerSecond, setChangePerSecond] = useState(0);
@@ -57,6 +63,37 @@ const Homepage = () => {
         const jsonData = await response.json()
         setEnergyUsedToday(JSON.stringify(jsonData))
     }
+
+    async function fetchDaysToTheEndOfCoal() {
+        const response = await fetch(LOCALHOST + "/daysToTheEndOfCoal")
+        const jsonData = await response.json()
+        setDaysToTheEndOfCoal(JSON.stringify(jsonData))
+    }
+
+    async function fetchOilLeft() {
+        const response = await fetch(LOCALHOST + "/oilLeft")
+        const jsonData = await response.json()
+        setOilLeft(JSON.stringify(jsonData))
+    }
+
+    async function fetchCigarrettesSmokedToday() {
+        const response = await fetch(LOCALHOST + "/cigarrettesSmokedToday")
+        const jsonData = await response.json()
+        setCigarrettesSmokedToday(JSON.stringify(jsonData))
+    }
+
+    async function fetchAbortionsThisYear() {
+        const response = await fetch(LOCALHOST + "/abortionsThisYear")
+        const jsonData = await response.json()
+        setAbortionsThisYear(JSON.stringify(jsonData))
+    }
+
+    async function fetchRoadTrafficFatalitiesThisYear() {
+        const response = await fetch(LOCALHOST + "/roadTrafficFatalitiesThisYear")
+        const jsonData = await response.json()
+        setRoadTrafficFatalitiesThisYear(JSON.stringify(jsonData))
+    }
+
 
     async function calculateBirthsToday() {
         const response = await fetch(LOCALHOST + "/birthsToday")
@@ -134,31 +171,31 @@ const Homepage = () => {
                     <div className="grid-item">
                         <h2 className='c-title'><a href='/energy'>Energy</a></h2>
                         <div className="info-item">
-                            <h3 className='wrap'>Energy used today</h3>
+                            <h3 className='wrap'>Energy used today (MWh)</h3>
                             <p className='number'>{energyUsedToday.toLocaleString()}</p>
                         </div>
                         <div className="info-item">
                             <h3>Oil left (barrels)</h3>
-                            <p className='number'>1.404.945.990.331</p>
+                            <p className='number'>{oilLeft.toLocaleString()}</p>
                         </div>
                         <div className="info-item">
                             <h3>Days to the end of coal</h3>
-                            <p className='number'>147.745</p>
+                            <p className='number'>{daysToTheEndOfCoal.toLocaleString()}</p>
                         </div>
                     </div>
                     <div className="grid-item">
                         <h2 className='c-title'><a href='/health'>Health</a></h2>
                         <div className="info-item">
                             <h3 className='wrap'>Cigarrettees smoked today</h3>
-                            <p className='number'>6.877.993.412</p>
+                            <p className='number'>{cigarrettesSmokedToday.toLocaleString()}</p>
                         </div>
                         <div className="info-item">
                             <h3>Abortions this year</h3>
-                            <p className='number'>14.937.011</p>
+                            <p className='number'>{abortionsThisYear.toLocaleString()}</p>
                         </div>
                         <div className="info-item">
                             <h3>Road traffic fatalities this year</h3>
-                            <p className='number'>452.672</p>
+                            <p className='number'>{roadTrafficFatalitiesThisYear}</p>
                         </div>
                     </div>
                 </div>

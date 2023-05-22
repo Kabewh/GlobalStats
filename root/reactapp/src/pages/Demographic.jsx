@@ -249,93 +249,96 @@ const Demographic = () => {
             <h2 className='worldpop'>Current World Population</h2>
             <p className='world'>{simulatedPopulation.toLocaleString("en")}</p>
           </div>
-          <div className="medium-container">
-            {/* <img className='flag' src={chinaFlag} alt="china" /> */}
-            <div className='country-population-1'>
-              <div className='individual-country'>
-                1.
-                <img className='flag' src={chinaFlag} alt="china" />
-                <h5>China</h5><p>{chinaPopulation.toLocaleString("en")}</p>
+          <div className="info">
+            <h3>Top 16 Countries by Population as of Today</h3>
+            <div className="medium-container">
+              <div className='country-population-1'>
+                <div className='individual-country'>
+                  1.
+                  <img className='flag' src={chinaFlag} alt="china" />
+                  <h5>China</h5><p>{chinaPopulation.toLocaleString("en")}</p>
+                </div>
+                <div className='individual-country'>
+                  2.
+                  <img className='flag' src={indiaFlag} alt="india" />
+                  <h5>India</h5><p> {indiaPopulation.toLocaleString("en")}</p>
+                </div>
+                <div className='individual-country'>
+                  3.
+                  <img className='flag' src={usaFlag} alt="usa" />
+                  <h5>United States</h5><p> {usaPopulation.toLocaleString("en")}</p>
+                </div>
+                <div className='individual-country'>
+                  4.
+                  <img className='flag' src={indonesiaFlag} alt="indonesia" />
+                  <h5>Indonesia</h5><p> {indonesiaPopulation.toLocaleString("en")}</p>
+                </div>
+                <div className='individual-country'>
+                  5.
+                  <img className='flag' src={pakistanFlag} alt="pakistan" />
+                  <h5>Pakistan </h5><p>{pakistanPopulation.toLocaleString("en")}</p>
+                </div>
+                <div className='individual-country'>
+                  6.
+                  <img className='flag' src={brazilFlag} alt="brazil" />
+                  <h5>Brazil</h5><p> {brazilPopulation.toLocaleString("en")}</p>
+                </div>
+                <div className='individual-country'>
+                  7.
+                  <img className='flag' src={bangladeshFlag} alt="bangladesh" />
+                  <h5>Bangladesh </h5><p>{bangladeshPopulation.toLocaleString("en")}</p>
+                </div>
+                <div className='individual-country'>
+                  8.
+                  <img className='flag' src={japanFlag} alt="japan" />
+                  <h5>Japan</h5><p> {japanPopulation.toLocaleString("en")}</p>
+                </div>
               </div>
-              <div className='individual-country'>
-                2.
-                <img className='flag' src={indiaFlag} alt="india" />
-                <h5>India</h5><p> {indiaPopulation.toLocaleString("en")}</p>
-              </div>
-              <div className='individual-country'>
-                3.
-                <img className='flag' src={usaFlag} alt="usa" />
-                <h5>United States</h5><p> {usaPopulation.toLocaleString("en")}</p>
-              </div>
-              <div className='individual-country'>
-                4.
-                <img className='flag' src={indonesiaFlag} alt="indonesia" />
-                <h5>Indonesia</h5><p> {indonesiaPopulation.toLocaleString("en")}</p>
-              </div>
-              <div className='individual-country'>
-                5.
-                <img className='flag' src={pakistanFlag} alt="pakistan" />
-                <h5>Pakistan </h5><p>{pakistanPopulation.toLocaleString("en")}</p>
-              </div>
-              <div className='individual-country'>
-                6.
-                <img className='flag' src={brazilFlag} alt="brazil" />
-                <h5>Brazil</h5><p> {brazilPopulation.toLocaleString("en")}</p>
-              </div>
-              <div className='individual-country'>
-                7.
-                <img className='flag' src={bangladeshFlag} alt="bangladesh" />
-                <h5>Bangladesh </h5><p>{bangladeshPopulation.toLocaleString("en")}</p>
-              </div>
-              <div className='individual-country'>
-                8.
-                <img className='flag' src={japanFlag} alt="japan" />
-                <h5>Japan</h5><p> {japanPopulation.toLocaleString("en")}</p>
-              </div>
-            </div>
-            <div className='country-population-2'>
-              <div className='individual-country'>
-                9.
-                <img className='flag' src={mexicoFlag} alt="mexico" />
-                <h5>Mexico</h5><p> {mexicoPopulation.toLocaleString("en")}</p>
-              </div>
-              <div className='individual-country'>
-                10.
-                <img className='flag' src={ethiopiaFlag} alt="ethiopia" />
-                <h5>Ethiopia</h5><p> {ethiopiaPopulation.toLocaleString("en")}</p>
-              </div>
-              <div className='individual-country'>
-                11.
-                <img className='flag' src={philippinesFlag} alt="philippines" />
-                <h5>Philippine </h5><p>{philippinesPopulation.toLocaleString("en")}</p>
-              </div>
-              <div className='individual-country'>
-                12.
-                <img className='flag' src={egyptFlag} alt="egypt" />
-                <h5>Egypt</h5><p> {egyptPopulation.toLocaleString("en")}</p>
-              </div>
-              <div className='individual-country'>
-                13.
-                <img className='flag' src={vietnamFlag} alt="vietnam" />
-                <h5>Vitenam </h5><p>{vietnamPopulation.toLocaleString("en")}</p>
-              </div>
-              <div className='individual-country'>
-                14.
-                <img className='flag' src={drcongoFlag} alt="drcongo" />
-                <h5>Congo</h5><p> {drcongoPopulation.toLocaleString("en")}</p>
-              </div>
-              <div className='individual-country'>
-                15.
-                <img className='flag' src={turkeyFlag} alt="turkey" />
-                <h5>Turkey</h5><p> {turkeyPopulation.toLocaleString("en")}</p>
-              </div>
-              <div className='individual-country'>
-                16.
-                <img className='flag' src={germanyFlag} alt="germany" />
-                <h5>Germany</h5><p> {germanyPopulation.toLocaleString("en")}</p>
+              <div className='country-population-2'>
+                <div className='individual-country'>
+                  9.
+                  <img className='flag' src={mexicoFlag} alt="mexico" />
+                  <h5>Mexico</h5><p> {mexicoPopulation.toLocaleString("en")}</p>
+                </div>
+                <div className='individual-country'>
+                  10.
+                  <img className='flag' src={ethiopiaFlag} alt="ethiopia" />
+                  <h5>Ethiopia</h5><p> {ethiopiaPopulation.toLocaleString("en")}</p>
+                </div>
+                <div className='individual-country'>
+                  11.
+                  <img className='flag' src={philippinesFlag} alt="philippines" />
+                  <h5>Philippine </h5><p>{philippinesPopulation.toLocaleString("en")}</p>
+                </div>
+                <div className='individual-country'>
+                  12.
+                  <img className='flag' src={egyptFlag} alt="egypt" />
+                  <h5>Egypt</h5><p> {egyptPopulation.toLocaleString("en")}</p>
+                </div>
+                <div className='individual-country'>
+                  13.
+                  <img className='flag' src={vietnamFlag} alt="vietnam" />
+                  <h5>Vitenam </h5><p>{vietnamPopulation.toLocaleString("en")}</p>
+                </div>
+                <div className='individual-country'>
+                  14.
+                  <img className='flag' src={drcongoFlag} alt="drcongo" />
+                  <h5>Congo</h5><p> {drcongoPopulation.toLocaleString("en")}</p>
+                </div>
+                <div className='individual-country'>
+                  15.
+                  <img className='flag' src={turkeyFlag} alt="turkey" />
+                  <h5>Turkey</h5><p> {turkeyPopulation.toLocaleString("en")}</p>
+                </div>
+                <div className='individual-country'>
+                  16.
+                  <img className='flag' src={germanyFlag} alt="germany" />
+                  <h5>Germany</h5><p> {germanyPopulation.toLocaleString("en")}</p>
+                </div>
               </div>
             </div>
           </div>
+
           <div className="small-container">
             <p className='populationChartLabel'>World Population: Past, Present</p>
             {renderLineChart}
