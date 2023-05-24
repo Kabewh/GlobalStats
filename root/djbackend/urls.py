@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views.generic.base import TemplateView
 from . import views
-from .views import PopulationView
+# from .views import PopulationView
 # from .views import BirthsTodayView
 # from .views import DeathsTodayView
 # from .views import EnergyUsedTodayView
@@ -13,7 +13,7 @@ from .views import PopulationView
 # from .views import OilLeft
 
 urlpatterns = [
-    path('population/', PopulationView.as_view(), name='population'),
+    # path('population/', PopulationView.as_view(), name='population'),
     # path('birthsToday/', BirthsTodayView.as_view(), name='birthsToday'),
     # path('deathsToday/', DeathsTodayView.as_view(), name='deathsToday'),
     # path('energyUsedToday/', EnergyUsedTodayView.as_view(), name='energyUsedToday'),

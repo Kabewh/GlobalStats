@@ -168,11 +168,12 @@ const Demographic = () => {
   async function fetchPopulation() {
     const response = await fetch(LOCALHOST + "/population")
     const jsonData = await response.json()
-    if (parseInt(localStorage.getItem("population")) == 0) {
-      setSimulatedPopulation(jsonData)
-    } else {
-      setSimulatedPopulation(parseInt(localStorage.getItem("population")));
-    }
+    setSimulatedPopulation(jsonData)
+    // if (parseInt(localStorage.getItem("population")) == 0) {
+    //   setSimulatedPopulation(jsonData)
+    // } else {
+    //   setSimulatedPopulation(parseInt(localStorage.getItem("population")));
+    // }
   }
 
   //import all countries and their population
@@ -231,10 +232,11 @@ const Demographic = () => {
       const data = parseInt(localStorage.getItem('population'));
       const value = netGrowthRate * data / (365 * 24 * 60 * 60)
       const randomizedValue = parseInt(Math.floor(Math.random() * 2) === 0 ? value - 1 : value + 1);
-      setChangePerSecond(randomizedValue);
-      setSimulatedPopulation(data => data + randomizedValue);
-      localStorage.setItem("population", data + randomizedValue)
-      setSimulatedPopulation(parseInt(localStorage.getItem('population')))
+      setChangePerSecond(parseInt(randomizedValue));
+      console.log(parseInt(randomizedValue))
+      // setSimulatedPopulation(data => data + randomizedValue);
+      // localStorage.setItem("population", data + randomizedValue)
+      // setSimulatedPopulation(parseInt(localStorage.getItem('population')))
     }, 1000);
     return () => clearInterval(interval);
   }

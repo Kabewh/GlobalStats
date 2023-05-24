@@ -5,13 +5,19 @@ from rest_framework import viewsets
 from django.views import View
 import json
 import asyncio
-from worldometer import api
+# from worldometer import api
 
-class PopulationView(View):
-    async def get(self, request):
-        population = await asyncio.to_thread(api.current_world_population)
-        population_data = population['current_world_population']
-        return HttpResponse(json.dumps(population_data))
+# class PopulationView(View):
+#     async def get(self, request):
+#         population = await asyncio.to_thread(api.current_world_population)
+#         population_data = population['current_world_population']
+#         return HttpResponse(json.dumps(population_data))
+
+# def getPopulation(request):
+#     population = api.get_metric_of(label='computers_produced_this_year')
+#     print(population)
+#     return HttpResponse(population)
+
 
 # class BirthsTodayView(View):
 #     async def get(self, request):
@@ -60,6 +66,12 @@ class PopulationView(View):
 #         oil_left = await asyncio.to_thread(api.oil_left)
 #         oil_left_data = oil_left['oil_left']
 #         return HttpResponse(json.dumps(oil_left_data))
+
+
+# def getPopulation(request):
+#     population = api.current_world_population()['current_world_population']
+#     return HttpResponse(json.dumps(population))
+
 
 # # def getBirthsToday(request): 
 #     birthsToday = api.births_today()['births_today']
