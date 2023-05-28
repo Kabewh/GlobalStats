@@ -124,13 +124,18 @@ const Demographic = () => {
   const [germanyFlag, setGermanyFlag] = useState("");
   const [thailandFlag, setThailandFlag] = useState("");
 
-
   const birthRate = 0.018;
   const deathRate = 0.008;
 
   useEffect(() => {
     fetchPopulation()
+    getCountries()
+    // fetchYoungerOlder() // --working
+    // fetchLifeExpectancy() // --working
+
+
     calculatePopulation()
+
     // populateChart()
   }, []);
 
@@ -138,6 +143,7 @@ const Demographic = () => {
     fetchCountries()
     fetchFlags()
   }, [])
+
   // function populateChart() {
   //   movies.map((movie, index) => {
   //     data.map((item) => {
@@ -154,7 +160,6 @@ const Demographic = () => {
     }
   })
 
-
   const renderLineChart = (
     <LineChart width={1000} height={400} data={data} margin={{ top: 20, right: 20, bottom: 5, left: 90 }}>
       <Line type="monotone" dataKey="population" stroke="#8884d8" />
@@ -166,7 +171,7 @@ const Demographic = () => {
   );
 
   async function fetchPopulation() {
-    const response = await fetch(LOCALHOST + "/population")
+    const response = await fetch(LOCALHOST + "population/" + "World" + "/" + "2023" + "/")
     const jsonData = await response.json()
     setSimulatedPopulation(jsonData)
     // if (parseInt(localStorage.getItem("population")) == 0) {
@@ -176,12 +181,34 @@ const Demographic = () => {
     // }
   }
 
-  //import all countries and their population
+  async function fetchYoungerOlder(country, year) {
+    const response = await fetch(LOCALHOST + "youngerOlderInfo/" + country + "/" + year + "/")
+    const jsonData = await response.json()
+    console.log(jsonData)
+  }
 
+  async function fetchLifeExpectancy(country, year) {
+    const response = await fetch(LOCALHOST + "lifeExpectancy/" + country + "/" + year + "/")
+    const jsonData = await response.json()
+    console.log(jsonData)
+  }
+
+  const birthdate = new Date("2002-02-12");
+  const currentDate = new Date();
+
+  const daysSinceBirth = Math.floor(
+    (currentDate - birthdate) / (1000 * 60 * 60)
+  );
+
+  const dailyBirths = 366.5
+  const peopleBornAfter = daysSinceBirth * dailyBirths
+
+
+
+  //import all countries and their population
   async function fetchCountries() {
     const response = await fetch('https://countriesnow.space/api/v0.1/countries/population')
     const jsonData = await response.json()
-
     setChinaPopulation(jsonData.data.filter((item) => item.country === 'China')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
     setIndiaPopulation(jsonData.data.filter((item) => item.country === 'India')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
     setUsaPopulation(jsonData.data.filter((item) => item.country === 'United States')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
@@ -225,31 +252,95 @@ const Demographic = () => {
   }
 
   async function calculatePopulation() {
-    const response = await fetch(LOCALHOST + "/population")
+    const response = await fetch(LOCALHOST + "population/World/2023")
     const jsonData = await response.json()
     const interval = setInterval(() => {
-      const netGrowthRate = birthRate - deathRate;
-      const data = parseInt(localStorage.getItem('population'));
-      const value = netGrowthRate * data / (365 * 24 * 60 * 60)
-      const randomizedValue = parseInt(Math.floor(Math.random() * 2) === 0 ? value - 1 : value + 1);
-      setChangePerSecond(parseInt(randomizedValue));
-      console.log(parseInt(randomizedValue))
-      // setSimulatedPopulation(data => data + randomizedValue);
-      // localStorage.setItem("population", data + randomizedValue)
-      // setSimulatedPopulation(parseInt(localStorage.getItem('population')))
+      setSimulatedPopulation(data => data + 3);
     }, 1000);
     return () => clearInterval(interval);
+  }
+
+  const [monthChoice, setMonthChoice] = useState('')
+  const [countryChoice, setCountryChoice] = useState('')
+  const [countries, setCountries] = useState([])
+
+  async function getCountries() {
+    const response = await fetch(LOCALHOST + "countries")
+    const jsonData = await response.json()
+    jsonData.map((country, index) => (
+      setCountries(countries => [...countries, country])
+    ))
+  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+  }
+
+  const handleChange = (e) => {
+    setMonthChoice(e.target.value)
   }
 
   return (
     <>
       <Navbar />
       <div className="container">
-        <div className="info">
+        <div className="world-clock">
+          <h3>
+            <p>Current world<br></br>population clock</p>
+            <p className="population-counter">{simulatedPopulation.toLocaleString("en")}</p>
+            <svg className='up' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg>
+          </h3>
+        </div>
+        <div className='question'>
+          <h1>
+            What's my place in the world population? How long will I live?
+          </h1>
+          <p>The journey of your life in numbers and dates! <br />
+            Please enter your date of birth, country of birth and sex at birth:</p>
+          <form onSubmit={handleSubmit}>
+            <input className="day" type="text" name="name" placeholder='Day' />
+            <select className="month" value={monthChoice} onChange={handleChange}>
+              <option value="january">January</option>
+              <option value="february">February</option>
+              <option value="march">March</option>
+              <option value="april">April</option>
+              <option value="may">May</option>
+              <option value="june">June</option>
+              <option value="july">July</option>
+              <option value="august">August</option>
+              <option value="september">September</option>
+              <option value="october">October</option>
+              <option value="november">November</option>
+              <option value="december">December</option>
+            </select>
+            <input className="year" type="text" name="name" placeholder='Year' />
+            <select className="country" value={countryChoice} onChange={handleChange}>
+              {countries.map((country, countrykey) => (
+                <option key={countrykey} value={country}>
+                  {country}
+                </option>
+              ))}
+            </select>
+          </form>
+        </div>
+
+
+
+
+
+        {/* <div className="info">
           <div className="info-item">
             <p className='worldpoplabel'>Updated with the <a href='https://population.un.org/wpp/'>2022 United Nations Revision</a></p>
             <h2 className='worldpop'>Current World Population</h2>
             <p className='world'>{simulatedPopulation.toLocaleString("en")}</p>
+
           </div>
           <div className="info">
             <h3>Top 16 Countries by Population as of Today</h3>
@@ -345,10 +436,9 @@ const Demographic = () => {
             <p className='populationChartLabel'>World Population: Past, Present</p>
             {renderLineChart}
           </div>
-        </div>
+        </div> */}
       </div >
     </>
-
   )
 }
 
