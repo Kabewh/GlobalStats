@@ -79,6 +79,13 @@ const Demographic = () => {
   { name: '2021', population: 7876931987 },
   ];
 
+  const months = [
+    "January", "February", "March", "April",
+    "May", "June", "July", "August",
+    "September", "October", "November", "December"
+  ];
+
+
   const LOCALHOST = "http://localhost:8000/"
 
   const [simulatedPopulation, setSimulatedPopulation] = useState(0);
@@ -184,13 +191,11 @@ const Demographic = () => {
   async function fetchYoungerOlder(country, year) {
     const response = await fetch(LOCALHOST + "youngerOlderInfo/" + country + "/" + year + "/")
     const jsonData = await response.json()
-    console.log(jsonData)
   }
 
   async function fetchLifeExpectancy(country, year) {
     const response = await fetch(LOCALHOST + "lifeExpectancy/" + country + "/" + year + "/")
     const jsonData = await response.json()
-    console.log(jsonData)
   }
 
   const birthdate = new Date("2002-02-12");
@@ -231,7 +236,6 @@ const Demographic = () => {
   async function fetchFlags() {
     const response = await fetch('https://countriesnow.space/api/v0.1/countries/flag/images')
     const jsonData = await response.json()
-    console.log(jsonData)
     setChinaFlag(jsonData.data.filter((item) => item.name === 'China')[0].flag)
     setIndiaFlag(jsonData.data.filter((item) => item.name === 'India')[0].flag)
     setUsaFlag(jsonData.data.filter((item) => item.name === 'United States')[0].flag)
@@ -260,9 +264,12 @@ const Demographic = () => {
     return () => clearInterval(interval);
   }
 
+  const [dayChoice, setDayChoice] = useState('')
   const [monthChoice, setMonthChoice] = useState('')
+  const [yearChoice, setYearChoice] = useState('')
   const [countryChoice, setCountryChoice] = useState('')
   const [countries, setCountries] = useState([])
+  const [selected, setSelected] = useState("male");
 
   async function getCountries() {
     const response = await fetch(LOCALHOST + "countries")
@@ -271,13 +278,37 @@ const Demographic = () => {
       setCountries(countries => [...countries, country])
     ))
   }
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
+
+    console.log("day: " + dayChoice)
+    console.log("month: " + monthChoice)
+    console.log("year: " + yearChoice)
+    console.log("country: " + countryChoice)
+    console.log("gender: " + selected)
   }
 
-  const handleChange = (e) => {
+
+  const handleDay = (e) => {
+    setDayChoice(e.target.value)
+  }
+
+  const handleMonth = (e) => {
     setMonthChoice(e.target.value)
+  }
+
+  const handleYear = (e) => {
+    setYearChoice(e.target.value)
+  }
+
+  const handleCountry = (e) => {
+    setCountryChoice(e.target.value)
+  }
+
+  const handleToggle = (gender) => {
+    setSelected(gender)
   }
 
   return (
@@ -305,29 +336,38 @@ const Demographic = () => {
           <p>The journey of your life in numbers and dates! <br />
             Please enter your date of birth, country of birth and sex at birth:</p>
           <form onSubmit={handleSubmit}>
-            <input className="day" type="text" name="name" placeholder='Day' />
-            <select className="month" value={monthChoice} onChange={handleChange}>
-              <option value="january">January</option>
-              <option value="february">February</option>
-              <option value="march">March</option>
-              <option value="april">April</option>
-              <option value="may">May</option>
-              <option value="june">June</option>
-              <option value="july">July</option>
-              <option value="august">August</option>
-              <option value="september">September</option>
-              <option value="october">October</option>
-              <option value="november">November</option>
-              <option value="december">December</option>
+            <input className="day" value={dayChoice} onChange={handleDay} type="text" name="name" placeholder='Day' />
+            <select className="month" value={monthChoice} onChange={handleMonth}>
+              {months.map((month, index) => (
+                <option key={index} value={index + 1}>
+                  {month}
+                </option>
+              ))}
             </select>
-            <input className="year" type="text" name="name" placeholder='Year' />
-            <select className="country" value={countryChoice} onChange={handleChange}>
+            <input className="year" value={yearChoice} onChange={handleYear} type="text" name="name" placeholder='Year' />
+            <select className="country" value={countryChoice} onChange={handleCountry}>
               {countries.map((country, countrykey) => (
                 <option key={countrykey} value={country}>
                   {country}
                 </option>
               ))}
             </select>
+            <div className='toggle'>
+              <button
+                id='option1Btn'
+                className={selected === "male" ? "selected" : "notSelected"}
+                onClick={() => handleToggle("male")}>
+                Male
+              </button>
+              <button
+                className={selected === "female" ? "selected" : "notSelected"}
+                onClick={() => handleToggle("female")}>
+                Female
+              </button>
+            </div>
+            <button className='goBtn'>
+              go
+            </button>
           </form>
         </div>
 
