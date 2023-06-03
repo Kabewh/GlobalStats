@@ -404,6 +404,7 @@
     margin-left: 30px;
 }
 
+
 form {
     display: flex;
     flex-direction: row;
@@ -427,7 +428,9 @@ form {
 .toggle button {
     width: 200px;
     height: 50px;
-    border: 1px solid #dedede
+    border: 1px solid #dedede;
+    cursor: pointer;
+
 }
 
 .selected {
@@ -444,9 +447,145 @@ form {
 
 .goBtn {
     font-family: plantinmtstd-light sans-serif;
-    font-size: 20px;
-    width: 80px;
-    height: 80px;
+    font-size: 40px;
+    width: 120px;
+    height: 120px;
+    color: #fff;
     border-radius: 50%;
-    background: #8a7eab;
+    background: #2b1076;
+}
+
+.youngOld {
+    color: #999;
+    font-size: 34px;
+    font-family: plantinmtstd-light, sans-serif;
+    margin-top: 50px;
+    width: 1200px;
+    border-top: 1px solid rgba(0, 0, 0, .2);
+    border-bottom: 1px solid rgba(0, 0, 0, .2);
+    line-height: 1.2em;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.youngOld h3 {
+    margin-top: 30px;
+}
+
+.youngOld span {
+    color: black;
+}
+
+.region-switcher {
+    height: 70px;
+    border-bottom: 1px solid rgba(0, 0, 0, .2);
+}
+
+.toggleRegion {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    border: 1px solid #dedede;
+    font-size: 14px;
+    height: 50px;
+    width: 300px;
+    background: #fff;
+}
+
+.toggleRegion button {
+    width: 200px;
+    height: 50px;
+    border: 1px solid #dedede;
+    cursor: pointer;
+}
+
+.younger-older-you {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin: 70px 0;
+}
+
+.younger-older-you p {
+    font-size: 20px;
+    margin: auto;
+}
+
+.younger-num {
+    margin-top: 37px;
+    font-family: plantinmtstd-light, sans-serif;
+    font-size: 48px;
+    color: #333;
+    font-weight: 600;
+}
+
+.citizen {
+    margin-top: 37px;
+    font-family: plantinmtstd-light, sans-serif;
+    font-size: 15px;
+}
+
+.citizen-icon {
+    margin: auto;
+    width: 50px;
+}
+
+.older-num {
+    margin-top: 37px;
+    font-family: plantinmtstd-light, sans-serif;
+    font-size: 48px;
+    color: #333;
+    font-weight: 600;
+}
+
+.summary-chart {
+    width: 1200;
+    background: red;
+    height: 300;
+}
+
+.milestones {
+    padding: 40px 0;
+    border-top: 1px solid rgba(0, 0, 0, .2);
+    border-bottom: 1px solid rgba(0, 0, 0, .2);
+}
+
+.milestones h1 {
+    font-size: 36px;
+    line-height: 1.2em;
+    font-family: plantinmtstd-light, sans-serif;
+    font-weight: 600;
+}
+
+.milestones span {
+    color: #333;
+    font-size: 36px;
+    line-height: 1.2em;
+    font-family: plantinmtstd-light, sans-serif;
+    font-weight: 600;
+}
+
+.lifespan {
+    padding: 40px 0;
+    border-top: 1px solid rgba(0, 0, 0, .2);
+    border-bottom: 1px solid rgba(0, 0, 0, .2);
+}
+
+.lifespan h1 {
+    font-size: 36px;
+    line-height: 1.2em;
+    font-family: plantinmtstd-light, sans-serif;
+    font-weight: 600;
+}
+
+.lifespan span {
+    color: #333;
+    font-size: 36px;
+    line-height: 1.2em;
+    font-family: plantinmtstd-light, sans-serif;
+    font-weight: 600;
 }

@@ -136,10 +136,10 @@ const Demographic = () => {
 
   useEffect(() => {
     fetchPopulation()
+    fetchRomaniaPopulation()
     getCountries()
     // fetchYoungerOlder() // --working
-    // fetchLifeExpectancy() // --working
-
+    fetchLifeExpectancy("World", 2023) // --working
 
     calculatePopulation()
 
@@ -188,14 +188,23 @@ const Demographic = () => {
     // }
   }
 
+  async function fetchRomaniaPopulation() {
+    const response = await fetch(LOCALHOST + "population/" + "Romania" + "/" + "2023" + "/")
+    const jsonData = await response.json()
+    setRomaniaPopulation(jsonData)
+  }
+
   async function fetchYoungerOlder(country, year) {
     const response = await fetch(LOCALHOST + "youngerOlderInfo/" + country + "/" + year + "/")
     const jsonData = await response.json()
+    setBirths(jsonData)
+    console.log("fetch younger Older: " + jsonData.toLocaleString())
   }
 
   async function fetchLifeExpectancy(country, year) {
     const response = await fetch(LOCALHOST + "lifeExpectancy/" + country + "/" + year + "/")
     const jsonData = await response.json()
+    setLifeExpectancy(jsonData)
   }
 
   const birthdate = new Date("2002-02-12");
@@ -269,7 +278,30 @@ const Demographic = () => {
   const [yearChoice, setYearChoice] = useState('')
   const [countryChoice, setCountryChoice] = useState('')
   const [countries, setCountries] = useState([])
-  const [selected, setSelected] = useState("male");
+  const [selected, setGender] = useState("male");
+  const [region, setRegion] = useState("World");
+  // const [regionToggle, setRegionToggle] = useState();
+  const [validated, setValidated] = useState(false);
+  const [youngPersonCount, setYoungPersonCount] = useState(0);
+  const [oldPersonCount, setOldPersonCount] = useState(0);
+  const [olderPercentageRomania, setOlderPercentageRomania] = useState(0);
+  const [olderPercentageWorld, setOlderPercentageWorld] = useState(0);
+  const [youngerPercentageWorld, setYoungerPercentageWorld] = useState(0);
+  const [youngerPercentageRomania, setYoungerPercentageRomania] = useState(0);
+  const [age, setAge] = useState(0);
+  const [lifeExpectancy, setLifeExpectancy] = useState(0);
+  const [romaniaPopulation, setRomaniaPopulation] = useState(0);
+  const [youngerRomania, setYoungerRomania] = useState(0);
+  const [olderRomania, setOlderRomania] = useState(0);
+  const [testBool, setTestBool] = useState(false);
+  const [births, setBirths] = useState(0);
+  const [estimatedBirths, setEstimatedBirths] = useState(0);
+  const [birthsPerHour, setBirthsPerHour] = useState(0);
+  const [worldLifeSpan, setWorldLifeSpan] = useState();
+  const [countryLifeSpan, setCountryLifeSpan] = useState();
+  const [nextMilestoneDate, setNextMilestoneDate] = useState();
+  const [billionMilestone, setBillionMilestone] = useState();
+
 
   async function getCountries() {
     const response = await fetch(LOCALHOST + "countries")
@@ -279,15 +311,92 @@ const Demographic = () => {
     ))
   }
 
+  async function getCountryLifeSpan() {
+    const response = await fetch(LOCALHOST + "lifeExpectancy/" + countryChoice + "/" + yearChoice + "/")
+    const jsonData = await response.json()
+    setCountryLifeSpan(jsonData)
+  }
+
+  async function getWorldLifeSpan() {
+    const response = await fetch(LOCALHOST + "lifeExpectancy/World/" + yearChoice + "/")
+    const jsonData = await response.json()
+    setWorldLifeSpan(jsonData)
+  }
+
+  async function calculateLifeSpan() {
+    getWorldLifeSpan();
+    getCountryLifeSpan();
+    const worldLifeSpanDate = dayChoice + "/" + monthChoice + "/" + yearChoice + worldLifeSpan
+    console.log(worldLifeSpanDate)
+  }
+
+  async function calculateEstimatedPeopleBorn() {
+    const response = await fetch(LOCALHOST + "population/World/" + yearChoice)
+    const jsonData = await response.json()
+
+    const birthDate = new Date(yearChoice - 1, monthChoice - 1, dayChoice)
+    const currentDate = new Date()
+
+
+    const populationGrowth = simulatedPopulation - jsonData
+    const timeElapsed = (currentDate - birthDate) / (1000 * 60 * 60 * 24 * 365.25);
+
+    const avgAnnualGrowth = jsonData / timeElapsed;
+    console.log(avgAnnualGrowth)
+    const daysEstimate = (3_000_000_000 / avgAnnualGrowth) * 365.25;
+    const estimatedDate = new Date(currentDate);
+    estimatedDate.setDate(currentDate.getDate() + Math.round(daysEstimate))
+    const correctDate = estimatedDate.getDay() + "/" + estimatedDate.getMonth() + "/" + estimatedDate.getFullYear()
+    console.log(estimatedDate.getMonth)
+    setNextMilestoneDate(correctDate)
+    setBillionMilestone("3rd billionth")
+  }
+
+  async function calculateSharedBirths() {
+    if (countryChoice && yearChoice) {
+      const response = await fetch(LOCALHOST + "population/" + countryChoice + "/" + yearChoice)
+      const jsonData = await response.json()
+      fetchYoungerOlder("World", yearChoice);
+      const population = jsonData;
+      const avgDailyBirthRate = (births / simulatedPopulation) * 1000
+      setBirthsPerHour(parseInt(births / 8760).toLocaleString())
+      console.log(birthsPerHour)
+      const avgBirthRate = (avgDailyBirthRate / 1000) * 365
+      const proportionBirths = 1 / 365
+      const estimatedBirths = avgBirthRate * proportionBirths / 100 * simulatedPopulation
+      setEstimatedBirths(estimatedBirths)
+      calculateLifeSpan()
+      calculateEstimatedPeopleBorn()
+    }
+  }
+
+  function calculateCounts() {
+    const proportion = parseFloat(age) / lifeExpectancy;
+    const younger = Math.floor(simulatedPopulation * proportion);
+    const youngerRomania = Math.floor(romaniaPopulation * proportion);
+    const olderRomania = romaniaPopulation - youngerRomania;
+    const older = simulatedPopulation - younger;
+    const youngerPercentageWorld = ((older / simulatedPopulation) * 100)
+    const youngerPercentageRomania = ((olderRomania / romaniaPopulation) * 100)
+    setYoungerPercentageRomania(youngerPercentageRomania)
+    setYoungerPercentageWorld(youngerPercentageWorld)
+    setYoungerRomania(youngerRomania);
+    setOlderRomania(olderRomania);
+    setYoungPersonCount(younger);
+    setOldPersonCount(older);
+    setOlderPercentageWorld((younger / simulatedPopulation) * 100);
+    setOlderPercentageRomania((youngerRomania / romaniaPopulation) * 100);
+    calculateSharedBirths()
+    calculateEstimatedPeopleBorn()
+  }
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
-
-
-    console.log("day: " + dayChoice)
-    console.log("month: " + monthChoice)
-    console.log("year: " + yearChoice)
-    console.log("country: " + countryChoice)
-    console.log("gender: " + selected)
+    setValidated(true);
+    const age = 2023 - yearChoice;
+    setAge(age)
+    calculateCounts();
   }
 
 
@@ -307,8 +416,13 @@ const Demographic = () => {
     setCountryChoice(e.target.value)
   }
 
-  const handleToggle = (gender) => {
-    setSelected(gender)
+  const handleToggleGender = (param) => {
+    setGender(param)
+  }
+
+  const handleToggleRegion = (param) => {
+    testBool ? setTestBool(false) : setTestBool(true);
+    setRegion(param)
   }
 
   return (
@@ -336,16 +450,16 @@ const Demographic = () => {
           <p>The journey of your life in numbers and dates! <br />
             Please enter your date of birth, country of birth and sex at birth:</p>
           <form onSubmit={handleSubmit}>
-            <input className="day" value={dayChoice} onChange={handleDay} type="text" name="name" placeholder='Day' />
-            <select className="month" value={monthChoice} onChange={handleMonth}>
+            <input className="day" required value={dayChoice} onChange={handleDay} type="text" name="name" placeholder='Day' />
+            <select className="month" required value={monthChoice} onChange={handleMonth}>
               {months.map((month, index) => (
                 <option key={index} value={index + 1}>
                   {month}
                 </option>
               ))}
             </select>
-            <input className="year" value={yearChoice} onChange={handleYear} type="text" name="name" placeholder='Year' />
-            <select className="country" value={countryChoice} onChange={handleCountry}>
+            <input className="year" required value={yearChoice} onChange={handleYear} type="text" name="name" placeholder='Year' />
+            <select className="country" required value={countryChoice} onChange={handleCountry}>
               {countries.map((country, countrykey) => (
                 <option key={countrykey} value={country}>
                   {country}
@@ -354,23 +468,74 @@ const Demographic = () => {
             </select>
             <div className='toggle'>
               <button
+                type='button'
                 id='option1Btn'
                 className={selected === "male" ? "selected" : "notSelected"}
-                onClick={() => handleToggle("male")}>
+                onClick={() => handleToggleGender("male")}>
                 Male
               </button>
               <button
+                type='button'
                 className={selected === "female" ? "selected" : "notSelected"}
-                onClick={() => handleToggle("female")}>
+                onClick={() => handleToggleGender("female")}>
                 Female
               </button>
             </div>
-            <button className='goBtn'>
+            <button className='goBtn' type='submit'>
               go
             </button>
           </form>
         </div>
+        {validated ?
+          <div className='youngOld'>
+            <h3>Do you think you belong to the young or old? You are the <span>{youngPersonCount.toLocaleString()}</span> person alive on the planet. This means that you are older than <span>{olderPercentageWorld.toFixed(2)}%</span> of the world's population and older than <span>{youngerRomania.toLocaleString()}</span> people in Romania.</h3>
+            <div className="region-switcher"></div>
+            <div className='toggleRegion'>
+              <button
+                type='button'
+                id='option1Btn'
+                className={region === "World" ? "selected" : "notSelected"}
+                onClick={() => handleToggleRegion("World")}>
+                World
+              </button>
+              <button
+                type='button'
+                className={testBool === true ? "selected" : "notSelected"}
+                onClick={() => handleToggleRegion({ region })}>
+                {countryChoice}
+              </button>
+            </div>
+            <div className="younger-older-you">
+              <div className="younger-you">
+                <div className="younger-num">{testBool === true ? youngerRomania.toLocaleString() : youngPersonCount.toLocaleString()}</div>
+                <p>People younger than you ({testBool === true ? olderPercentageRomania.toFixed(2) : olderPercentageWorld.toFixed(2)}%)</p>
+              </div>
+              <div className="citizen">
+                <div className="citizen-icon">
+                  {selected === "male" ? <svg xmlns="http://www.w3.org/2000/svg" height="5em" viewBox="0 0 320 512"><path d="M112 48a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm40 304V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V256.9L59.4 304.5c-9.1 15.1-28.8 20-43.9 10.9s-20-28.8-10.9-43.9l58.3-97c17.4-28.9 48.6-46.6 82.3-46.6h29.7c33.7 0 64.9 17.7 82.3 46.6l58.3 97c9.1 15.1 4.2 34.8-10.9 43.9s-34.8 4.2-43.9-10.9L232 256.9V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V352H152z" /></svg> : <svg xmlns="http://www.w3.org/2000/svg" height="5em" viewBox="0 0 320 512"><path d="M160 0a48 48 0 1 1 0 96 48 48 0 1 1 0-96zM88 384H70.2c-10.9 0-18.6-10.7-15.2-21.1L93.3 248.1 59.4 304.5c-9.1 15.1-28.8 20-43.9 10.9s-20-28.8-10.9-43.9l53.6-89.2c20.3-33.7 56.7-54.3 96-54.3h11.6c39.3 0 75.7 20.6 96 54.3l53.6 89.2c9.1 15.1 4.2 34.8-10.9 43.9s-34.8 4.2-43.9-10.9l-33.9-56.3L265 362.9c3.5 10.4-4.3 21.1-15.2 21.1H232v96c0 17.7-14.3 32-32 32s-32-14.3-32-32V384H152v96c0 17.7-14.3 32-32 32s-32-14.3-32-32V384z" /></svg>}
+                </div>
 
+                You as a citizen of {testBool === true ? countryChoice : "World"}
+              </div>
+              <div className="older-you">
+                <div className="older-num">{testBool === true ? olderRomania.toLocaleString() : oldPersonCount.toLocaleString()}</div>
+                <p>People older than you ({testBool === true ? youngerPercentageRomania.toFixed(2) : youngerPercentageWorld.toFixed(2)}%)</p>
+              </div>
+            </div>
+            <div className="milestones">
+              <h1>What are the big milestones to expect in your life?</h1>
+              <h1>Your next milestone is <span>{nextMilestoneDate}</span> when you'll be the <span>{billionMilestone}</span> person to be alive in the world.</h1>
+            </div>
+            <div className="milestones">
+              <h1>Did you know that you share a birthday with about <span>{parseInt(estimatedBirths).toLocaleString()}</span> people around the world and that approximately <span>{birthsPerHour}</span> people were born in the same hour?</h1>
+            </div>
+            <div className="timeline">
+              {/* <h2>Timeline (projections)</h2> */}
+            </div>
+            <div className="lifespan">
+              <h1>We estimate that you will live until <span>{parseInt(worldLifeSpan)}</span> if you were an average world citizen. Whereas in <span>{countryChoice}</span> it would be until <span>{parseInt(countryLifeSpan)}</span> years old.</h1>
+            </div>
+          </div> : null}
 
 
 

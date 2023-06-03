@@ -14,6 +14,7 @@ def getCountries(request):
         return HttpResponse(json.dumps(list(countries)))
     else:
         return HttpResponseNotFound('<h1>Page not found</h1>')
+        
 def getWorldPopulation(request, country, year):
     all_entries = Population.objects.all().values()
     country_year = all_entries.filter(country=country, year=year)
@@ -35,9 +36,9 @@ def getYoungerOlderInfo(request, country, year):
     world_2023 = all_entries.filter(country='World', year=2023)
     world_birth = all_entries.filter(country=country, year=year)
     growth_rate = world_2023[0]['population_growth_rate']
-    born_population = world_birth[0]['total_population'] * 1000
-    print(json.dumps(born_population), json.dumps(growth_rate))
-    return HttpResponse(json.dumps(born_population), json.dumps(growth_rate))
+    birth_rate = world_birth[0]['births'] * 1000
+    print(json.dumps(birth_rate))
+    return HttpResponse(json.dumps(birth_rate))
 
 def getLifeExpectancy(request, country, year):
     all_entries = Population.objects.all().values()
