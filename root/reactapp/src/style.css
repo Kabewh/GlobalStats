@@ -300,30 +300,6 @@
     font-weight: 300;
 }
 
-@keyframes up {
-    0% {
-        margin-top: 75px;
-        margin-left: 100px;
-    }
-
-    100% {
-        margin-top: 0px;
-        margin-left: 300px;
-    }
-}
-
-
-.world-clock h3 svg.up {
-    width: 40px;
-    height: 40px;
-    margin-left: 100px;
-    /* margin-top: 75px; */
-    animation-name: up;
-    animation-duration: 1.2s;
-    animation-direction: alternate;
-    animation-iteration-count: infinite;
-
-}
 
 .world-clock h3 svg {
     position: relative;
@@ -588,4 +564,55 @@ form {
     line-height: 1.2em;
     font-family: plantinmtstd-light, sans-serif;
     font-weight: 600;
+}
+
+@keyframes up {
+    0% {
+        margin-top: 100px;
+        margin-left: -50px;
+    }
+
+    100% {}
+}
+
+@keyframes slide {
+    from {
+        transform: translateX(0%);
+    }
+
+    to {
+        transform: translateX(100%);
+    }
+}
+
+/* .world-clock h3 svg  */
+.up {
+    overflow: hidden;
+    width: 40px;
+    height: 40px;
+    margin-top: 75px;
+    animation-name: up;
+    animation-duration: 1s;
+    animation-direction: normal;
+    animation-iteration-count: 1;
+}
+
+
+.babies {
+    margin-left: 100px;
+}
+
+.babyGenerator {
+    width: 40px;
+}
+
+.line_graph {
+    width: 1000px;
+    margin: 0 auto;
+}
+
+.ageIdentifier {
+    height: 100px;
+    width: 10px;
+    margin-bottom: 100px;
 }

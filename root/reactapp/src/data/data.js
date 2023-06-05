@@ -1,4 +1,5 @@
-[
+
+export const data = [
     {
         "name": 1950,
         "population": 2584034261
@@ -286,5 +287,5 @@
     {
         "name": 2021,
         "population": 7876931987
-    },
+    }
 ]

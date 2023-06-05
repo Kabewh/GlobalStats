@@ -1,84 +1,100 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import { json } from 'react-router-dom';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
+// import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { read, utils, writeFile } from 'xlsx';
+import { data } from '../data/data'
+import { age_population_data } from '../data/age_population_data';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Filler,
+  Legend,
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
+import OverflowElement from '../components/georgelpetre';
+
+
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Filler,
+  Legend
+)
+
+export const options = {
+
+  responsive: true,
+  elements: {
+    point: {
+      radius: 2
+    }
+  },
+  scales: {
+    x: {
+      grid: {
+        display: false
+      }
+    },
+    y: {
+      grid: {
+        display: false
+      }
+    }
+  },
+  plugins: {
+    legend: {
+      position: 'top',
+    },
+    title: {
+      display: true,
+      text: 'Chart.js Line Chart',
+    },
+  },
+
+};
+
+const labels = Array.from({ length: 80 }, (_, index) => index);
+
+const modifiedData = age_population_data.map((item) => {
+  return {
+    age: item.age,
+    population: item.population,
+  }
+})
+
+
+export const dataset = {
+  labels,
+  datasets: [
+    {
+      fill: true,
+      label: 'Age_Population',
+      // data: modifiedData.map((item) => item.population),
+      data: modifiedData.map((item) => {
+        return item.population;
+      }),
+      borderColor: '#333',
+      backgroundColor: 'rgba(97, 63, 194, 0.5)',
+    },
+  ],
+};
+
+console.log(dataset)
+
+
 
 const Demographic = () => {
-  const data = [{ name: '1950', population: 2584034261 },
-  { name: '1951', population: 2584034261 },
-  { name: '1952', population: 2630861562 },
-  { name: '1953', population: 2677608960 },
-  { name: '1954', population: 2718651703 },
-  { name: '1955', population: 2773492579 },
-  { name: '1956', population: 2828512683 },
-  { name: '1957', population: 2887221030 },
-  { name: '1958', population: 2944995164 },
-  { name: '1959', population: 2995589212 },
-  { name: '1960', population: 3042877656 },
-  { name: '1961', population: 3093863563 },
-  { name: '1962', population: 3159509922 },
-  { name: '1963', population: 3232048572 },
-  { name: '1964', population: 3302376104 },
-  { name: '1965', population: 3371847862 },
-  { name: '1966', population: 3440986209 },
-  { name: '1967', population: 3509910122 },
-  { name: '1968', population: 3583711493 },
-  { name: '1969', population: 3657599057 },
-  { name: '1970', population: 3733181615 },
-  { name: '1971', population: 3807144569 },
-  { name: '1972', population: 3882457201 },
-  { name: '1973', population: 3958045806 },
-  { name: '1974', population: 4032988348 },
-  { name: '1975', population: 4105886113 },
-  { name: '1976', population: 4179125652 },
-  { name: '1977', population: 4252419327 },
-  { name: '1978', population: 4326896089 },
-  { name: '1979', population: 4404269653 },
-  { name: '1980', population: 4483745758 },
-  { name: '1981', population: 4565509559 },
-  { name: '1982', population: 4650460182 },
-  { name: '1983', population: 4733308294 },
-  { name: '1984', population: 4818363854 },
-  { name: '1985', population: 4905097372 },
-  { name: '1986', population: 4995029307 },
-  { name: '1987', population: 5086939683 },
-  { name: '1988', population: 5177648264 },
-  { name: '1989', population: 5269760352 },
-  { name: '1990', population: 5362591372 },
-  { name: '1991', population: 5449900363 },
-  { name: '1992', population: 5535471822 },
-  { name: '1993', population: 5535471822 },
-  { name: '1994', population: 5619395224 },
-  { name: '1995', population: 5702060762 },
-  { name: '1996', population: 5784378146 },
-  { name: '1997', population: 5865912450 },
-  { name: '1998', population: 5947050072 },
-  { name: '1999', population: 6027574888 },
-  { name: '2000', population: 6107942028 },
-  { name: '2001', population: 6189855922 },
-  { name: '2002', population: 6271638043 },
-  { name: '2003', population: 6353176677 },
-  { name: '2004', population: 6434620053 },
-  { name: '2005', population: 6516882903 },
-  { name: '2006', population: 6599469335 },
-  { name: '2007', population: 6683363101 },
-  { name: '2008', population: 6768533988 },
-  { name: '2009', population: 6854660556 },
-  { name: '2010', population: 6941951260 },
-  { name: '2011', population: 7029254950 },
-  { name: '2012', population: 7116995900 },
-  { name: '2013', population: 7206399942 },
-  { name: '2014', population: 7294786798 },
-  { name: '2015', population: 7383240040 },
-  { name: '2016', population: 7469955033 },
-  { name: '2017', population: 7556993443 },
-  { name: '2018', population: 7642651364 },
-  { name: '2019', population: 7724928292 },
-  { name: '2020', population: 7804973773 },
-  { name: '2021', population: 7876931987 },
-  ];
-
   const months = [
     "January", "February", "March", "April",
     "May", "June", "July", "August",
@@ -88,6 +104,7 @@ const Demographic = () => {
 
   const LOCALHOST = "http://localhost:8000/"
 
+  const [ageRef, setAgeRef] = useState();
   const [simulatedPopulation, setSimulatedPopulation] = useState(0);
   const [changePerSecond, setChangePerSecond] = useState(0);
   const [movies, setMovies] = useState([]);
@@ -160,22 +177,25 @@ const Demographic = () => {
   //     });
   //   });
   // }
-  const modifiedData = data.map((item) => {
-    return {
-      name: item.name,
-      population: item.population.toLocaleString(),
-    }
-  })
+  // const modifiedData = data.map((item) => {
+  //   return {
+  //     name: item.name,
+  //     population: item.population.toLocaleString(),
+  //   }
+  // })
 
-  const renderLineChart = (
-    <LineChart width={1000} height={400} data={data} margin={{ top: 20, right: 20, bottom: 5, left: 90 }}>
-      <Line type="monotone" dataKey="population" stroke="#8884d8" />
-      <CartesianGrid stroke="#ccc" strokeDasharray="3 3" />
-      <XAxis dataKey="name" />
-      <YAxis dataKey="population" />
-      <Tooltip />
-    </LineChart>
-  );
+  // const renderLineChart = (
+  //   <LineChart width={1000} height={400} data={data} margin={{ top: 20, right: 20, bottom: 5, left: 90 }}>
+  //     <Line type="monotone" dataKey="population" stroke="#8884d8" />
+  //     <CartesianGrid stroke="#ccc" strokeDasharray="3 3" />
+  //     <XAxis dataKey="name" />
+  //     <YAxis dataKey="population" />
+  //     <Tooltip />
+  //   </LineChart>
+  // );
+
+
+
 
   async function fetchPopulation() {
     const response = await fetch(LOCALHOST + "population/" + "World" + "/" + "2023" + "/")
@@ -269,6 +289,7 @@ const Demographic = () => {
     const jsonData = await response.json()
     const interval = setInterval(() => {
       setSimulatedPopulation(data => data + 3);
+      addDivElement()
     }, 1000);
     return () => clearInterval(interval);
   }
@@ -301,7 +322,7 @@ const Demographic = () => {
   const [countryLifeSpan, setCountryLifeSpan] = useState();
   const [nextMilestoneDate, setNextMilestoneDate] = useState();
   const [billionMilestone, setBillionMilestone] = useState();
-
+  const [divElements, setDivElements] = useState([]);
 
   async function getCountries() {
     const response = await fetch(LOCALHOST + "countries")
@@ -425,6 +446,14 @@ const Demographic = () => {
     setRegion(param)
   }
 
+
+  const addDivElement = () => {
+    setDivElements(prevDivs => [...prevDivs, <div key={prevDivs.length} class="babyGenerator"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className='up'><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg></div>]);
+
+  };
+
+
+
   return (
     <>
       <Navbar />
@@ -433,14 +462,16 @@ const Demographic = () => {
           <h3>
             <p>Current world<br></br>population clock</p>
             <p className="population-counter">{simulatedPopulation.toLocaleString("en")}</p>
-            <svg className='up' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg>
+            <div className='babies'>
+            </div>{divElements.map(div => div).reverse()}
+            {/* {<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg> */
+            /*<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg> */}
           </h3>
         </div>
         <div className='question'>
@@ -486,7 +517,7 @@ const Demographic = () => {
             </button>
           </form>
         </div>
-        {validated ?
+        {!validated ?
           <div className='youngOld'>
             <h3>Do you think you belong to the young or old? You are the <span>{youngPersonCount.toLocaleString()}</span> person alive on the planet. This means that you are older than <span>{olderPercentageWorld.toFixed(2)}%</span> of the world's population and older than <span>{youngerRomania.toLocaleString()}</span> people in Romania.</h3>
             <div className="region-switcher"></div>
@@ -520,7 +551,30 @@ const Demographic = () => {
               <div className="older-you">
                 <div className="older-num">{testBool === true ? olderRomania.toLocaleString() : oldPersonCount.toLocaleString()}</div>
                 <p>People older than you ({testBool === true ? youngerPercentageRomania.toFixed(2) : youngerPercentageWorld.toFixed(2)}%)</p>
+
+
+                {/* <AreaChart
+                    width={600}
+                    height={300}
+                    data={modifiedData}
+                    margin={{
+                      top: 10,
+                      right: 30,
+                      left: 0,
+                      bottom: 0,
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray="1 3" />
+                    <XAxis dataKey="age" />
+                    <YAxis />
+                    <Tooltip />
+                    <Area type="monotone" dataKey="population" stroke="#8884d8" fill="#8884d8" />
+                  </AreaChart> */}
+
               </div>
+            </div>
+            <div className='line_graph'>
+              <Line options={options} data={dataset} />
             </div>
             <div className="milestones">
               <h1>What are the big milestones to expect in your life?</h1>
