@@ -18,8 +18,7 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import OverflowElement from '../components/georgelpetre';
-
-
+import Graph from '../components/Graph';
 
 ChartJS.register(
   CategoryScale,
@@ -32,8 +31,16 @@ ChartJS.register(
   Legend
 )
 
-export const options = {
+const months = [
+  "January", "February", "March", "April",
+  "May", "June", "July", "August",
+  "September", "October", "November", "December"
+];
 
+const total_deaths = 69248000;
+const LOCALHOST = "http://localhost:8000/"
+
+export const options = {
   responsive: true,
   elements: {
     point: {
@@ -57,14 +64,20 @@ export const options = {
       position: 'top',
     },
     title: {
-      display: true,
+      display: false,
       text: 'Chart.js Line Chart',
     },
+    tooltip: {
+      enabled: true,
+      poision: 'nearest',
+      intersect: false,
+
+    }
   },
 
 };
 
-const labels = Array.from({ length: 80 }, (_, index) => index);
+const labels = Array.from({ length: 81 }, (_, index) => index);
 
 const modifiedData = age_population_data.map((item) => {
   return {
@@ -73,14 +86,12 @@ const modifiedData = age_population_data.map((item) => {
   }
 })
 
-
 export const dataset = {
   labels,
   datasets: [
     {
       fill: true,
-      label: 'Age_Population',
-      // data: modifiedData.map((item) => item.population),
+      label: 'population',
       data: modifiedData.map((item) => {
         return item.population;
       }),
@@ -90,20 +101,8 @@ export const dataset = {
   ],
 };
 
-console.log(dataset)
-
-
 
 const Demographic = () => {
-  const months = [
-    "January", "February", "March", "April",
-    "May", "June", "July", "August",
-    "September", "October", "November", "December"
-  ];
-
-
-  const LOCALHOST = "http://localhost:8000/"
-
   const [ageRef, setAgeRef] = useState();
   const [simulatedPopulation, setSimulatedPopulation] = useState(0);
   const [changePerSecond, setChangePerSecond] = useState(0);
@@ -157,7 +156,7 @@ const Demographic = () => {
     getCountries()
     // fetchYoungerOlder() // --working
     fetchLifeExpectancy("World", 2023) // --working
-
+    // getDeaths()
     calculatePopulation()
 
     // populateChart()
@@ -218,7 +217,6 @@ const Demographic = () => {
     const response = await fetch(LOCALHOST + "youngerOlderInfo/" + country + "/" + year + "/")
     const jsonData = await response.json()
     setBirths(jsonData)
-    console.log("fetch younger Older: " + jsonData.toLocaleString())
   }
 
   async function fetchLifeExpectancy(country, year) {
@@ -287,6 +285,8 @@ const Demographic = () => {
   async function calculatePopulation() {
     const response = await fetch(LOCALHOST + "population/World/2023")
     const jsonData = await response.json()
+    const popgrowthrate = 0.0108 // 18.5 crude birth rate - 7.7 crude death rate / 1000  rata neta a cresterii populatiei per 1000 locuitori
+    const secondBirthRate = 8_000_000_000 * 0.0108 / (365 * 24 * 60 * 60) // rata nasterii pe secunda 
     const interval = setInterval(() => {
       setSimulatedPopulation(data => data + 3);
       addDivElement()
@@ -295,8 +295,8 @@ const Demographic = () => {
   }
 
   const [dayChoice, setDayChoice] = useState('')
-  const [monthChoice, setMonthChoice] = useState('')
-  const [yearChoice, setYearChoice] = useState('')
+  const [monthChoice, setMonthChoice] = useState(0)
+  const [yearChoice, setYearChoice] = useState()
   const [countryChoice, setCountryChoice] = useState('')
   const [countries, setCountries] = useState([])
   const [selected, setGender] = useState("male");
@@ -318,11 +318,26 @@ const Demographic = () => {
   const [births, setBirths] = useState(0);
   const [estimatedBirths, setEstimatedBirths] = useState(0);
   const [birthsPerHour, setBirthsPerHour] = useState(0);
-  const [worldLifeSpan, setWorldLifeSpan] = useState();
+  const [worldLifeSpan, setWorldLifeSpan] = useState('');
+  const [worldLifeSpanDate, setWorldLifeSpanDate] = useState('');
   const [countryLifeSpan, setCountryLifeSpan] = useState();
+  const [countryLifeSpanDate, setCountryLifeSpanDate] = useState('');
   const [nextMilestoneDate, setNextMilestoneDate] = useState();
-  const [billionMilestone, setBillionMilestone] = useState();
+  const [billionMilestone, setBillionMilestone] = useState(0);
+  const [firstBillion, setFirstBillion] = useState(0);
+  const [secondBillion, setSecondBillion] = useState(0);
+  const [thirdBillion, setThirdBillion] = useState(0);
+  const [fourthBillion, setFourthBillion] = useState(0);
+  const [fifthBillion, setFifthBillion] = useState(0);
+  const [sixthBillion, setSixthBillion] = useState(0);
+  const [seventhBillion, setSeventhBillion] = useState(0);
+  const [eighthBillion, setEighthBillion] = useState(0);
+  const [ninthBillion, setNinthBillion] = useState(0);
+  const [tenthBillion, setTenthBillion] = useState(0);
+  const [eighteenthBirthday, setEighteenthBirthday] = useState(0);
   const [divElements, setDivElements] = useState([]);
+  const [abbrMonth, setAbbrMonth] = useState('');
+  const [coolDeaths, setCoolDeaths] = useState(0);
 
   async function getCountries() {
     const response = await fetch(LOCALHOST + "countries")
@@ -345,32 +360,78 @@ const Demographic = () => {
   }
 
   async function calculateLifeSpan() {
+    getCountryLifeSpan("Romania", 2023);
     getWorldLifeSpan();
     getCountryLifeSpan();
-    const worldLifeSpanDate = dayChoice + "/" + monthChoice + "/" + yearChoice + worldLifeSpan
-    console.log(worldLifeSpanDate)
+    const intYear = parseInt(yearChoice) + parseInt(worldLifeSpan)
+    const intYearCountry = parseInt(yearChoice) + parseInt(countryLifeSpan)
+    const worldLifeSpanDate = dayChoice + "/" + monthChoice + "/" + intYear
+    const countryLifeSpanDate = dayChoice + "/" + monthChoice + "/" + intYearCountry
+    setCountryLifeSpanDate(countryLifeSpanDate)
+    setWorldLifeSpanDate(worldLifeSpanDate)
   }
 
   async function calculateEstimatedPeopleBorn() {
     const response = await fetch(LOCALHOST + "population/World/" + yearChoice)
     const jsonData = await response.json()
-
-    const birthDate = new Date(yearChoice - 1, monthChoice - 1, dayChoice)
+    const birthDate = new Date(yearChoice - 1, monthChoice, dayChoice)
     const currentDate = new Date()
-
-
     const populationGrowth = simulatedPopulation - jsonData
     const timeElapsed = (currentDate - birthDate) / (1000 * 60 * 60 * 24 * 365.25);
-
     const avgAnnualGrowth = jsonData / timeElapsed;
-    console.log(avgAnnualGrowth)
     const daysEstimate = (3_000_000_000 / avgAnnualGrowth) * 365.25;
     const estimatedDate = new Date(currentDate);
     estimatedDate.setDate(currentDate.getDate() + Math.round(daysEstimate))
     const correctDate = estimatedDate.getDay() + "/" + estimatedDate.getMonth() + "/" + estimatedDate.getFullYear()
-    console.log(estimatedDate.getMonth)
     setNextMilestoneDate(correctDate)
     setBillionMilestone("3rd billionth")
+  }
+
+  function calculateMilestones() {
+    const millisecondsPerYear = 1000 * 60 * 60 * 24 * 365.25;
+    const birthDate = new Date(yearChoice, monthChoice - 1, dayChoice)
+    console.log(birthDate)
+    const averageBirthsPerYear = 130_000_000
+    const billionEstimate = (1_000_000_000 / averageBirthsPerYear);
+    const twoBillionEstimate = (2_000_000_000 / averageBirthsPerYear);
+    const threeBillionEstimate = (3_000_000_000 / averageBirthsPerYear);
+    const fourBillionEstimate = (4_000_000_000 / averageBirthsPerYear);
+    const fiveBillionEstimate = (5_000_000_000 / averageBirthsPerYear);
+    const sixBillionEstimate = (6_000_000_000 / averageBirthsPerYear);
+    const sevenBillionEstimate = (7_000_000_000 / averageBirthsPerYear);
+    const eightBillionEstimate = (8_000_000_000 / averageBirthsPerYear);
+    const nineBillionEstimate = (9_000_000_000 / averageBirthsPerYear);
+    const tenBillionEstimate = (10_000_000_000 / averageBirthsPerYear);
+    const firstBillion = new Date(birthdate.getTime() + billionEstimate * millisecondsPerYear)
+    const secondBillion = new Date(birthdate.getTime() + twoBillionEstimate * millisecondsPerYear)
+    const thirdBillion = new Date(birthdate.getTime() + threeBillionEstimate * millisecondsPerYear)
+    const fourthBillion = new Date(birthdate.getTime() + fourBillionEstimate * millisecondsPerYear)
+    const fifthBillion = new Date(birthdate.getTime() + fiveBillionEstimate * millisecondsPerYear)
+    const sixthBillion = new Date(birthdate.getTime() + sixBillionEstimate * millisecondsPerYear)
+    const seventhBillion = new Date(birthdate.getTime() + sevenBillionEstimate * millisecondsPerYear)
+    const eighthBillion = new Date(birthdate.getTime() + eightBillionEstimate * millisecondsPerYear)
+    const ninthBillion = new Date(birthdate.getTime() + nineBillionEstimate * millisecondsPerYear)
+    const tenthBillion = new Date(birthdate.getTime() + tenBillionEstimate * millisecondsPerYear)
+    const tenthBillionMonth = tenthBillion.getMonth() + 1
+    const ninthBillionMonth = ninthBillion.getMonth() + 1
+    const eighthBillionMonth = eighthBillion.getMonth() + 1
+    const seventhBillionMonth = seventhBillion.getMonth() + 1
+    const sixthBillionMonth = sixthBillion.getMonth() + 1
+    const fifthBillionMonth = fifthBillion.getMonth() + 1
+    const fourthBillionMonth = fourthBillion.getMonth() + 1
+    const thirdBillionMonth = thirdBillion.getMonth() + 1
+    const secondBillionMonth = secondBillion.getMonth() + 1
+    const firstBillionMonth = firstBillion.getMonth() + 1
+    setFirstBillion(firstBillion.getDate() + "/" + firstBillionMonth + "/" + firstBillion.getFullYear());
+    setSecondBillion(secondBillion.getDate() + "/" + secondBillionMonth + "/" + secondBillion.getFullYear());
+    setThirdBillion(thirdBillion.getDate() + "/" + thirdBillionMonth + "/" + thirdBillion.getFullYear());
+    setFourthBillion(fourthBillion.getDate() + "/" + fourthBillionMonth + "/" + fourthBillion.getFullYear());
+    setFifthBillion(fifthBillion.getDate() + "/" + fifthBillionMonth + "/" + fifthBillion.getFullYear());
+    setSixthBillion(sixthBillion.getDate() + "/" + sixthBillionMonth + "/" + sixthBillion.getFullYear());
+    setSeventhBillion(seventhBillion.getDate() + "/" + seventhBillionMonth + "/" + seventhBillion.getFullYear());
+    setEighthBillion(eighthBillion.getDate() + "/" + eighthBillionMonth + "/" + eighthBillion.getFullYear());
+    setNinthBillion(ninthBillion.getDate() + "/" + ninthBillionMonth + "/" + ninthBillion.getFullYear());
+    setTenthBillion(tenthBillion.getDate() + "/" + tenthBillionMonth + "/" + tenthBillion.getFullYear());
   }
 
   async function calculateSharedBirths() {
@@ -381,7 +442,6 @@ const Demographic = () => {
       const population = jsonData;
       const avgDailyBirthRate = (births / simulatedPopulation) * 1000
       setBirthsPerHour(parseInt(births / 8760).toLocaleString())
-      console.log(birthsPerHour)
       const avgBirthRate = (avgDailyBirthRate / 1000) * 365
       const proportionBirths = 1 / 365
       const estimatedBirths = avgBirthRate * proportionBirths / 100 * simulatedPopulation
@@ -391,9 +451,9 @@ const Demographic = () => {
     }
   }
 
-  function calculateCounts() {
-    const proportion = parseFloat(age) / lifeExpectancy;
-    const younger = Math.floor(simulatedPopulation * proportion);
+  async function calculateCounts() {
+    const proportion = parseFloat(age) / lifeExpectancy; // 0.5
+    const younger = Math.floor(simulatedPopulation * proportion); // 
     const youngerRomania = Math.floor(romaniaPopulation * proportion);
     const olderRomania = romaniaPopulation - youngerRomania;
     const older = simulatedPopulation - younger;
@@ -409,13 +469,28 @@ const Demographic = () => {
     setOlderPercentageRomania((youngerRomania / romaniaPopulation) * 100);
     calculateSharedBirths()
     calculateEstimatedPeopleBorn()
+    calculateMilestones()
+    const interval = setInterval(() => {
+
+    }, 1000);
+    return () => clearInterval(interval);
   }
 
+  // async function getDeaths() {
+  //   const response = await fetch(LOCALHOST + "deaths")
+  //   const jsonData = await response.json()
+  //   const deathMap = jsonData.map((item, index) => {
+  //     console.log(index + ": " + (item * 1000 / total_deaths) * 100)
+  //   })
+  // }
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setValidated(true);
     const age = 2023 - yearChoice;
+    const birthday = parseInt(yearChoice) + 18;
+    console.log(birthday)
+    setEighteenthBirthday(birthday)
     setAge(age)
     calculateCounts();
   }
@@ -427,6 +502,7 @@ const Demographic = () => {
 
   const handleMonth = (e) => {
     setMonthChoice(e.target.value)
+    setAbbrMonth(e.target.value.slice(0, 3))
   }
 
   const handleYear = (e) => {
@@ -445,7 +521,6 @@ const Demographic = () => {
     testBool ? setTestBool(false) : setTestBool(true);
     setRegion(param)
   }
-
 
   const addDivElement = () => {
     setDivElements(prevDivs => [...prevDivs, <div key={prevDivs.length} class="babyGenerator"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className='up'><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg></div>]);
@@ -519,8 +594,7 @@ const Demographic = () => {
         </div>
         {!validated ?
           <div className='youngOld'>
-            <h3>Do you think you belong to the young or old? You are the <span>{youngPersonCount.toLocaleString()}</span> person alive on the planet. This means that you are older than <span>{olderPercentageWorld.toFixed(2)}%</span> of the world's population and older than <span>{youngerRomania.toLocaleString()}</span> people in Romania.</h3>
-            <div className="region-switcher"></div>
+            <h3>Do you think you belong to the young or old? You are the <span>{youngPersonCount.toLocaleString()}</span> person alive on the planet. This means that you are <span>older than {olderPercentageWorld.toFixed(2)}%</span> of the world's population and <span>older than {youngerRomania.toLocaleString()}</span> people in Romania.</h3>
             <div className='toggleRegion'>
               <button
                 type='button'
@@ -545,14 +619,11 @@ const Demographic = () => {
                 <div className="citizen-icon">
                   {selected === "male" ? <svg xmlns="http://www.w3.org/2000/svg" height="5em" viewBox="0 0 320 512"><path d="M112 48a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm40 304V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V256.9L59.4 304.5c-9.1 15.1-28.8 20-43.9 10.9s-20-28.8-10.9-43.9l58.3-97c17.4-28.9 48.6-46.6 82.3-46.6h29.7c33.7 0 64.9 17.7 82.3 46.6l58.3 97c9.1 15.1 4.2 34.8-10.9 43.9s-34.8 4.2-43.9-10.9L232 256.9V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V352H152z" /></svg> : <svg xmlns="http://www.w3.org/2000/svg" height="5em" viewBox="0 0 320 512"><path d="M160 0a48 48 0 1 1 0 96 48 48 0 1 1 0-96zM88 384H70.2c-10.9 0-18.6-10.7-15.2-21.1L93.3 248.1 59.4 304.5c-9.1 15.1-28.8 20-43.9 10.9s-20-28.8-10.9-43.9l53.6-89.2c20.3-33.7 56.7-54.3 96-54.3h11.6c39.3 0 75.7 20.6 96 54.3l53.6 89.2c9.1 15.1 4.2 34.8-10.9 43.9s-34.8 4.2-43.9-10.9l-33.9-56.3L265 362.9c3.5 10.4-4.3 21.1-15.2 21.1H232v96c0 17.7-14.3 32-32 32s-32-14.3-32-32V384H152v96c0 17.7-14.3 32-32 32s-32-14.3-32-32V384z" /></svg>}
                 </div>
-
                 You as a citizen of {testBool === true ? countryChoice : "World"}
               </div>
               <div className="older-you">
                 <div className="older-num">{testBool === true ? olderRomania.toLocaleString() : oldPersonCount.toLocaleString()}</div>
                 <p>People older than you ({testBool === true ? youngerPercentageRomania.toFixed(2) : youngerPercentageWorld.toFixed(2)}%)</p>
-
-
                 {/* <AreaChart
                     width={600}
                     height={300}
@@ -570,7 +641,6 @@ const Demographic = () => {
                     <Tooltip />
                     <Area type="monotone" dataKey="population" stroke="#8884d8" fill="#8884d8" />
                   </AreaChart> */}
-
               </div>
             </div>
             <div className='line_graph'>
@@ -578,10 +648,144 @@ const Demographic = () => {
             </div>
             <div className="milestones">
               <h1>What are the big milestones to expect in your life?</h1>
-              <h1>Your next milestone is <span>{nextMilestoneDate}</span> when you'll be the <span>{billionMilestone}</span> person to be alive in the world.</h1>
+              <h1>Your next milestone is <span>{thirdBillion}</span> when you'll be the <span>{billionMilestone}</span> person to be alive in the world.</h1>
             </div>
+
+            <ul className='projections'>
+              <h3>Timeline (Projections)</h3>
+              <li class="projection">
+                <div className='check-line'></div>
+                <div className='date'>
+                  <h2 className='day-date'>{dayChoice + "/" + abbrMonth + "/" + yearChoice}</h2>
+                </div>
+                <div className='message-date'>
+                  <h2>Your birth!</h2>
+                </div>
+              </li>
+              <li class="projection">
+                <div className='check-line'></div>
+                <div className='date'>
+                  <h2 className='day-date'>{firstBillion}</h2>
+                </div>
+                <div className='message-date'>
+                  <h2>1 billionth person</h2>
+                </div>
+              </li>
+              <li class="projection">
+                <div className='check-line'></div>
+                <div className='date'>
+                  <h2 className='day-date'>{secondBillion}</h2>
+                </div>
+                <div className='message-date'>
+                  <h2>2 billionth person</h2>
+                </div>
+              </li>
+              <li class="projection">
+                <div className='check-line'></div>
+                <div className='date'>
+                  <h2 className='day-date'>{dayChoice + "/" + abbrMonth + "/" + eighteenthBirthday}</h2>
+                </div>
+                <div className='message-date'>
+                  <h2>Your 18th birthday!</h2>
+                </div>
+              </li>
+              <li class="projection">
+                <div className='check-line'></div>
+                <div className='date'>
+                  <h2 className='day-date'>{thirdBillion}</h2>
+                </div>
+                <div className='message-date'>
+                  <h2>3 billionth person</h2>
+                </div>
+              </li>
+              <li class="projection">
+                <div className='check-line'></div>
+                <div className='date'>
+                  <h2 className='day-date'>{fourthBillion}</h2>
+                </div>
+                <div className='message-date'>
+                  <h2>4 billionth person</h2>
+                </div>
+              </li>
+              <li class="projection">
+                <div className='check-line'></div>
+                <div className='date'>
+                  <h2 className='day-date'>{fifthBillion}</h2>
+                </div>
+                <div className='message-date'>
+                  <h2>5 billionth person</h2>
+                </div>
+              </li>
+              <li class="projection">
+                <div className='check-line'></div>
+                <div className='date'>
+                  <h2 className='day-date'>{sixthBillion}</h2>
+                </div>
+                <div className='message-date'>
+                  <h2>6 billionth person</h2>
+                </div>
+              </li>
+              <li class="projection">
+                <div className='check-line'></div>
+                <div className='date'>
+                  <h2 className='day-date'>{seventhBillion}</h2>
+                </div>
+                <div className='message-date'>
+                  <h2>7 billionth person</h2>
+                </div>
+              </li>
+              <li class="projection">
+                <div className='check-line'></div>
+                <div className='date'>
+                  <h2 className='day-date'>{eighthBillion}</h2>
+                </div>
+                <div className='message-date'>
+                  <h2>8 billionth person</h2>
+                </div>
+              </li>
+              <li class="projection">
+                <div className='check-line'></div>
+                <div className='date'>
+                  <h2 className='day-date'>{worldLifeSpanDate}</h2>
+                </div>
+                <div className='message-date'>
+                  <h2>Your projected life expectancy in World</h2>
+                </div>
+              </li>
+              <li class="projection">
+                <div className='check-line'></div>
+                <div className='date'>
+                  <h2 className='day-date'>{ninthBillion}</h2>
+                </div>
+                <div className='message-date'>
+                  <h2>9 billionth person</h2>
+                </div>
+              </li>
+              <li class="projection">
+                <div className='check-line'></div>
+                <div className='date'>
+                  <h2 className='day-date'>{countryLifeSpanDate}</h2>
+                </div>
+                <div className='message-date'>
+                  <h2>Your projected life expectancy in {countryChoice}</h2>
+                </div>
+              </li>
+              <li class="projection">
+                <div className='check-line'></div>
+                <div className='date'>
+                  <h2 className='day-date'>{tenthBillion}</h2>
+                </div>
+                <div className='message-date'>
+                  <h2>10 billionth person</h2>
+                </div>
+              </li>
+            </ul>
             <div className="milestones">
               <h1>Did you know that you share a birthday with about <span>{parseInt(estimatedBirths).toLocaleString()}</span> people around the world and that approximately <span>{birthsPerHour}</span> people were born in the same hour?</h1>
+            </div>
+            <div className='line_graph'>
+              <h3>Mortality Distribution</h3>
+              <Graph />
             </div>
             <div className="timeline">
               {/* <h2>Timeline (projections)</h2> */}

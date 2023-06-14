@@ -24,13 +24,6 @@ def getWorldPopulation(request, country, year):
     else:
         return HttpResponseNotFound('<h1>Page not found</h1>')
 
-all_entries = Population.objects.all().values()
-world_2023 = all_entries.filter(country='World', year=2023)
-world_birth = all_entries.filter(country='World', year=2002)
-growth_rate = world_2023[0]['population_growth_rate']
-born_population = world_birth[0]['total_population'] * 1000
-# print(json.dumps(born_population), json.dumps(growth_rate))
-
 def getYoungerOlderInfo(request, country, year):
     all_entries = Population.objects.all().values()
     world_2023 = all_entries.filter(country='World', year=2023)
@@ -48,6 +41,14 @@ def getLifeExpectancy(request, country, year):
         return HttpResponse(json.dumps(life_expectancy))
     else:
         return HttpResponseNotFound('<h1>Page not found</h1>')
+
+def getDeaths(request):
+    all_entries = Population.objects.all().values()
+    deaths = all_entries.filter(time=2021)
+    death_totals = [entry['death_total'] for entry in deaths]
+    return HttpResponse(json.dumps(death_totals))
+ 
+
 
 # https://www.pbs.org/wgbh/nova/teachers/activities/3108_worldbal_02.html (calculating growth rate)
 

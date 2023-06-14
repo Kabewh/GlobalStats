@@ -195,6 +195,8 @@
     height: 80px;
     padding: 0 50px;
     border-bottom: 1px solid #dedede;
+    width: 1200px;
+    margin: 0 auto;
 }
 
 /* Style the navbar brand */
@@ -247,12 +249,12 @@
 
 /* Style the links on hover */
 .nav-list li a:hover {
-    color: #0fa419;
+    color: #613fc2;
 }
 
 /* Style the active link */
 .nav-list li.active a {
-    color: #0fa419;
+    color: #613fc2;
 }
 
 /* Style the underline effect on hover */
@@ -275,6 +277,8 @@
 .world-clock {
     margin-top: 80px;
     margin-bottom: 40px;
+    width: 1200px;
+    margin: 50px auto;
     border-bottom: 1px solid #dedede;
 }
 
@@ -288,8 +292,7 @@
     font-size: 18px;
     line-height: 1.1em;
     color: #666;
-    width: 1200px;
-    margin-left: 200px;
+    width: 2000px;
     overflow: hidden;
 }
 
@@ -380,7 +383,6 @@
     margin-left: 30px;
 }
 
-
 form {
     display: flex;
     flex-direction: row;
@@ -406,7 +408,6 @@ form {
     height: 50px;
     border: 1px solid #dedede;
     cursor: pointer;
-
 }
 
 .selected {
@@ -424,8 +425,9 @@ form {
 .goBtn {
     font-family: plantinmtstd-light sans-serif;
     font-size: 40px;
-    width: 120px;
-    height: 120px;
+    width: 150px;
+    height: 150px;
+    margin-left: 15px;
     color: #fff;
     border-radius: 50%;
     background: #2b1076;
@@ -436,7 +438,7 @@ form {
     font-size: 34px;
     font-family: plantinmtstd-light, sans-serif;
     margin-top: 50px;
-    width: 1200px;
+    width: 1250px;
     border-top: 1px solid rgba(0, 0, 0, .2);
     border-bottom: 1px solid rgba(0, 0, 0, .2);
     line-height: 1.2em;
@@ -549,6 +551,7 @@ form {
     padding: 40px 0;
     border-top: 1px solid rgba(0, 0, 0, .2);
     border-bottom: 1px solid rgba(0, 0, 0, .2);
+
 }
 
 .lifespan h1 {
@@ -599,7 +602,7 @@ form {
 
 
 .babies {
-    margin-left: 100px;
+    margin-left: 300px;
 }
 
 .babyGenerator {
@@ -615,4 +618,77 @@ form {
     height: 100px;
     width: 10px;
     margin-bottom: 100px;
+}
+
+.projections {
+    height: 1200px;
+}
+
+.projections h3 {
+    color: #666;
+    font-family: plantinmtstd-light, sans-serif;
+    font-weight: 300;
+}
+
+.projection {
+    display: flex;
+    height: 70px;
+    flex-direction: row;
+    align-items: start;
+    justify-content: start;
+    list-style-type: none;
+    border-top: 3px solid #fff;
+    padding: 17px 40px 0px 40px;
+    font-size: 18px;
+    position: relative;
+    cursor: pointer;
+}
+
+.check-line {
+    height: 50px;
+    width: 0.3vw;
+    background-color: #613fc2;
+}
+
+.date {
+    margin-left: 50px;
+    border-left: 1px solid rgba(0, 0, 0, .2);
+    border-right: 1px solid rgba(0, 0, 0, .2);
+    width: 8vw;
+    height: 50px;
+    font-family: plantinmtstd-light, sans-serif;
+    font-weight: 600;
+    color: #666;
+    text-align: center;
+}
+
+.day-date {
+    margin: 0 auto;
+    font-size: 22px;
+    font-weight: 300;
+}
+
+.year-date {
+    font-weight: 300;
+}
+
+.message-date :hover {
+    background-color: #f5f5f5;
+}
+
+.message-date {
+    border-right: 1px solid rgba(0, 0, 0, .2);
+    width: 40vw;
+    height: 50px;
+    color: #666;
+}
+
+.message-date h2 {
+    font-family: plantinmtstd-light, sans-serif;
+    font-weight: 300;
+    text-align: center;
+}
+
+.container {
+    overflow-x: hidden;
 }

@@ -4,6 +4,7 @@ from django.views.generic.base import TemplateView
 from . import views
 
 urlpatterns = [
+    path('deaths/', views.getDeaths),
     path('countries/', views.getCountries),
     path('population/<str:country>/<int:year>/', views.getWorldPopulation),    # path('population/', views.getPopulation),
     path('youngerOlderInfo/<str:country>/<int:year>/', views.getYoungerOlderInfo),

@@ -31,3 +31,7 @@ class Population(models.Model):
     female_life_expectancy_at_65 = models.FloatField() #years
     infant_deaths = models.IntegerField() #thousands (under 1 year old)
     infant_mortality_rate = models.FloatField() #per 1000 live births
+    time = models.IntegerField()
+    age_group = models.IntegerField()
+    death_total = models.IntegerField()
+    location = models.CharField(max_length=100) 
