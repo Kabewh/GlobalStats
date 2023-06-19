@@ -77,7 +77,6 @@ const Graph = () => {
                 bodySpacing: 150,
                 callbacks: {
                     title: function (context) {
-                        console.log(context[0].label)
                         if (context[0].label === "21") {
                             return 'Your Current Age: ' + context[0].label;
                         } else if (context[0].label === "68") {
@@ -117,8 +116,6 @@ const Graph = () => {
             },
         ],
     }
-
-
 
     async function getDeaths() {
         const response = await fetch(LOCALHOST + "deaths")

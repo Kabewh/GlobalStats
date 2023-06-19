@@ -19,6 +19,7 @@ import {
 import { Line } from 'react-chartjs-2';
 import OverflowElement from '../components/georgelpetre';
 import Graph from '../components/Graph';
+import BubbleChart from '../components/BubbleChart';
 
 ChartJS.register(
   CategoryScale,
@@ -126,7 +127,6 @@ const Demographic = () => {
   const [iranPopulation, setIranPopulation] = useState(0);
   const [germanyPopulation, setGermanyPopulation] = useState(0);
   const [thailandPopulation, setThailandPopulation] = useState(0);
-
   const [chinaFlag, setChinaFlag] = useState("");
   const [indiaFlag, setIndiaFlag] = useState("");
   const [usaFlag, setUsaFlag] = useState("");
@@ -146,7 +146,6 @@ const Demographic = () => {
   const [iranFlag, setIranFlag] = useState("");
   const [germanyFlag, setGermanyFlag] = useState("");
   const [thailandFlag, setThailandFlag] = useState("");
-
   const birthRate = 0.018;
   const deathRate = 0.008;
 
@@ -154,57 +153,15 @@ const Demographic = () => {
     fetchPopulation()
     fetchRomaniaPopulation()
     getCountries()
-    // fetchYoungerOlder() // --working
-    fetchLifeExpectancy("World", 2023) // --working
-    // getDeaths()
+    fetchLifeExpectancy("World", 2023)
     calculatePopulation()
-
-    // populateChart()
   }, []);
-
-  useEffect(() => {
-    fetchCountries()
-    fetchFlags()
-  }, [])
-
-  // function populateChart() {
-  //   movies.map((movie, index) => {
-  //     data.map((item) => {
-  //       item.name = movie.Year
-  //       item.population = movie.Population
-  //       console.log(item.population)
-  //     });
-  //   });
-  // }
-  // const modifiedData = data.map((item) => {
-  //   return {
-  //     name: item.name,
-  //     population: item.population.toLocaleString(),
-  //   }
-  // })
-
-  // const renderLineChart = (
-  //   <LineChart width={1000} height={400} data={data} margin={{ top: 20, right: 20, bottom: 5, left: 90 }}>
-  //     <Line type="monotone" dataKey="population" stroke="#8884d8" />
-  //     <CartesianGrid stroke="#ccc" strokeDasharray="3 3" />
-  //     <XAxis dataKey="name" />
-  //     <YAxis dataKey="population" />
-  //     <Tooltip />
-  //   </LineChart>
-  // );
-
-
 
 
   async function fetchPopulation() {
     const response = await fetch(LOCALHOST + "population/" + "World" + "/" + "2023" + "/")
     const jsonData = await response.json()
     setSimulatedPopulation(jsonData)
-    // if (parseInt(localStorage.getItem("population")) == 0) {
-    //   setSimulatedPopulation(jsonData)
-    // } else {
-    //   setSimulatedPopulation(parseInt(localStorage.getItem("population")));
-    // }
   }
 
   async function fetchRomaniaPopulation() {
@@ -213,11 +170,7 @@ const Demographic = () => {
     setRomaniaPopulation(jsonData)
   }
 
-  async function fetchYoungerOlder(country, year) {
-    const response = await fetch(LOCALHOST + "youngerOlderInfo/" + country + "/" + year + "/")
-    const jsonData = await response.json()
-    setBirths(jsonData)
-  }
+
 
   async function fetchLifeExpectancy(country, year) {
     const response = await fetch(LOCALHOST + "lifeExpectancy/" + country + "/" + year + "/")
@@ -234,53 +187,6 @@ const Demographic = () => {
 
   const dailyBirths = 366.5
   const peopleBornAfter = daysSinceBirth * dailyBirths
-
-
-
-  //import all countries and their population
-  async function fetchCountries() {
-    const response = await fetch('https://countriesnow.space/api/v0.1/countries/population')
-    const jsonData = await response.json()
-    setChinaPopulation(jsonData.data.filter((item) => item.country === 'China')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
-    setIndiaPopulation(jsonData.data.filter((item) => item.country === 'India')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
-    setUsaPopulation(jsonData.data.filter((item) => item.country === 'United States')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
-    setIndonesiaPopulation(jsonData.data.filter((item) => item.country === 'Indonesia')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
-    setPakistanPopulation(jsonData.data.filter((item) => item.country === 'Pakistan')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
-    setBrazilPopulation(jsonData.data.filter((item) => item.country === 'Brazil')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
-    setBangladeshPopulation(jsonData.data.filter((item) => item.country === 'Bangladesh')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
-    setJapanPopulation(jsonData.data.filter((item) => item.country === 'Japan')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
-    setMexicoPopulation(jsonData.data.filter((item) => item.country === 'Mexico')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
-    setEthiopiaPopulation(jsonData.data.filter((item) => item.country === 'Ethiopia')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
-    setPhilippinesPopulation(jsonData.data.filter((item) => item.country === 'Philippines')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
-    setEgyptPopulation(jsonData.data.filter((item) => item.country === 'Egypt, Arab Rep.')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
-    setVietnamPopulation(jsonData.data.filter((item) => item.country === 'Vietnam')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
-    setDrcongoPopulation(jsonData.data.filter((item) => item.country === 'Congo, Dem. Rep.')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
-    setTurkeyPopulation(jsonData.data.filter((item) => item.country === 'Turkey')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
-    setGermanyPopulation(jsonData.data.filter((item) => item.country === 'Germany')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
-    setThailandPopulation(jsonData.data.filter((item) => item.country === 'Thailand')[0].populationCounts.filter((item) => item.year === 2018)[0].value)
-  }
-
-  async function fetchFlags() {
-    const response = await fetch('https://countriesnow.space/api/v0.1/countries/flag/images')
-    const jsonData = await response.json()
-    setChinaFlag(jsonData.data.filter((item) => item.name === 'China')[0].flag)
-    setIndiaFlag(jsonData.data.filter((item) => item.name === 'India')[0].flag)
-    setUsaFlag(jsonData.data.filter((item) => item.name === 'United States')[0].flag)
-    setIndonesiaFlag(jsonData.data.filter((item) => item.name === 'Indonesia')[0].flag)
-    setPakistanFlag(jsonData.data.filter((item) => item.name === 'Pakistan')[0].flag)
-    setBrazilFlag(jsonData.data.filter((item) => item.name === 'Brazil')[0].flag)
-    setBangladeshFlag(jsonData.data.filter((item) => item.name === 'Bangladesh')[0].flag)
-    setJapanFlag(jsonData.data.filter((item) => item.name === 'Japan')[0].flag)
-    setMexicoFlag(jsonData.data.filter((item) => item.name === 'Mexico')[0].flag)
-    setEthiopiaFlag(jsonData.data.filter((item) => item.name === 'Ethiopia')[0].flag)
-    setPhilippinesFlag(jsonData.data.filter((item) => item.name === 'Philippines')[0].flag)
-    setEgyptFlag(jsonData.data.filter((item) => item.name === 'Egypt')[0].flag)
-    setVietnamFlag(jsonData.data.filter((item) => item.name === 'Vietnam')[0].flag)
-    setDrcongoFlag(jsonData.data.filter((item) => item.name === 'Congo')[0].flag)
-    setTurkeyFlag(jsonData.data.filter((item) => item.name === 'Turkey')[0].flag)
-    setGermanyFlag(jsonData.data.filter((item) => item.name === 'Germany')[0].flag)
-    setThailandFlag(jsonData.data.filter((item) => item.name === 'Thailand')[0].flag)
-  }
 
   async function calculatePopulation() {
     const response = await fetch(LOCALHOST + "population/World/2023")
@@ -315,7 +221,50 @@ const Demographic = () => {
   const [youngerRomania, setYoungerRomania] = useState(0);
   const [olderRomania, setOlderRomania] = useState(0);
   const [testBool, setTestBool] = useState(false);
-  const [births, setBirths] = useState(0);
+  const [birthsWorld, setBirthsWorld] = useState(0);
+  const [birthsRomania, setBirthsRomania] = useState(0);
+  const [birthsItaly, setBirthsItaly] = useState(0);
+  const [birthsSpain, setBirthsSpain] = useState(0);
+  const [birthsFrance, setBirthsFrance] = useState(0);
+  const [birthsGermany, setBirthsGermany] = useState(0);
+  const [birthsPoland, setBirthsPoland] = useState(0);
+  const [birthsUkraine, setBirthsUkraine] = useState(0);
+  const [birthsIreland, setBirthsIreland] = useState(0);
+  const [birthsCzechia, setBirthsCzechia] = useState(0);
+  const [birthsUnitedKingdom, setBirthsUnitedKingdom] = useState(0);
+  const [birthsSerbia, setBirthsSerbia] = useState(0);
+  const [birthsHungary, setBirthsHungary] = useState(0);
+  const [birthsBelarus, setBirthsBelarus] = useState(0);
+  const [birthsAustria, setBirthsAustria] = useState(0);
+  const [birthsSwitzerland, setBirthsSwitzerland] = useState(0);
+  const [birthsBulgaria, setBirthsBulgaria] = useState(0);
+  const [birthsGreece, setBirthsGreece] = useState(0);
+  const [birthsSweden, setBirthsSweden] = useState(0);
+  const [birthsPortugal, setBirthsPortugal] = useState(0);
+  const [birthsDenmark, setBirthsDenmark] = useState(0);
+  const [birthsFinland, setBirthsFinland] = useState(0);
+  const [birthsSlovakia, setBirthsSlovakia] = useState(0);
+  const [birthsNorway, setBirthsNorway] = useState(0);
+  const [birthsCroatia, setBirthsCroatia] = useState(0);
+  const [birthsMoldova, setBirthsMoldova] = useState(0);
+  const [birthsBosnia, setBirthsBosnia] = useState(0);
+  const [birthsAlbania, setBirthsAlbania] = useState(0);
+  const [birthsLithuania, setBirthsLithuania] = useState(0);
+  const [birthsNorthMacedonia, setBirthsNorthMacedonia] = useState(0);
+  const [birthsSlovenia, setBirthsSlovenia] = useState(0);
+  const [birthsLatvia, setBirthsLatvia] = useState(0);
+  const [birthsEstonia, setBirthsEstonia] = useState(0);
+  const [birthsMontenegro, setBirthsMontenegro] = useState(0);
+  const [birthsLuxembourg, setBirthsLuxembourg] = useState(0);
+  const [birthsMalta, setBirthsMalta] = useState(0);
+  const [birthsIceland, setBirthsIceland] = useState(0);
+  const [birthsAndorra, setBirthsAndorra] = useState(0);
+  const [birthsMonaco, setBirthsMonaco] = useState(0);
+  const [birthsLiechtenstein, setBirthsLiechtenstein] = useState(0);
+  const [birthsBelgium, setBirthsBelgium] = useState(0);
+
+
+
   const [estimatedBirths, setEstimatedBirths] = useState(0);
   const [birthsPerHour, setBirthsPerHour] = useState(0);
   const [worldLifeSpan, setWorldLifeSpan] = useState('');
@@ -390,7 +339,6 @@ const Demographic = () => {
   function calculateMilestones() {
     const millisecondsPerYear = 1000 * 60 * 60 * 24 * 365.25;
     const birthDate = new Date(yearChoice, monthChoice - 1, dayChoice)
-    console.log(birthDate)
     const averageBirthsPerYear = 130_000_000
     const billionEstimate = (1_000_000_000 / averageBirthsPerYear);
     const twoBillionEstimate = (2_000_000_000 / averageBirthsPerYear);
@@ -438,10 +386,10 @@ const Demographic = () => {
     if (countryChoice && yearChoice) {
       const response = await fetch(LOCALHOST + "population/" + countryChoice + "/" + yearChoice)
       const jsonData = await response.json()
-      fetchYoungerOlder("World", yearChoice);
       const population = jsonData;
-      const avgDailyBirthRate = (births / simulatedPopulation) * 1000
-      setBirthsPerHour(parseInt(births / 8760).toLocaleString())
+      fetchYoungerOlderWorld("World", yearChoice);
+      const avgDailyBirthRate = (birthsWorld / simulatedPopulation) * 1000
+      setBirthsPerHour(parseInt(birthsWorld / 8760).toLocaleString())
       const avgBirthRate = (avgDailyBirthRate / 1000) * 365
       const proportionBirths = 1 / 365
       const estimatedBirths = avgBirthRate * proportionBirths / 100 * simulatedPopulation
@@ -450,6 +398,14 @@ const Demographic = () => {
       calculateEstimatedPeopleBorn()
     }
   }
+
+  //youngerOlderr
+  async function fetchYoungerOlderWorld() {
+    const response = await fetch(LOCALHOST + "youngerOlderInfo/World/2023/")
+    const jsonData = await response.json()
+    setBirthsWorld(jsonData)
+  }
+
 
   async function calculateCounts() {
     const proportion = parseFloat(age) / lifeExpectancy; // 0.5
@@ -467,9 +423,10 @@ const Demographic = () => {
     setOldPersonCount(older);
     setOlderPercentageWorld((younger / simulatedPopulation) * 100);
     setOlderPercentageRomania((youngerRomania / romaniaPopulation) * 100);
-    calculateSharedBirths()
     calculateEstimatedPeopleBorn()
     calculateMilestones()
+    calculateSharedBirths()
+
     const interval = setInterval(() => {
 
     }, 1000);
@@ -489,7 +446,6 @@ const Demographic = () => {
     setValidated(true);
     const age = 2023 - yearChoice;
     const birthday = parseInt(yearChoice) + 18;
-    console.log(birthday)
     setEighteenthBirthday(birthday)
     setAge(age)
     calculateCounts();
@@ -539,14 +495,6 @@ const Demographic = () => {
             <p className="population-counter">{simulatedPopulation.toLocaleString("en")}</p>
             <div className='babies'>
             </div>{divElements.map(div => div).reverse()}
-            {/* {<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg> */
-            /*<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg> */}
           </h3>
         </div>
         <div className='question'>
@@ -592,7 +540,7 @@ const Demographic = () => {
             </button>
           </form>
         </div>
-        {!validated ?
+        {validated ?
           <div className='youngOld'>
             <h3>Do you think you belong to the young or old? You are the <span>{youngPersonCount.toLocaleString()}</span> person alive on the planet. This means that you are <span>older than {olderPercentageWorld.toFixed(2)}%</span> of the world's population and <span>older than {youngerRomania.toLocaleString()}</span> people in Romania.</h3>
             <div className='toggleRegion'>
@@ -624,23 +572,6 @@ const Demographic = () => {
               <div className="older-you">
                 <div className="older-num">{testBool === true ? olderRomania.toLocaleString() : oldPersonCount.toLocaleString()}</div>
                 <p>People older than you ({testBool === true ? youngerPercentageRomania.toFixed(2) : youngerPercentageWorld.toFixed(2)}%)</p>
-                {/* <AreaChart
-                    width={600}
-                    height={300}
-                    data={modifiedData}
-                    margin={{
-                      top: 10,
-                      right: 30,
-                      left: 0,
-                      bottom: 0,
-                    }}
-                  >
-                    <CartesianGrid strokeDasharray="1 3" />
-                    <XAxis dataKey="age" />
-                    <YAxis />
-                    <Tooltip />
-                    <Area type="monotone" dataKey="population" stroke="#8884d8" fill="#8884d8" />
-                  </AreaChart> */}
               </div>
             </div>
             <div className='line_graph'>
@@ -784,122 +715,16 @@ const Demographic = () => {
               <h1>Did you know that you share a birthday with about <span>{parseInt(estimatedBirths).toLocaleString()}</span> people around the world and that approximately <span>{birthsPerHour}</span> people were born in the same hour?</h1>
             </div>
             <div className='line_graph'>
-              <h3>Mortality Distribution</h3>
-              <Graph />
+              <BubbleChart />
             </div>
             <div className="timeline">
               {/* <h2>Timeline (projections)</h2> */}
             </div>
             <div className="lifespan">
               <h1>We estimate that you will live until <span>{parseInt(worldLifeSpan)}</span> if you were an average world citizen. Whereas in <span>{countryChoice}</span> it would be until <span>{parseInt(countryLifeSpan)}</span> years old.</h1>
+              <h3><Graph /></h3>
             </div>
           </div> : null}
-
-
-
-
-        {/* <div className="info">
-          <div className="info-item">
-            <p className='worldpoplabel'>Updated with the <a href='https://population.un.org/wpp/'>2022 United Nations Revision</a></p>
-            <h2 className='worldpop'>Current World Population</h2>
-            <p className='world'>{simulatedPopulation.toLocaleString("en")}</p>
-
-          </div>
-          <div className="info">
-            <h3>Top 16 Countries by Population as of Today</h3>
-            <div className="medium-container">
-              <div className='country-population-1'>
-                <div className='individual-country'>
-                  1.
-                  <img className='flag' src={chinaFlag} alt="china" />
-                  <h5>China</h5><p>{chinaPopulation.toLocaleString("en")}</p>
-                </div>
-                <div className='individual-country'>
-                  2.
-                  <img className='flag' src={indiaFlag} alt="india" />
-                  <h5>India</h5><p> {indiaPopulation.toLocaleString("en")}</p>
-                </div>
-                <div className='individual-country'>
-                  3.
-                  <img className='flag' src={usaFlag} alt="usa" />
-                  <h5>United States</h5><p> {usaPopulation.toLocaleString("en")}</p>
-                </div>
-                <div className='individual-country'>
-                  4.
-                  <img className='flag' src={indonesiaFlag} alt="indonesia" />
-                  <h5>Indonesia</h5><p> {indonesiaPopulation.toLocaleString("en")}</p>
-                </div>
-                <div className='individual-country'>
-                  5.
-                  <img className='flag' src={pakistanFlag} alt="pakistan" />
-                  <h5>Pakistan </h5><p>{pakistanPopulation.toLocaleString("en")}</p>
-                </div>
-                <div className='individual-country'>
-                  6.
-                  <img className='flag' src={brazilFlag} alt="brazil" />
-                  <h5>Brazil</h5><p> {brazilPopulation.toLocaleString("en")}</p>
-                </div>
-                <div className='individual-country'>
-                  7.
-                  <img className='flag' src={bangladeshFlag} alt="bangladesh" />
-                  <h5>Bangladesh </h5><p>{bangladeshPopulation.toLocaleString("en")}</p>
-                </div>
-                <div className='individual-country'>
-                  8.
-                  <img className='flag' src={japanFlag} alt="japan" />
-                  <h5>Japan</h5><p> {japanPopulation.toLocaleString("en")}</p>
-                </div>
-              </div>
-              <div className='country-population-2'>
-                <div className='individual-country'>
-                  9.
-                  <img className='flag' src={mexicoFlag} alt="mexico" />
-                  <h5>Mexico</h5><p> {mexicoPopulation.toLocaleString("en")}</p>
-                </div>
-                <div className='individual-country'>
-                  10.
-                  <img className='flag' src={ethiopiaFlag} alt="ethiopia" />
-                  <h5>Ethiopia</h5><p> {ethiopiaPopulation.toLocaleString("en")}</p>
-                </div>
-                <div className='individual-country'>
-                  11.
-                  <img className='flag' src={philippinesFlag} alt="philippines" />
-                  <h5>Philippine </h5><p>{philippinesPopulation.toLocaleString("en")}</p>
-                </div>
-                <div className='individual-country'>
-                  12.
-                  <img className='flag' src={egyptFlag} alt="egypt" />
-                  <h5>Egypt</h5><p> {egyptPopulation.toLocaleString("en")}</p>
-                </div>
-                <div className='individual-country'>
-                  13.
-                  <img className='flag' src={vietnamFlag} alt="vietnam" />
-                  <h5>Vitenam </h5><p>{vietnamPopulation.toLocaleString("en")}</p>
-                </div>
-                <div className='individual-country'>
-                  14.
-                  <img className='flag' src={drcongoFlag} alt="drcongo" />
-                  <h5>Congo</h5><p> {drcongoPopulation.toLocaleString("en")}</p>
-                </div>
-                <div className='individual-country'>
-                  15.
-                  <img className='flag' src={turkeyFlag} alt="turkey" />
-                  <h5>Turkey</h5><p> {turkeyPopulation.toLocaleString("en")}</p>
-                </div>
-                <div className='individual-country'>
-                  16.
-                  <img className='flag' src={germanyFlag} alt="germany" />
-                  <h5>Germany</h5><p> {germanyPopulation.toLocaleString("en")}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="small-container">
-            <p className='populationChartLabel'>World Population: Past, Present</p>
-            {renderLineChart}
-          </div>
-        </div> */}
       </div >
     </>
   )
