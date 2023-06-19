@@ -18,11 +18,9 @@ Aplicatia: Live World Statistics
 }Speranta de viata in functie de tara.
 
 
-
 ++++Ce mai am de realizat?
 
-}Un bubble chart ce va arata persoanele nascute in acceasi zi cu tine in functie de tara.
-}Un line chart pentru distributia mortalitatii si sansele de deces in functie de varsta.
+}Un line chart pentru sansele de deces in functie de varsta.
 }Un pie chart care sa arate distrbutia nasterilor in functie de continent
 
 
@@ -46,7 +44,13 @@ Aplicatia: Live World Statistics
 
 
 
+}Pentru timeline projection am aflat cate milisecunde sunt intr-un an, data nasterii, average-ul nasterilor 
+}pe an din ultimii ani
+}Am aflat de cati oameni mai e nevoie sa ajungem pana la 1 miliard (de ex) 1_000_000_000 / average-ul de    nasteri pe an
 
 
 
 
+
+
+}sqlite

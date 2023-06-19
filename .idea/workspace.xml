@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="89ee854f-33f3-470e-a05a-1fae562423a1" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/root/reactapp/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/root/reactapp/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/root/reactapp/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/root/reactapp/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/root/reactapp/src/components/BubbleChart.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/root/reactapp/src/components/BubbleChart.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/root/reactapp/src/components/Graph.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/root/reactapp/src/components/Graph.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/root/reactapp/src/pages/Demographic.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/root/reactapp/src/pages/Demographic.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/root/reactapp/src/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/root/reactapp/src/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/root/reactapp/src/things to be done" beforeDir="false" afterPath="$PROJECT_DIR$/root/reactapp/src/things to be done" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="2QExNhmHFP9z9Tg2FT9tsEeyKjU" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenDatabaseViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
+    &quot;database.data.extractors.current.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/danie/Desktop/alldata.csv&quot;
+  }
+}</component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

@@ -59,6 +59,10 @@ const Graph = () => {
             }
         },
         plugins: {
+            datalabels: {
+                display: false,
+                color: "white"
+            },
             legend: {
                 position: 'top',
             },
@@ -77,10 +81,9 @@ const Graph = () => {
                 bodySpacing: 150,
                 callbacks: {
                     title: function (context) {
-                        console.log(context[0].label)
                         if (context[0].label === "21") {
                             return 'Your Current Age: ' + context[0].label;
-                        } else if (context[0].label === "68") {
+                        } else if (context[0].label === "67") {
                             return 'Your Life Expectancy: ' + context[0].label;
                         }
                         else return 'Age: ' + context[0].label;
@@ -117,8 +120,6 @@ const Graph = () => {
             },
         ],
     }
-
-
 
     async function getDeaths() {
         const response = await fetch(LOCALHOST + "deaths")
