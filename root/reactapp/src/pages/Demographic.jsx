@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import { json } from 'react-router-dom';
-// import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { read, utils, writeFile } from 'xlsx';
 import { data } from '../data/data'
 import { age_population_data } from '../data/age_population_data';
@@ -61,8 +60,12 @@ export const options = {
     }
   },
   plugins: {
+    datalabels: {
+      display: false,
+      color: "white"
+    },
     legend: {
-      position: 'top',
+      display: 'false',
     },
     title: {
       display: false,
@@ -146,60 +149,6 @@ const Demographic = () => {
   const [iranFlag, setIranFlag] = useState("");
   const [germanyFlag, setGermanyFlag] = useState("");
   const [thailandFlag, setThailandFlag] = useState("");
-  const birthRate = 0.018;
-  const deathRate = 0.008;
-
-  useEffect(() => {
-    fetchPopulation()
-    fetchRomaniaPopulation()
-    getCountries()
-    fetchLifeExpectancy("World", 2023)
-    calculatePopulation()
-  }, []);
-
-
-  async function fetchPopulation() {
-    const response = await fetch(LOCALHOST + "population/" + "World" + "/" + "2023" + "/")
-    const jsonData = await response.json()
-    setSimulatedPopulation(jsonData)
-  }
-
-  async function fetchRomaniaPopulation() {
-    const response = await fetch(LOCALHOST + "population/" + "Romania" + "/" + "2023" + "/")
-    const jsonData = await response.json()
-    setRomaniaPopulation(jsonData)
-  }
-
-
-
-  async function fetchLifeExpectancy(country, year) {
-    const response = await fetch(LOCALHOST + "lifeExpectancy/" + country + "/" + year + "/")
-    const jsonData = await response.json()
-    setLifeExpectancy(jsonData)
-  }
-
-  const birthdate = new Date("2002-02-12");
-  const currentDate = new Date();
-
-  const daysSinceBirth = Math.floor(
-    (currentDate - birthdate) / (1000 * 60 * 60)
-  );
-
-  const dailyBirths = 366.5
-  const peopleBornAfter = daysSinceBirth * dailyBirths
-
-  async function calculatePopulation() {
-    const response = await fetch(LOCALHOST + "population/World/2023")
-    const jsonData = await response.json()
-    const popgrowthrate = 0.0108 // 18.5 crude birth rate - 7.7 crude death rate / 1000  rata neta a cresterii populatiei per 1000 locuitori
-    const secondBirthRate = 8_000_000_000 * 0.0108 / (365 * 24 * 60 * 60) // rata nasterii pe secunda 
-    const interval = setInterval(() => {
-      setSimulatedPopulation(data => data + 3);
-      addDivElement()
-    }, 1000);
-    return () => clearInterval(interval);
-  }
-
   const [dayChoice, setDayChoice] = useState('')
   const [monthChoice, setMonthChoice] = useState(0)
   const [yearChoice, setYearChoice] = useState()
@@ -207,7 +156,6 @@ const Demographic = () => {
   const [countries, setCountries] = useState([])
   const [selected, setGender] = useState("male");
   const [region, setRegion] = useState("World");
-  // const [regionToggle, setRegionToggle] = useState();
   const [validated, setValidated] = useState(false);
   const [youngPersonCount, setYoungPersonCount] = useState(0);
   const [oldPersonCount, setOldPersonCount] = useState(0);
@@ -262,9 +210,6 @@ const Demographic = () => {
   const [birthsMonaco, setBirthsMonaco] = useState(0);
   const [birthsLiechtenstein, setBirthsLiechtenstein] = useState(0);
   const [birthsBelgium, setBirthsBelgium] = useState(0);
-
-
-
   const [estimatedBirths, setEstimatedBirths] = useState(0);
   const [birthsPerHour, setBirthsPerHour] = useState(0);
   const [worldLifeSpan, setWorldLifeSpan] = useState('');
@@ -288,6 +233,60 @@ const Demographic = () => {
   const [abbrMonth, setAbbrMonth] = useState('');
   const [coolDeaths, setCoolDeaths] = useState(0);
 
+  const birthRate = 0.018;
+  const deathRate = 0.008;
+
+  useEffect(() => {
+    fetchPopulation()
+    fetchRomaniaPopulation()
+    getCountries()
+    fetchLifeExpectancy("World", 2023)
+    calculatePopulation()
+  }, []);
+
+
+  async function fetchPopulation() {
+    const response = await fetch(LOCALHOST + "population/" + "World" + "/" + "2023" + "/")
+    const jsonData = await response.json()
+    setSimulatedPopulation(jsonData)
+  }
+
+  async function fetchRomaniaPopulation() {
+    const response = await fetch(LOCALHOST + "population/" + "Romania" + "/" + "2023" + "/")
+    const jsonData = await response.json()
+    setRomaniaPopulation(jsonData)
+  }
+
+
+  async function fetchLifeExpectancy(country, year) {
+    const response = await fetch(LOCALHOST + "lifeExpectancy/" + country + "/" + year + "/")
+    const jsonData = await response.json()
+    setLifeExpectancy(jsonData)
+  }
+
+  const birthdate = new Date("2002-02-12");
+  const currentDate = new Date();
+
+  const daysSinceBirth = Math.floor(
+    (currentDate - birthdate) / (1000 * 60 * 60)
+  );
+
+  const dailyBirths = 366.5
+  const peopleBornAfter = daysSinceBirth * dailyBirths
+
+  async function calculatePopulation() {
+    const response = await fetch(LOCALHOST + "population/World/2023")
+    const jsonData = await response.json()
+    const popgrowthrate = 0.0108 // 18.5 crude birth rate - 7.7 crude death rate / 1000  rata neta a cresterii populatiei per 1000 locuitori
+    const secondBirthRate = 8_000_000_000 * 0.0108 / (365 * 24 * 60 * 60) // rata nasterii pe secunda 
+    const interval = setInterval(() => {
+      setSimulatedPopulation(data => data + 3);
+      addDivElement()
+    }, 1000);
+    return () => clearInterval(interval);
+  }
+
+ 
   async function getCountries() {
     const response = await fetch(LOCALHOST + "countries")
     const jsonData = await response.json()
@@ -325,7 +324,6 @@ const Demographic = () => {
     const jsonData = await response.json()
     const birthDate = new Date(yearChoice - 1, monthChoice, dayChoice)
     const currentDate = new Date()
-    const populationGrowth = simulatedPopulation - jsonData
     const timeElapsed = (currentDate - birthDate) / (1000 * 60 * 60 * 24 * 365.25);
     const avgAnnualGrowth = jsonData / timeElapsed;
     const daysEstimate = (3_000_000_000 / avgAnnualGrowth) * 365.25;
@@ -482,8 +480,6 @@ const Demographic = () => {
     setDivElements(prevDivs => [...prevDivs, <div key={prevDivs.length} class="babyGenerator"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className='up'><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg></div>]);
 
   };
-
-
 
   return (
     <>
@@ -715,10 +711,10 @@ const Demographic = () => {
               <h1>Did you know that you share a birthday with about <span>{parseInt(estimatedBirths).toLocaleString()}</span> people around the world and that approximately <span>{birthsPerHour}</span> people were born in the same hour?</h1>
             </div>
             <div className='line_graph'>
+              <h4>Birthdays in Europe</h4>
               <BubbleChart />
             </div>
             <div className="timeline">
-              {/* <h2>Timeline (projections)</h2> */}
             </div>
             <div className="lifespan">
               <h1>We estimate that you will live until <span>{parseInt(worldLifeSpan)}</span> if you were an average world citizen. Whereas in <span>{countryChoice}</span> it would be until <span>{parseInt(countryLifeSpan)}</span> years old.</h1>

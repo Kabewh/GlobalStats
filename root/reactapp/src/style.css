@@ -692,3 +692,15 @@ form {
 .container {
     overflow-x: hidden;
 }
+
+.bubble {
+    margin-top: 50px;
+    margin-left: -50px;
+}
+
+.line_graph h4 {
+    font-weight: 300;
+    margin-top: 50px;
+    margin-left: -120px;
+    color: #333;
+}

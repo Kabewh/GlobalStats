@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import "chartjs-plugin-datalabels"
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -12,12 +13,14 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { Bubble } from 'react-chartjs-2';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 
 const total_deaths = 69248000;
 const LOCALHOST = "http://localhost:8000/"
 
 ChartJS.register(
+    ChartDataLabels,
     CategoryScale,
     LinearScale,
     PointElement,
@@ -931,34 +934,16 @@ const BubbleChart = () => {
         }
     }
 
-    //return value.x < 1000 ? 'end' : 'center'
     const options = {
         type: 'bubble',
         drawActiveElementsOnTop: false,
         hitRadius: 5,
-        plugins: {
-            tooltip: {
-                enabled: true,
-                callbacks: {
-                    label: function (context) {
-                        return context.dataset.label;
-                    }
-                }
-            },
-            collision: {
-                enabled: false
-            },
-            legend: {
-                display: false,
-            },
-        },
         scales: {
             x: {
                 display: false,
                 grid: {
                     display: false,
                     color: '#fff'
-
                 }
             },
             y: {
@@ -968,17 +953,32 @@ const BubbleChart = () => {
                 }
             }
         },
-        customText: {
-            enabled: true,
-            textArray: ['Text 1', 'Text 2', 'Text 3'], // Array of text to be displayed
-            font: '14px Arial', // Customize the font
-            color: 'white', // Customize the color
-            position: 'top' // Position of the text relative to the bubble ('top', 'bottom', 'center')
+        plugins: {
+            datalabels: {
+                display: true,
+                color: "#222",
+                font: {
+                    weight: "bold"
+                }
+            },
+            collision: {
+                enabled: false
+            },
+            legend: {
+                display: false,
+            },
+            tooltip: {
+                enabled: true,
+                callbacks: {
+                    label: function (context) {
+                        return context.dataset.label;
+                    }
+                }
+            },
         }
     };
 
     const data = {
-        type: 'bubble',
         datasets: [{
             label: `Births in United Kigndom: ${estimatedBirthsUK.toLocaleString()}`,
             data: [{
@@ -987,8 +987,8 @@ const BubbleChart = () => {
                 r: 54,
                 label: "United Kingdom",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
 
         },
         {
@@ -996,10 +996,11 @@ const BubbleChart = () => {
             data: [{
                 x: 36,
                 y: 80,
-                r: 60
+                r: 60,
+                label: "Germany",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
 
         },
         {
@@ -1008,9 +1009,10 @@ const BubbleChart = () => {
                 x: 30,
                 y: 64,
                 r: 20,
+                label: "Estonia",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
 
         },
         {
@@ -1019,9 +1021,10 @@ const BubbleChart = () => {
                 x: 43,
                 y: 65,
                 r: 25,
+                label: "Lithuania",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Finland: ${estimatedBirthsFinland.toLocaleString()}`,
@@ -1029,9 +1032,10 @@ const BubbleChart = () => {
                 x: 35,
                 y: 58,
                 r: 22,
+                label: "Finland",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Croatia: ${estimatedBirthsCroatia.toLocaleString()}`,
@@ -1039,9 +1043,11 @@ const BubbleChart = () => {
                 x: 50,
                 y: 60,
                 r: 20,
+                label: "Croatia",
+
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Iceland: ${estimatedBirthsIceland.toLocaleString()}`,
@@ -1049,9 +1055,10 @@ const BubbleChart = () => {
                 x: 55,
                 y: 65,
                 r: 15,
+                label: "ISL",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Malta: ${estimatedBirthsMalta.toLocaleString()}`,
@@ -1059,9 +1066,10 @@ const BubbleChart = () => {
                 x: 54.2,
                 y: 58,
                 r: 15,
+                label: "Malta",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Spain: ${estimatedBirthsSpain.toLocaleString()}`,
@@ -1069,9 +1077,10 @@ const BubbleChart = () => {
                 x: 62,
                 y: 50,
                 r: 55,
+                label: "Spain",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Slovakia: ${estimatedBirthsSlovakia.toLocaleString()}`,
@@ -1079,9 +1088,10 @@ const BubbleChart = () => {
                 x: 27,
                 y: 55,
                 r: 23,
+                label: "Slovakia",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Montenegro: ${estimatedBirthsMontenegro.toLocaleString()}`,
@@ -1089,9 +1099,10 @@ const BubbleChart = () => {
                 x: 40,
                 y: 57,
                 r: 15,
+                label: "MNE",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Switzerland: ${estimatedBirthsSwitzerland.toLocaleString()}`,
@@ -1099,9 +1110,10 @@ const BubbleChart = () => {
                 x: 45,
                 y: 54,
                 r: 22,
+                label: "SWZ",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Sweden: ${estimatedBirthsSweden.toLocaleString()}`,
@@ -1109,9 +1121,10 @@ const BubbleChart = () => {
                 x: 52,
                 y: 48,
                 r: 30,
+                label: "Sweden",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Serbia: ${estimatedBirthsSerbia.toLocaleString()}`,
@@ -1119,9 +1132,10 @@ const BubbleChart = () => {
                 x: 23,
                 y: 47,
                 r: 25,
+                label: "Serbia",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Slovenia: ${estimatedBirthsSlovenia.toLocaleString()}`,
@@ -1129,9 +1143,10 @@ const BubbleChart = () => {
                 x: 28,
                 y: 43,
                 r: 17,
+                label: "SLV",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Bulgary: ${estimatedBirthsBulgaria.toLocaleString()}`,
@@ -1139,9 +1154,10 @@ const BubbleChart = () => {
                 x: 31.5,
                 y: 50,
                 r: 20,
+                label: "BLG",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Belarus: ${estimatedBirthsBelarus.toLocaleString()}`,
@@ -1149,10 +1165,10 @@ const BubbleChart = () => {
                 x: 38,
                 y: 47,
                 r: 25,
-
+                label: "Belarus",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Luxembourg: ${estimatedBirthsLuxembourg.toLocaleString()}`,
@@ -1160,9 +1176,10 @@ const BubbleChart = () => {
                 x: 42,
                 y: 42,
                 r: 15,
+                label: "LUX",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Greece: ${estimatedBirthsGreece.toLocaleString()}`,
@@ -1170,9 +1187,10 @@ const BubbleChart = () => {
                 x: 46.5,
                 y: 42,
                 r: 23,
+                label: "Greece",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Hungary: ${estimatedBirthsHungary.toLocaleString()}`,
@@ -1180,9 +1198,10 @@ const BubbleChart = () => {
                 x: 55,
                 y: 35,
                 r: 27,
+                label: "Hungary",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Czech: ${estimatedBirthsCzechia.toLocaleString()}`,
@@ -1190,9 +1209,10 @@ const BubbleChart = () => {
                 x: 68,
                 y: 33,
                 r: 26,
+                label: "Czechia",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Romania: ${estimatedBirthsRomania.toLocaleString()}`,
@@ -1200,10 +1220,10 @@ const BubbleChart = () => {
                 x: 61.5,
                 y: 28,
                 r: 32,
-                name: "Poland"
+                label: "Romania",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in France: ${estimatedBirthsFrance.toLocaleString()}`,
@@ -1211,9 +1231,10 @@ const BubbleChart = () => {
                 x: 60,
                 y: 9,
                 r: 55,
+                label: "France",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Poland: ${estimatedBirthsPoland.toLocaleString()}`,
@@ -1221,10 +1242,10 @@ const BubbleChart = () => {
                 x: 48,
                 y: 28,
                 r: 40,
-
+                label: "Poland",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Latvia: ${estimatedBirthsLatvia.toLocaleString()}`,
@@ -1232,9 +1253,10 @@ const BubbleChart = () => {
                 x: 55,
                 y: 25,
                 r: 18,
+                label: "Latvia",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Portugal: ${estimatedBirthsPortugal.toLocaleString()}`,
@@ -1242,9 +1264,10 @@ const BubbleChart = () => {
                 x: 24,
                 y: 36,
                 r: 23,
+                label: "Portugal",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Ukraine: ${estimatedBirthsUkraine.toLocaleString()}`,
@@ -1252,9 +1275,10 @@ const BubbleChart = () => {
                 x: 33,
                 y: 37,
                 r: 30,
+                label: "Ukraine",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Denmark: ${estimatedBirthsDenmark.toLocaleString()}`,
@@ -1262,9 +1286,10 @@ const BubbleChart = () => {
                 x: 28,
                 y: 30,
                 r: 18,
+                label: "DNM",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in The Netherlands: ${estimatedBirthsNetherlands.toLocaleString()}`,
@@ -1272,9 +1297,10 @@ const BubbleChart = () => {
                 x: 40,
                 y: 32,
                 r: 30,
+                label: "NTL",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Moldavia: ${estimatedBirthsMoldova.toLocaleString()}`,
@@ -1282,9 +1308,10 @@ const BubbleChart = () => {
                 x: 29,
                 y: 22,
                 r: 18,
+                label: "MLD",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Belgium: ${estimatedBirthsBelgium.toLocaleString()}`,
@@ -1292,9 +1319,10 @@ const BubbleChart = () => {
                 x: 35,
                 y: 24,
                 r: 26,
+                label: "Belgium",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Albania: ${estimatedBirthsAlbania.toLocaleString()}`,
@@ -1302,9 +1330,10 @@ const BubbleChart = () => {
                 x: 41,
                 y: 21,
                 r: 20,
+                label: "Albania",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Italy: ${estimatedBirthsItaly.toLocaleString()}`,
@@ -1312,9 +1341,10 @@ const BubbleChart = () => {
                 x: 32,
                 y: 10,
                 r: 40,
+                label: "Italy",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Ireland: ${estimatedBirthsIreland.toLocaleString()}`,
@@ -1322,9 +1352,10 @@ const BubbleChart = () => {
                 x: 39,
                 y: 12,
                 r: 20,
+                label: "Ireland",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Bosnia and Herzegovina: ${estimatedBirthsBosnia.toLocaleString()}`,
@@ -1332,9 +1363,10 @@ const BubbleChart = () => {
                 x: 45,
                 y: 15,
                 r: 20,
+                label: "BIH",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
             label: `Births in Austria: ${estimatedBirthsAustria.toLocaleString()}`,
@@ -1342,27 +1374,28 @@ const BubbleChart = () => {
                 x: 48,
                 y: 7,
                 r: 20,
+                label: "Austria",
             }],
-            backgroundColor: '#999',
-            borderColor: '#333',
+            backgroundColor: '#bdaee9',
+            borderColor: '#666',
         },
         {
-            label: `Births in world:`,
+            label: 'Births in world:',
             data: [{
                 x: 1,
                 y: 10,
-                r: 15,
+                r: 0,
             }],
             backgroundColor: '#fff',
             borderColor: '#fff',
         },
         {
-            label: `Births in world:`,
             data: [{
-                x: 100,
+                x: 80,
                 y: 80,
-                r: 15,
+                r: 0,
             }],
+            color: '#fff',
             backgroundColor: '#fff',
             borderColor: '#fff',
         }]
@@ -1370,9 +1403,9 @@ const BubbleChart = () => {
 
 
     return (
-        <h3>
+        <h2 className='bubble'>
             <Bubble options={options} data={data} />
-        </h3>
+        </h2>
     )
 }
 
