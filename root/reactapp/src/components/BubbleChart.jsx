@@ -1384,7 +1384,7 @@ const BubbleChart = () => {
             data: [{
                 x: 1,
                 y: 10,
-                r: 0,
+                r: "",
             }],
             backgroundColor: '#fff',
             borderColor: '#fff',
@@ -1393,7 +1393,7 @@ const BubbleChart = () => {
             data: [{
                 x: 80,
                 y: 80,
-                r: 0,
+                r: "",
             }],
             color: '#fff',
             backgroundColor: '#fff',
@@ -1404,7 +1404,10 @@ const BubbleChart = () => {
 
     return (
         <h2 className='bubble'>
-            <Bubble options={options} data={data} />
+            <h4>Birthdays in Europe</h4>
+            <div className='bchart'>
+                <Bubble options={options} data={data} />
+            </div>
         </h2>
     )
 }

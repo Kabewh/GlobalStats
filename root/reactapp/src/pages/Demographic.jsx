@@ -16,9 +16,10 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import OverflowElement from '../components/georgelpetre';
 import Graph from '../components/Graph';
 import BubbleChart from '../components/BubbleChart';
+import PieChart from '../components/PieChart';
+import WorldClock from '../components/WorldClock';
 
 ChartJS.register(
   CategoryScale,
@@ -236,12 +237,21 @@ const Demographic = () => {
   const birthRate = 0.018;
   const deathRate = 0.008;
 
+  const birthdate = new Date("2002-02-12");
+  const currentDate = new Date();
+
+  const daysSinceBirth = Math.floor(
+    (currentDate - birthdate) / (1000 * 60 * 60)
+  );
+
+  const dailyBirths = 366.5
+  const peopleBornAfter = daysSinceBirth * dailyBirths
+
   useEffect(() => {
     fetchPopulation()
     fetchRomaniaPopulation()
     getCountries()
     fetchLifeExpectancy("World", 2023)
-    calculatePopulation()
   }, []);
 
 
@@ -257,36 +267,12 @@ const Demographic = () => {
     setRomaniaPopulation(jsonData)
   }
 
-
   async function fetchLifeExpectancy(country, year) {
     const response = await fetch(LOCALHOST + "lifeExpectancy/" + country + "/" + year + "/")
     const jsonData = await response.json()
     setLifeExpectancy(jsonData)
   }
 
-  const birthdate = new Date("2002-02-12");
-  const currentDate = new Date();
-
-  const daysSinceBirth = Math.floor(
-    (currentDate - birthdate) / (1000 * 60 * 60)
-  );
-
-  const dailyBirths = 366.5
-  const peopleBornAfter = daysSinceBirth * dailyBirths
-
-  async function calculatePopulation() {
-    const response = await fetch(LOCALHOST + "population/World/2023")
-    const jsonData = await response.json()
-    const popgrowthrate = 0.0108 // 18.5 crude birth rate - 7.7 crude death rate / 1000  rata neta a cresterii populatiei per 1000 locuitori
-    const secondBirthRate = 8_000_000_000 * 0.0108 / (365 * 24 * 60 * 60) // rata nasterii pe secunda 
-    const interval = setInterval(() => {
-      setSimulatedPopulation(data => data + 3);
-      addDivElement()
-    }, 1000);
-    return () => clearInterval(interval);
-  }
-
- 
   async function getCountries() {
     const response = await fetch(LOCALHOST + "countries")
     const jsonData = await response.json()
@@ -397,17 +383,27 @@ const Demographic = () => {
     }
   }
 
-  //youngerOlderr
   async function fetchYoungerOlderWorld() {
     const response = await fetch(LOCALHOST + "youngerOlderInfo/World/2023/")
     const jsonData = await response.json()
+    console.log(jsonData)
     setBirthsWorld(jsonData)
   }
 
-
   async function calculateCounts() {
-    const proportion = parseFloat(age) / lifeExpectancy; // 0.5
-    const younger = Math.floor(simulatedPopulation * proportion); // 
+    calculateEstimatedPeopleBorn()
+    calculateMilestones()
+    calculateSharedBirths()
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const age = 2023 - yearChoice;
+    const birthday = parseInt(yearChoice) + 18;
+    setEighteenthBirthday(birthday)
+    setAge(age)
+    const proportion = parseFloat(age) / lifeExpectancy;
+    const younger = Math.floor(simulatedPopulation * proportion);
     const youngerRomania = Math.floor(romaniaPopulation * proportion);
     const olderRomania = romaniaPopulation - youngerRomania;
     const older = simulatedPopulation - younger;
@@ -421,32 +417,8 @@ const Demographic = () => {
     setOldPersonCount(older);
     setOlderPercentageWorld((younger / simulatedPopulation) * 100);
     setOlderPercentageRomania((youngerRomania / romaniaPopulation) * 100);
-    calculateEstimatedPeopleBorn()
-    calculateMilestones()
-    calculateSharedBirths()
-
-    const interval = setInterval(() => {
-
-    }, 1000);
-    return () => clearInterval(interval);
-  }
-
-  // async function getDeaths() {
-  //   const response = await fetch(LOCALHOST + "deaths")
-  //   const jsonData = await response.json()
-  //   const deathMap = jsonData.map((item, index) => {
-  //     console.log(index + ": " + (item * 1000 / total_deaths) * 100)
-  //   })
-  // }
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setValidated(true);
-    const age = 2023 - yearChoice;
-    const birthday = parseInt(yearChoice) + 18;
-    setEighteenthBirthday(birthday)
-    setAge(age)
     calculateCounts();
+    setValidated(true);
   }
 
 
@@ -476,23 +448,11 @@ const Demographic = () => {
     setRegion(param)
   }
 
-  const addDivElement = () => {
-    setDivElements(prevDivs => [...prevDivs, <div key={prevDivs.length} class="babyGenerator"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className='up'><path d="M152 88a72 72 0 1 1 144 0A72 72 0 1 1 152 88zM39.7 144.5c13-17.9 38-21.8 55.9-8.8L131.8 162c26.8 19.5 59.1 30 92.2 30s65.4-10.5 92.2-30l36.2-26.4c17.9-13 42.9-9 55.9 8.8s9 42.9-8.8 55.9l-36.2 26.4c-13.6 9.9-28.1 18.2-43.3 25V288H128V251.7c-15.2-6.7-29.7-15.1-43.3-25L48.5 200.3c-17.9-13-21.8-38-8.8-55.9zm89.8 184.8l60.6 53-26 37.2 24.3 24.3c15.6 15.6 15.6 40.9 0 56.6s-40.9 15.6-56.6 0l-48-48C70 438.6 68.1 417 79.2 401.1l50.2-71.8zm128.5 53l60.6-53 50.2 71.8c11.1 15.9 9.2 37.5-4.5 51.2l-48 48c-15.6 15.6-40.9 15.6-56.6 0s-15.6-40.9 0-56.6L284 419.4l-26-37.2z" /></svg></div>]);
-
-  };
-
   return (
     <>
       <Navbar />
       <div className="container">
-        <div className="world-clock">
-          <h3>
-            <p>Current world<br></br>population clock</p>
-            <p className="population-counter">{simulatedPopulation.toLocaleString("en")}</p>
-            <div className='babies'>
-            </div>{divElements.map(div => div).reverse()}
-          </h3>
-        </div>
+        <WorldClock />
         <div className='question'>
           <h1>
             What's my place in the world population? How long will I live?
@@ -711,8 +671,10 @@ const Demographic = () => {
               <h1>Did you know that you share a birthday with about <span>{parseInt(estimatedBirths).toLocaleString()}</span> people around the world and that approximately <span>{birthsPerHour}</span> people were born in the same hour?</h1>
             </div>
             <div className='line_graph'>
-              <h4>Birthdays in Europe</h4>
-              <BubbleChart />
+              <div className="grid-cont">
+                <BubbleChart />
+                <PieChart />
+              </div>
             </div>
             <div className="timeline">
             </div>

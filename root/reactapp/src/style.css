@@ -693,6 +693,14 @@ form {
     overflow-x: hidden;
 }
 
+.grid-cont {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 600px;
+    margin-left: -325px;
+    width: 180%;
+}
+
 .bubble {
     margin-top: 50px;
     margin-left: -50px;
@@ -701,6 +709,37 @@ form {
 .line_graph h4 {
     font-weight: 300;
     margin-top: 50px;
-    margin-left: -120px;
+    margin-left: -130px;
     color: #333;
+}
+
+.grid-item {
+    margin-top: 50px;
+}
+
+.pie {
+    width: 500px;
+    height: 500px;
+}
+
+.bubble h4 {
+    font-weight: 300;
+    margin-left: 150px;
+    margin-top: 0px;
+    font-size: 38px;
+    color: #333;
+}
+
+.bchart {
+    margin-top: 30px;
+}
+
+@media (max-width: 800px) {
+    .world-clock {
+        width: 400px;
+    }
+
+    .question {
+        width: 400px;
+    }
 }

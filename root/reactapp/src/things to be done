@@ -17,7 +17,6 @@ Aplicatia: Live World Statistics
 
 }Speranta de viata in functie de tara.
 
-
 ++++Ce mai am de realizat?
 
 }Un line chart pentru sansele de deces in functie de varsta.
@@ -38,7 +37,6 @@ Aplicatia: Live World Statistics
 }Posbilitatea de a urmari populatia mai multor tari de pe glob. 
 }Realizarea si imbunatatirea algoritmilor existenti de urmarire in timp real a datelor;
 }Posibilitatea de a personaliza pagina prinicipala dupa preferinta fiecarui utilizator;
-<!-- }Realizarea a mai multor grafice si diagrame -->
 }Finalizarea UI-ului (adaugare informatii relevante)
 }Realizarea functionalitatii de creare si logare a unui cont;
 

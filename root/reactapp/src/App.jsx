@@ -5,7 +5,6 @@ import {
   Route,
   Routes
 } from "react-router-dom";
-import Homepage from './pages/Homepage';
 import Demographic from './pages/Demographic';
 
 function App() {

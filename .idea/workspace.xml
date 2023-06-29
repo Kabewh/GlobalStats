@@ -2,11 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="89ee854f-33f3-470e-a05a-1fae562423a1" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/root/reactapp/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/root/reactapp/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/root/reactapp/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/root/reactapp/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/00e1fe3d-11b9-41c1-a1ed-36d89f5aa029.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/root/reactapp/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/root/reactapp/src/App.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/root/reactapp/src/components/BubbleChart.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/root/reactapp/src/components/BubbleChart.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/root/reactapp/src/components/Graph.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/root/reactapp/src/components/Graph.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/root/reactapp/src/components/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/root/reactapp/src/components/Navbar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/root/reactapp/src/components/georgelpetre.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/root/reactapp/src/pages/Demographic.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/root/reactapp/src/pages/Demographic.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/root/reactapp/src/pages/Homepage.jsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/root/reactapp/src/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/root/reactapp/src/style.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/root/reactapp/src/things to be done" beforeDir="false" afterPath="$PROJECT_DIR$/root/reactapp/src/things to be done" afterDir="false" />
     </list>

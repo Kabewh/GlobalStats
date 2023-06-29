@@ -30,7 +30,7 @@ def getYoungerOlderInfo(request, country, year):
     world_birth = all_entries.filter(country=country, year=year)
     growth_rate = world_2023[0]['population_growth_rate']
     birth_rate = world_birth[0]['births'] * 1000
-    print(json.dumps(birth_rate))
+    print(birth_rate)
     return HttpResponse(json.dumps(birth_rate))
 
 def getLifeExpectancy(request, country, year):
