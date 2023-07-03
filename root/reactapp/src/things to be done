@@ -1,0 +1,54 @@
+Prof coordonator: domnul profesor Daniel Pop
+Aplicatia: Live World Statistics
+
+++++Ce face aplicatia mea?
+
+}Aplicatie web pe scurt iti afiseaza date demografice in timp real prin manipularea unor seturi de date.
+
+
+++++Ce am realizat? 
+
+}Un area chart ce arata populatia anuala pentru fiecare varsta in parte.
+--Cum? Pe baza unui algoritm ce se foloseste de populatia impartita pe grupe de varsta si populatia curenta pentru a obtine populatia anuala pentru fiecare grupa de varsta in parte. 
+
+}O estimare a urmatoarelor evenimente demografice importante pe baza datei de nastere
+
+}Estimativ cate persoane s-au nascut in aceeasi zi cu tine, si cate in acceasi ora.
+
+}Speranta de viata in functie de tara.
+
+++++Ce mai am de realizat?
+
+}Un line chart pentru sansele de deces in functie de varsta.
+}Un pie chart care sa arate distrbutia nasterilor in functie de continent
+
+
+<!-- }Am folosit un api (worldometer) pentru a obtine datele necesare afisarii.
+--De unde sunt luate datele? United Nations
+
+}Am realizat afisarea populatiei de pe glob in timp real pe baza unui algoritm
+}ce ia ca parametrii populatia curenta si rata neta de crestere a acesteia
+}pentru a obtine numarul aproximativ de nasteri pe secunda
+
+}Locul utilizatorului in lume dupa varsta in functie de populatia totala -->
+
+
+
+}Posbilitatea de a urmari populatia mai multor tari de pe glob. 
+}Realizarea si imbunatatirea algoritmilor existenti de urmarire in timp real a datelor;
+}Posibilitatea de a personaliza pagina prinicipala dupa preferinta fiecarui utilizator;
+}Finalizarea UI-ului (adaugare informatii relevante)
+}Realizarea functionalitatii de creare si logare a unui cont;
+
+
+
+}Pentru timeline projection am aflat cate milisecunde sunt intr-un an, data nasterii, average-ul nasterilor 
+}pe an din ultimii ani
+}Am aflat de cati oameni mai e nevoie sa ajungem pana la 1 miliard (de ex) 1_000_000_000 / average-ul de    nasteri pe an
+
+
+
+
+
+
+}sqlite

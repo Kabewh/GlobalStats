@@ -1,17 +1,58 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
+from django.views.decorators.http import require_http_methods
 from django.shortcuts import render
 from rest_framework import viewsets
-from worldometer import api
+from django.views import View
+from members.models import Population
+import json
+
+
+def getCountries(request):
+    all_entries = Population.objects.all().values()
+    countries = all_entries.values_list('country', flat=True).distinct()
+    if countries:
+        return HttpResponse(json.dumps(list(countries)))
+    else:
+        return HttpResponseNotFound('<h1>Page not found</h1>')
+        
+def getWorldPopulation(request, country, year):
+    all_entries = Population.objects.all().values()
+    country_year = all_entries.filter(country=country, year=year)
+    population = country_year[0]['total_population'] * 1000
+    if country_year:
+        return HttpResponse(json.dumps(population))
+    else:
+        return HttpResponseNotFound('<h1>Page not found</h1>')
+
+def getYoungerOlderInfo(request, country, year):
+    all_entries = Population.objects.all().values()
+    world_2023 = all_entries.filter(country='World', year=2023)
+    world_birth = all_entries.filter(country=country, year=year)
+    growth_rate = world_2023[0]['population_growth_rate']
+    birth_rate = world_birth[0]['births'] * 1000
+    print(birth_rate)
+    return HttpResponse(json.dumps(birth_rate))
+
+def getLifeExpectancy(request, country, year):
+    all_entries = Population.objects.all().values()
+    country_year = all_entries.filter(country=country, year=year)
+    life_expectancy = country_year[0]['life_expectancy']
+    if country_year:
+        return HttpResponse(json.dumps(life_expectancy))
+    else:
+        return HttpResponseNotFound('<h1>Page not found</h1>')
+
+def getDeaths(request):
+    all_entries = Population.objects.all().values()
+    deaths = all_entries.filter(time=2021)
+    death_totals = [entry['death_total'] for entry in deaths]
+    return HttpResponse(json.dumps(death_totals))
+ 
+
+
 # https://www.pbs.org/wgbh/nova/teachers/activities/3108_worldbal_02.html (calculating growth rate)
 
 
-def index(request):
-    print('index() called')
-    population = api.current_world_population()
-    populationNumber = population['current_world_population']
-    print('populationNumber:', populationNumber)
-    return render(request, 'index.html', {'populationNumber': populationNumber})
 
-def index1(request):
-    return render(request 'index1.html')
 
+# #to be done other routes
