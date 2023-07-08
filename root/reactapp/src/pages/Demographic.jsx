@@ -20,6 +20,7 @@ import Graph from '../components/Graph';
 import BubbleChart from '../components/BubbleChart';
 import PieChart from '../components/PieChart';
 import WorldClock from '../components/WorldClock';
+import UserInput from '../components/UserInput';
 
 ChartJS.register(
   CategoryScale,
@@ -131,25 +132,6 @@ const Demographic = () => {
   const [iranPopulation, setIranPopulation] = useState(0);
   const [germanyPopulation, setGermanyPopulation] = useState(0);
   const [thailandPopulation, setThailandPopulation] = useState(0);
-  const [chinaFlag, setChinaFlag] = useState("");
-  const [indiaFlag, setIndiaFlag] = useState("");
-  const [usaFlag, setUsaFlag] = useState("");
-  const [indonesiaFlag, setIndonesiaFlag] = useState("");
-  const [pakistanFlag, setPakistanFlag] = useState("");
-  const [brazilFlag, setBrazilFlag] = useState("");
-  const [bangladeshFlag, setBangladeshFlag] = useState("");
-  const [russiaFlag, setRussiaFlag] = useState("");
-  const [japanFlag, setJapanFlag] = useState("");
-  const [mexicoFlag, setMexicoFlag] = useState("");
-  const [ethiopiaFlag, setEthiopiaFlag] = useState("");
-  const [philippinesFlag, setPhilippinesFlag] = useState("");
-  const [egyptFlag, setEgyptFlag] = useState("");
-  const [vietnamFlag, setVietnamFlag] = useState("");
-  const [drcongoFlag, setDrcongoFlag] = useState("");
-  const [turkeyFlag, setTurkeyFlag] = useState("");
-  const [iranFlag, setIranFlag] = useState("");
-  const [germanyFlag, setGermanyFlag] = useState("");
-  const [thailandFlag, setThailandFlag] = useState("");
   const [dayChoice, setDayChoice] = useState('')
   const [monthChoice, setMonthChoice] = useState(0)
   const [yearChoice, setYearChoice] = useState()
@@ -233,6 +215,7 @@ const Demographic = () => {
   const [divElements, setDivElements] = useState([]);
   const [abbrMonth, setAbbrMonth] = useState('');
   const [coolDeaths, setCoolDeaths] = useState(0);
+  const [younger, setYounger] = useState(0);
 
   const birthRate = 0.018;
   const deathRate = 0.008;
@@ -379,7 +362,6 @@ const Demographic = () => {
       const estimatedBirths = avgBirthRate * proportionBirths / 100 * simulatedPopulation
       setEstimatedBirths(estimatedBirths)
       calculateLifeSpan()
-      calculateEstimatedPeopleBorn()
     }
   }
 
@@ -391,56 +373,8 @@ const Demographic = () => {
   }
 
   async function calculateCounts() {
-    calculateEstimatedPeopleBorn()
-    calculateMilestones()
+    calculateLifeSpan()
     calculateSharedBirths()
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const age = 2023 - yearChoice;
-    const birthday = parseInt(yearChoice) + 18;
-    setEighteenthBirthday(birthday)
-    setAge(age)
-    const proportion = parseFloat(age) / lifeExpectancy;
-    const younger = Math.floor(simulatedPopulation * proportion);
-    const youngerRomania = Math.floor(romaniaPopulation * proportion);
-    const olderRomania = romaniaPopulation - youngerRomania;
-    const older = simulatedPopulation - younger;
-    const youngerPercentageWorld = ((older / simulatedPopulation) * 100)
-    const youngerPercentageRomania = ((olderRomania / romaniaPopulation) * 100)
-    setYoungerPercentageRomania(youngerPercentageRomania)
-    setYoungerPercentageWorld(youngerPercentageWorld)
-    setYoungerRomania(youngerRomania);
-    setOlderRomania(olderRomania);
-    setYoungPersonCount(younger);
-    setOldPersonCount(older);
-    setOlderPercentageWorld((younger / simulatedPopulation) * 100);
-    setOlderPercentageRomania((youngerRomania / romaniaPopulation) * 100);
-    calculateCounts();
-    setValidated(true);
-  }
-
-
-  const handleDay = (e) => {
-    setDayChoice(e.target.value)
-  }
-
-  const handleMonth = (e) => {
-    setMonthChoice(e.target.value)
-    setAbbrMonth(e.target.value.slice(0, 3))
-  }
-
-  const handleYear = (e) => {
-    setYearChoice(e.target.value)
-  }
-
-  const handleCountry = (e) => {
-    setCountryChoice(e.target.value)
-  }
-
-  const handleToggleGender = (param) => {
-    setGender(param)
   }
 
   const handleToggleRegion = (param) => {
@@ -448,54 +382,44 @@ const Demographic = () => {
     setRegion(param)
   }
 
+  const handleValidated = (data) => {
+    setValidated(data)
+  }
+
+  const handleCountryChoice = (data) => {
+    setCountryChoice(data)
+  }
+
+  const handleDayChoice = (data) => {
+    setDayChoice(data)
+  }
+
+  const handleOlder = (data) => {
+    setOldPersonCount(data)
+  }
+
+  const handleYounger = (data) => {
+    setYoungPersonCount(data)
+  }
+
+  const handleYoungerRomania = (data) => {
+    setYoungerRomania(data)
+  }
+
+  const handleOlderPercentageWorld = (data) => {
+    setOlderPercentageWorld(data)
+  }
+
+  const handleOlderRomania = (data) => {
+    setOlderRomania(data)
+  }
+
   return (
     <>
       <Navbar />
       <div className="container">
         <WorldClock />
-        <div className='question'>
-          <h1>
-            What's my place in the world population? How long will I live?
-          </h1>
-          <p>The journey of your life in numbers and dates! <br />
-            Please enter your date of birth, country of birth and sex at birth:</p>
-          <form onSubmit={handleSubmit}>
-            <input className="day" required value={dayChoice} onChange={handleDay} type="text" name="name" placeholder='Day' />
-            <select className="month" required value={monthChoice} onChange={handleMonth}>
-              {months.map((month, index) => (
-                <option key={index} value={index + 1}>
-                  {month}
-                </option>
-              ))}
-            </select>
-            <input className="year" required value={yearChoice} onChange={handleYear} type="text" name="name" placeholder='Year' />
-            <select className="country" required value={countryChoice} onChange={handleCountry}>
-              {countries.map((country, countrykey) => (
-                <option key={countrykey} value={country}>
-                  {country}
-                </option>
-              ))}
-            </select>
-            <div className='toggle'>
-              <button
-                type='button'
-                id='option1Btn'
-                className={selected === "male" ? "selected" : "notSelected"}
-                onClick={() => handleToggleGender("male")}>
-                Male
-              </button>
-              <button
-                type='button'
-                className={selected === "female" ? "selected" : "notSelected"}
-                onClick={() => handleToggleGender("female")}>
-                Female
-              </button>
-            </div>
-            <button className='goBtn' type='submit'>
-              go
-            </button>
-          </form>
-        </div>
+        <UserInput onData={handleValidated} country={handleCountryChoice} dayChoice={handleDayChoice} younger={handleYounger} olderPercentageWorld={handleOlderPercentageWorld} youngerRomania={handleYoungerRomania} olderRomania={handleOlderRomania} older={handleOlder}/>
         {validated ?
           <div className='youngOld'>
             <h3>Do you think you belong to the young or old? You are the <span>{youngPersonCount.toLocaleString()}</span> person alive on the planet. This means that you are <span>older than {olderPercentageWorld.toFixed(2)}%</span> of the world's population and <span>older than {youngerRomania.toLocaleString()}</span> people in Romania.</h3>
