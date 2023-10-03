@@ -46,8 +46,6 @@ const PieChart = () => {
     const [birthsPakistan, setBirthsPakistan] = useState(0);
     const [birthsChina, setBirthsChina] = useState(0);
 
-
-
     const [estimatedBirthsWorld, setEstimatedBirthsWorld] = useState(0);
     const [estimatedBirthsIndia, setEstimatedBirthsIndia] = useState(0);
     const [estimatedBirthsJapan, setEstimatedBirthsJapan] = useState(0);
@@ -60,88 +58,121 @@ const PieChart = () => {
     const [estimatedBirthsPakistan, setEstimatedBirthsPakistan] = useState(0);
     const [estimatedBirthsChina, setEstimatedBirthsChina] = useState(0);
 
+    const countries = [
+        "World", "India", "Japan", "Mexico", "Brazil", "Bangladesh", "Nigeria", "Indonesia", "Pakistan", "China"
+    ]
+
+    const [birthsByCountry, setBirthsByCountry] = useState([
+        {
+            country: '',
+            births: 0,
+            estimatedBirths: 0,
+        }
+    ])
+
+    const updateCountries = () => {
+        const UpdatedBirthsByCountry = countries.map((country) => {
+            return (
+                {
+                    country: country,
+                    births: 0,
+                    estimatedBirths: 0
+                }
+            )
+        }
+        )
+        setBirthsByCountry(UpdatedBirthsByCountry)
+        console.log(birthsByCountry)
+    }
 
     useEffect(() => {
-        sharedBirthsIndia();
+        // updateCountries()
+        // sharedBirthsIndia();
         sharedBirthsWorld();
-        sharedBirthsJapan();
-        sharedBirthsMexico();
-        sharedBirthsBrazil();
-        sharedBirthsBangladesh();
-        sharedBirthsNigeria();
-        sharedBirthsIndonesia();
-        sharedBirthsUnitedStates();
-        sharedBirthsPakistan();
-        sharedBirthsChina();
+        // sharedBirthsJapan();
+        // sharedBirthsMexico();
+        // sharedBirthsBrazil();
+        // sharedBirthsBangladesh();
+        // sharedBirthsNigeria();
+        // sharedBirthsIndonesia();
+        // sharedBirthsUnitedStates();
+        // sharedBirthsPakistan();
+        // sharedBirthsChina();
 
     }, [birthsBrazil, birthsIndia, birthsJapan, birthsMexico])
 
 
     async function fetchYoungerOlderWorld() {
-        const response = await fetch(LOCALHOST + "youngerOlderInfo/World/2023/")
-        const jsonData = await response.json()
-        setBirthsWorld(jsonData)
+        const promises = countries.map(async (country) => {
+            const response = await fetch(LOCALHOST + `youngerOlderInfo/${country}/2023/`)
+            const jsonData = await response.json()
+            return { country, births: jsonData }
+        })
+        const results = await Promise.all(promises);
+        setBirthsWorld(results)
     }
 
-    async function fetchYoungerOlderIndia() {
-        const response = await fetch(LOCALHOST + "youngerOlderInfo/India/2023/")
-        const jsonData = await response.json()
-        setBirthsIndia(jsonData)
-    }
 
-    async function fetchYoungerOlderJapan() {
-        const response = await fetch(LOCALHOST + "youngerOlderInfo/Japan/2023/")
-        const jsonData = await response.json()
-        setBirthsJapan(jsonData)
-    }
 
-    async function fetchYoungerOlderMexico() {
-        const response = await fetch(LOCALHOST + "youngerOlderInfo/Mexico/2023/")
-        const jsonData = await response.json()
-        setBirthsMexico(jsonData)
-    }
+    // async function fetchYoungerOlderIndia() {
+    //     const response = await fetch(LOCALHOST + "youngerOlderInfo/India/2023/")
+    //     const jsonData = await response.json()
+    //     setBirthsIndia(jsonData)
+    // }
 
-    async function fetchYoungerOlderBrazil() {
-        const response = await fetch(LOCALHOST + "youngerOlderInfo/Brazil/2023/")
-        const jsonData = await response.json()
-        setBirthsBrazil(jsonData)
-    }
+    // async function fetchYoungerOlderJapan() {
+    //     const response = await fetch(LOCALHOST + "youngerOlderInfo/Japan/2023/")
+    //     const jsonData = await response.json()
+    //     setBirthsJapan(jsonData)
+    // }
 
-    async function fetchYoungerOlderBangladesh() {
-        const response = await fetch(LOCALHOST + "youngerOlderInfo/Bangladesh/2023/")
-        const jsonData = await response.json()
-        setBirthsBangladesh(jsonData)
-    }
+    // async function fetchYoungerOlderMexico() {
+    //     const response = await fetch(LOCALHOST + "youngerOlderInfo/Mexico/2023/")
+    //     const jsonData = await response.json()
+    //     setBirthsMexico(jsonData)
+    // }
 
-    async function fetchYoungerOlderNigeria() {
-        const response = await fetch(LOCALHOST + "youngerOlderInfo/Nigeria/2023/")
-        const jsonData = await response.json()
-        setBirthsNigeria(jsonData)
-    }
+    // async function fetchYoungerOlderBrazil() {
+    //     const response = await fetch(LOCALHOST + "youngerOlderInfo/Brazil/2023/")
+    //     const jsonData = await response.json()
+    //     setBirthsBrazil(jsonData)
+    // }
 
-    async function fetchYoungerOlderIndonesia() {
-        const response = await fetch(LOCALHOST + "youngerOlderInfo/Indonesia/2023/")
-        const jsonData = await response.json()
-        setBirthsIndonesia(jsonData)
-    }
+    // async function fetchYoungerOlderBangladesh() {
+    //     const response = await fetch(LOCALHOST + "youngerOlderInfo/Bangladesh/2023/")
+    //     const jsonData = await response.json()
+    //     setBirthsBangladesh(jsonData)
+    // }
 
-    async function fetchYoungerOlderUnitedStates() {
-        const response = await fetch(LOCALHOST + "youngerOlderInfo/Northern America/2023/")
-        const jsonData = await response.json()
-        setBirthsUnitedStates(jsonData)
-    }
+    // async function fetchYoungerOlderNigeria() {
+    //     const response = await fetch(LOCALHOST + "youngerOlderInfo/Nigeria/2023/")
+    //     const jsonData = await response.json()
+    //     setBirthsNigeria(jsonData)
+    // }
 
-    async function fetchYoungerOlderPakistan() {
-        const response = await fetch(LOCALHOST + "youngerOlderInfo/Pakistan/2023/")
-        const jsonData = await response.json()
-        setBirthsPakistan(jsonData)
-    }
+    // async function fetchYoungerOlderIndonesia() {
+    //     const response = await fetch(LOCALHOST + "youngerOlderInfo/Indonesia/2023/")
+    //     const jsonData = await response.json()
+    //     setBirthsIndonesia(jsonData)
+    // }
 
-    async function fetchYoungerOlderChina() {
-        const response = await fetch(LOCALHOST + "youngerOlderInfo/China/2023/")
-        const jsonData = await response.json()
-        setBirthsChina(jsonData)
-    }
+    // async function fetchYoungerOlderUnitedStates() {
+    //     const response = await fetch(LOCALHOST + "youngerOlderInfo/Northern America/2023/")
+    //     const jsonData = await response.json()
+    //     setBirthsUnitedStates(jsonData)
+    // }
+
+    // async function fetchYoungerOlderPakistan() {
+    //     const response = await fetch(LOCALHOST + "youngerOlderInfo/Pakistan/2023/")
+    //     const jsonData = await response.json()
+    //     setBirthsPakistan(jsonData)
+    // }
+
+    // async function fetchYoungerOlderChina() {
+    //     const response = await fetch(LOCALHOST + "youngerOlderInfo/China/2023/")
+    //     const jsonData = await response.json()
+    //     setBirthsChina(jsonData)
+    // }
 
     const countryChoice = true
     const yearChoice = true
