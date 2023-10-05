@@ -386,7 +386,6 @@ const Demographic = () => {
   async function fetchYoungerOlderWorld() {
     const response = await fetch(LOCALHOST + "youngerOlderInfo/World/2023/")
     const jsonData = await response.json()
-    console.log(jsonData)
     setBirthsWorld(jsonData)
   }
 
