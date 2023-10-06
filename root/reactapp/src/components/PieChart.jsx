@@ -38,7 +38,7 @@ ChartJS.register(
 const PieChart = () => {
 
     const countries = [
-        "World", "India", "Japan", "Mexico", "Brazil", "Bangladesh", "Nigeria", "Indonesia", "Pakistan", "China"
+        "India", "Japan", "Mexico", "Brazil", "Bangladesh", "Nigeria", "Indonesia", "Pakistan", "China"
     ]
 
     // const [birthsByCountry, setBirthsByCountry] = useState([
@@ -67,22 +67,19 @@ const PieChart = () => {
     const [estimatedBirthsWorld, setEstimatedBirthsWorld] = useState([]);
 
     useEffect(() => {
+        async function fetchYoungerOlderWorld() {
+            const promises = countries.map(async (country) => {
+                const response = await fetch(LOCALHOST + `youngerOlderInfo/${country}/2023/`)
+                const jsonData = await response.json()
+                return { country, births: jsonData }
+            })
+            const results = await Promise.all(promises);
+            setBirthsWorld(results.reverse())
+            console.log("births world: ", birthsWorld);
+        }
+
         fetchYoungerOlderWorld();
     }, [])
-
-
-    async function fetchYoungerOlderWorld() {
-        const promises = countries.map(async (country) => {
-            const response = await fetch(LOCALHOST + `youngerOlderInfo/${country}/2023/`)
-            const jsonData = await response.json()
-            return { country, births: jsonData }
-        })
-        const results = await Promise.all(promises);
-        setBirthsWorld(results)
-        console.log("births world: ", birthsWorld);
-    }
-
-
 
     // console.log("births world: ", birthsWorld)
     // async function sharedBirthsWorld() {
@@ -133,12 +130,19 @@ const PieChart = () => {
         }
     };
 
-    // console.log("births world: ", birthsWorld.map((births) => births.births))
+    const renderedData = () => {
+        if (birthsWorld.length > 0) {
+            return (
+                [birthsWorld[0].births, birthsWorld[1].births, birthsWorld[2].births, birthsWorld[3].births, birthsWorld[4].births, birthsWorld[5].births, birthsWorld[6].births, birthsWorld[7].births, birthsWorld[8].births]
+            )
+        }
+    }
+    // console.log(birthsWorld)
 
     const data = {
         datasets: [{
             labels: ['India', 'Japan', 'Mexico', 'Brazil', 'Bangladesh', 'Nigeria', 'Indonesia', 'Pakistan', 'China'],
-            // data: [birthsWorld[1].births, birthsWorld[2].births, birthsWorld[3].births, birthsWorld[4].births, birthsWorld[5].births, birthsWorld[6].births, birthsWorld[7].births, birthsWorld[8].births],
+            data: renderedData(),
             backgroundColor: ['#E6E6FA', '#98FF98', '#FADADD', '#87CEEB', '#C0C0C0', '#FFDAB9', '#FFFFE0', '#C8A2C8', '#98FB98', '#F8FD'],
         }
         ]
@@ -149,7 +153,8 @@ const PieChart = () => {
         <>
             <div className='pie'>
                 <h4>Top 10 Countries by Birthdays</h4>
-                <Pie options={options} data={data} />
+                {data ? <Pie options={options} data={data} /> : console.log("data not loaded")}
+
             </div>
         </>
 
