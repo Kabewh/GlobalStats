@@ -135,7 +135,6 @@ const PieChart = () => {
 
   const renderedData = () => {
     if (birthsWorld.length > 0) {
-      console.log(birthsWorld);
       return birthsWorld.map((births) => births.births);
     }
   };
