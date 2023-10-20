@@ -56,7 +56,7 @@ const PieChart = () => {
         LOCALHOST + `youngerOlderInfo/${country}/2023/`
       );
       const jsonData = await response.json();
-      return { country, births: jsonData };
+      return { country, births: jsonData / 1000 };
     });
     const results = await Promise.all(promises);
     setBirthsWorld(results);

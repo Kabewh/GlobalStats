@@ -116,7 +116,7 @@ const Demographic = () => {
   const [simulatedPopulation, setSimulatedPopulation] = useState(0);
   const [dayChoice, setDayChoice] = useState("");
   const [monthChoice, setMonthChoice] = useState(0);
-  const [yearChoice, setYearChoice] = useState();
+  const [yearChoice, setYearChoice] = useState("");
   const [countryChoice, setCountryChoice] = useState("");
   const [countries, setCountries] = useState([]);
   const [selected, setGender] = useState("male");
@@ -151,7 +151,7 @@ const Demographic = () => {
   const [eighthBillion, setEighthBillion] = useState(0);
   const [ninthBillion, setNinthBillion] = useState(0);
   const [tenthBillion, setTenthBillion] = useState(0);
-  const [eighteenthBirthday, setEighteenthBirthday] = useState(0);
+  const [eighteenthBirthday, setEighteenthBirthday] = useState("");
   const [abbrMonth, setAbbrMonth] = useState("");
 
   const birthdate = new Date("2002-02-12");
@@ -397,6 +397,7 @@ const Demographic = () => {
     const birthday = parseInt(yearChoice) + 18;
     setEighteenthBirthday(birthday);
     const proportion = parseFloat(age) / lifeExpectancy;
+    console.log("proportion", birthday);
     const younger = Math.floor(simulatedPopulation * proportion);
     const youngerRomania = Math.floor(romaniaPopulation * proportion);
     const olderRomania = romaniaPopulation - youngerRomania;
@@ -614,7 +615,7 @@ const Demographic = () => {
 
             <ul className="projections">
               <h3>Timeline (Projections)</h3>
-              <li class="projection">
+              <li className="projection">
                 <div className="check-line"></div>
                 <div className="date">
                   <h2 className="day-date">
@@ -625,7 +626,7 @@ const Demographic = () => {
                   <h2>Your birth!</h2>
                 </div>
               </li>
-              <li class="projection">
+              <li className="projection">
                 <div className="check-line"></div>
                 <div className="date">
                   <h2 className="day-date">{firstBillion}</h2>
@@ -634,7 +635,7 @@ const Demographic = () => {
                   <h2>1 billionth person</h2>
                 </div>
               </li>
-              <li class="projection">
+              <li className="projection">
                 <div className="check-line"></div>
                 <div className="date">
                   <h2 className="day-date">{secondBillion}</h2>
@@ -643,18 +644,22 @@ const Demographic = () => {
                   <h2>2 billionth person</h2>
                 </div>
               </li>
-              <li class="projection">
+              <li className="projection">
                 <div className="check-line"></div>
                 <div className="date">
                   <h2 className="day-date">
-                    {dayChoice + "/" + abbrMonth + "/" + eighteenthBirthday}
+                    {dayChoice +
+                      "/" +
+                      abbrMonth +
+                      "/" +
+                      eighteenthBirthday.toString()}
                   </h2>
                 </div>
                 <div className="message-date">
                   <h2>Your 18th birthday!</h2>
                 </div>
               </li>
-              <li class="projection">
+              <li className="projection">
                 <div className="check-line"></div>
                 <div className="date">
                   <h2 className="day-date">{thirdBillion}</h2>
@@ -663,7 +668,7 @@ const Demographic = () => {
                   <h2>3 billionth person</h2>
                 </div>
               </li>
-              <li class="projection">
+              <li className="projection">
                 <div className="check-line"></div>
                 <div className="date">
                   <h2 className="day-date">{fourthBillion}</h2>
@@ -672,7 +677,7 @@ const Demographic = () => {
                   <h2>4 billionth person</h2>
                 </div>
               </li>
-              <li class="projection">
+              <li className="projection">
                 <div className="check-line"></div>
                 <div className="date">
                   <h2 className="day-date">{fifthBillion}</h2>
@@ -681,7 +686,7 @@ const Demographic = () => {
                   <h2>5 billionth person</h2>
                 </div>
               </li>
-              <li class="projection">
+              <li className="projection">
                 <div className="check-line"></div>
                 <div className="date">
                   <h2 className="day-date">{sixthBillion}</h2>
@@ -690,7 +695,7 @@ const Demographic = () => {
                   <h2>6 billionth person</h2>
                 </div>
               </li>
-              <li class="projection">
+              <li className="projection">
                 <div className="check-line"></div>
                 <div className="date">
                   <h2 className="day-date">{seventhBillion}</h2>
@@ -699,7 +704,7 @@ const Demographic = () => {
                   <h2>7 billionth person</h2>
                 </div>
               </li>
-              <li class="projection">
+              <li className="projection">
                 <div className="check-line"></div>
                 <div className="date">
                   <h2 className="day-date">{eighthBillion}</h2>
@@ -708,7 +713,7 @@ const Demographic = () => {
                   <h2>8 billionth person</h2>
                 </div>
               </li>
-              <li class="projection">
+              <li className="projection">
                 <div className="check-line"></div>
                 <div className="date">
                   <h2 className="day-date">{worldLifeSpanDate}</h2>
@@ -717,7 +722,7 @@ const Demographic = () => {
                   <h2>Your projected life expectancy in World</h2>
                 </div>
               </li>
-              <li class="projection">
+              <li className="projection">
                 <div className="check-line"></div>
                 <div className="date">
                   <h2 className="day-date">{ninthBillion}</h2>
@@ -726,7 +731,7 @@ const Demographic = () => {
                   <h2>9 billionth person</h2>
                 </div>
               </li>
-              <li class="projection">
+              <li className="projection">
                 <div className="check-line"></div>
                 <div className="date">
                   <h2 className="day-date">{countryLifeSpanDate}</h2>
@@ -735,7 +740,7 @@ const Demographic = () => {
                   <h2>Your projected life expectancy in {countryChoice}</h2>
                 </div>
               </li>
-              <li class="projection">
+              <li className="projection">
                 <div className="check-line"></div>
                 <div className="date">
                   <h2 className="day-date">{tenthBillion}</h2>

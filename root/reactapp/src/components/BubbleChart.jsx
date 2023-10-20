@@ -11,11 +11,9 @@ import {
   Filler,
   Legend,
 } from "chart.js";
-import { Line } from "react-chartjs-2";
 import { Bubble } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 
-const total_deaths = 69248000;
 const LOCALHOST = "http://localhost:8000/";
 
 ChartJS.register(
@@ -31,20 +29,60 @@ ChartJS.register(
 );
 
 const BubbleChart = () => {
-  const [birthsWorld, setBirthsWorld] = useState(0);
+  const countries = [
+    "romania",
+    "italy",
+    "spain",
+    "france",
+    "germany",
+    "poland",
+    "ireland",
+    "czechia",
+    "united kingdom",
+    "serbia",
+    "hungary",
+    "austria",
+    "switzerland",
+    "bulgaria",
+    "greece",
+    "sweden",
+    "portugal",
+    "denmark",
+    "finland",
+    "slovakia",
+    "norway",
+    "croatia",
+    "moldova",
+    "bosnia and herzegovina",
+    "albania",
+    "lithuania",
+    "slovenia",
+    "latvia",
+    "estonia",
+    "montenegro",
+    "luxembourg",
+    "malta",
+    "iceland",
+    "andorra",
+    "monaco",
+    "liechtenstein",
+    "belarus",
+    "netherlands",
+  ];
+
+  const [setBirthsWorld] = useState(0);
   const [birthsRomania, setBirthsRomania] = useState(0);
   const [birthsItaly, setBirthsItaly] = useState(0);
   const [birthsSpain, setBirthsSpain] = useState(0);
   const [birthsFrance, setBirthsFrance] = useState(0);
   const [birthsGermany, setBirthsGermany] = useState(0);
   const [birthsPoland, setBirthsPoland] = useState(0);
-  const [birthsUkraine, setBirthsUkraine] = useState(0);
   const [birthsIreland, setBirthsIreland] = useState(0);
   const [birthsCzechia, setBirthsCzechia] = useState(0);
   const [birthsUnitedKingdom, setBirthsUnitedKingdom] = useState(0);
   const [birthsSerbia, setBirthsSerbia] = useState(0);
   const [birthsHungary, setBirthsHungary] = useState(0);
-  const [birthsBelarus, setBirthsBelarus] = useState(0);
+  const [setBirthsBelarus] = useState(0);
   const [birthsAustria, setBirthsAustria] = useState(0);
   const [birthsSwitzerland, setBirthsSwitzerland] = useState(0);
   const [birthsBulgaria, setBirthsBulgaria] = useState(0);
@@ -60,7 +98,6 @@ const BubbleChart = () => {
   const [birthsBosnia, setBirthsBosnia] = useState(0);
   const [birthsAlbania, setBirthsAlbania] = useState(0);
   const [birthsLithuania, setBirthsLithuania] = useState(0);
-  const [birthsNorthMacedonia, setBirthsNorthMacedonia] = useState(0);
   const [birthsSlovenia, setBirthsSlovenia] = useState(0);
   const [birthsLatvia, setBirthsLatvia] = useState(0);
   const [birthsEstonia, setBirthsEstonia] = useState(0);
@@ -80,13 +117,13 @@ const BubbleChart = () => {
   const [estimatedBirthsFrance, setEstimatedBirthsFrance] = useState(0);
   const [estimatedBirthsGermany, setEstimatedBirthsGermany] = useState(0);
   const [estimatedBirthsPoland, setEstimatedBirthsPoland] = useState(0);
-  const [estimatedBirthsUkraine, setEstimatedBirthsUkraine] = useState(0);
+  const [estimatedBirthsUkraine] = useState(0);
   const [estimatedBirthsIreland, setEstimatedBirthsIreland] = useState(0);
   const [estimatedBirthsCzechia, setEstimatedBirthsCzechia] = useState(0);
   const [estimatedBirthsUK, setEstimatedBirthsUK] = useState(0);
   const [estimatedBirthsSerbia, setEstimatedBirthsSerbia] = useState(0);
   const [estimatedBirthsHungary, setEstimatedBirthsHungary] = useState(0);
-  const [estimatedBirthsBelarus, setEstimatedBirthsBelarus] = useState(0);
+  const [estimatedBirthsBelarus] = useState(0);
   const [estimatedBirthsAustria, setEstimatedBirthsAustria] = useState(0);
   const [estimatedBirthsSwitzerland, setEstimatedBirthsSwitzerland] =
     useState(0);
@@ -97,14 +134,12 @@ const BubbleChart = () => {
   const [estimatedBirthsDenmark, setEstimatedBirthsDenmark] = useState(0);
   const [estimatedBirthsFinland, setEstimatedBirthsFinland] = useState(0);
   const [estimatedBirthsSlovakia, setEstimatedBirthsSlovakia] = useState(0);
-  const [estimatedBirthsNorway, setEstimatedBirthsNorway] = useState(0);
+  const [setEstimatedBirthsNorway] = useState(0);
   const [estimatedBirthsCroatia, setEstimatedBirthsCroatia] = useState(0);
   const [estimatedBirthsMoldova, setEstimatedBirthsMoldova] = useState(0);
   const [estimatedBirthsBosnia, setEstimatedBirthsBosnia] = useState(0);
   const [estimatedBirthsAlbania, setEstimatedBirthsAlbania] = useState(0);
   const [estimatedBirthsLithuania, setEstimatedBirthsLithuania] = useState(0);
-  const [estimatedBirthsNorthMacedonia, setEstimatedBirthsNorthMacedonia] =
-    useState(0);
   const [estimatedBirthsSlovenia, setEstimatedBirthsSlovenia] = useState(0);
   const [estimatedBirthsLatvia, setEstimatedBirthsLatvia] = useState(0);
   const [estimatedBirthsEstonia, setEstimatedBirthsEstonia] = useState(0);
@@ -112,10 +147,9 @@ const BubbleChart = () => {
   const [estimatedBirthsLuxembourg, setEstimatedBirthsLuxembourg] = useState(0);
   const [estimatedBirthsMalta, setEstimatedBirthsMalta] = useState(0);
   const [estimatedBirthsIceland, setEstimatedBirthsIceland] = useState(0);
-  const [estimatedBirthsAndorra, setEstimatedBirthsAndorra] = useState(0);
-  const [estimatedBirthsMonaco, setEstimatedBirthsMonaco] = useState(0);
-  const [estimatedBirthsLiechtenstein, setEstimatedBirthsLiechtenstein] =
-    useState(0);
+  const [setEstimatedBirthsAndorra] = useState(0);
+  const [setEstimatedBirthsMonaco] = useState(0);
+  const [setEstimatedBirthsLiechtenstein] = useState(0);
   const [estimatedBirthsBelgium, setEstimatedBirthsBelgium] = useState(0);
   const [estimatedBirthsNetherlands, setEstimatedBirthsNetherlands] =
     useState(0);
@@ -160,6 +194,18 @@ const BubbleChart = () => {
     sharedBirthsBelgium();
     sharedBirthsNetherlands();
   }, [birthsBulgaria, birthsNetherlands]);
+
+  async function fetchYoungerOlderWorld() {
+    const promises = countries.map(async (country) => {
+      const response = await fetch(
+        LOCALHOST + `youngerOlderInfo/${country}/2023/`
+      );
+      const jsonData = await response.json();
+      return { country, births: jsonData / 1000 };
+    });
+    const results = await Promise.all(promises);
+    setBirthsWorld(results);
+  }
 
   async function fetchYoungerOlderWorld() {
     const response = await fetch(LOCALHOST + "youngerOlderInfo/World/2023/");
@@ -1542,7 +1588,7 @@ const BubbleChart = () => {
 
   return (
     <h2 className="bubble">
-      <h4>Birthdays in Europe</h4>
+      <p>Birthdays in Europe</p>
       <div className="bchart">
         <Bubble options={options} data={data} />
       </div>
