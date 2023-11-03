@@ -1,7 +1,6 @@
 from django.http import HttpResponse, HttpResponseNotFound
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import render
-from rest_framework import viewsets
 from django.views import View
 from members.models import Population
 import json
