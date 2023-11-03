@@ -14,7 +14,7 @@ const WorldClock = () => {
 
   async function fetchPopulation() {
     const response = await fetch(
-      LOCALHOST + "population/" + "World" + "/" + "2023" + "/"
+      LOCALHOST + "population/World/2023/"
     );
     const jsonData = await response.json();
     setSimulatedPopulation(jsonData);
@@ -22,9 +22,6 @@ const WorldClock = () => {
 
   async function calculatePopulation() {
     const response = await fetch(LOCALHOST + "population/World/2023");
-    // const jsonData = await response.json()
-    // const popgrowthrate = 0.0108 // 18.5 crude birth rate - 7.7 crude death rate / 1000  rata neta a cresterii populatiei per 1000 locuitori
-    // const secondBirthRate = 8_000_000_000 * 0.0108 / (365 * 24 * 60 * 60) // rata nasterii pe secunda
     const interval = setInterval(() => {
       setSimulatedPopulation((data) => data + 3);
       addDivElement();
@@ -35,7 +32,7 @@ const WorldClock = () => {
   const addDivElement = () => {
     setDivElements((prevDivs) => [
       ...prevDivs,
-      <div key={prevDivs.length} class="babyGenerator">
+      <div key={prevDivs.length} className="babyGenerator">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 448 512"
