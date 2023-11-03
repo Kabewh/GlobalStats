@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import { json } from "react-router-dom";
-import { read, utils, writeFile } from "xlsx";
-import { data } from "../data/data";
 import { age_population_data } from "../data/age_population_data";
+import { Line } from "react-chartjs-2";
+import Graph from "../components/Graph";
+import BubbleChart from "../components/BubbleChart";
+import PieChart from "../components/PieChart";
+import WorldClock from "../components/WorldClock";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -15,11 +17,6 @@ import {
   Filler,
   Legend,
 } from "chart.js";
-import { Line } from "react-chartjs-2";
-import Graph from "../components/Graph";
-import BubbleChart from "../components/BubbleChart";
-import PieChart from "../components/PieChart";
-import WorldClock from "../components/WorldClock";
 
 ChartJS.register(
   CategoryScale,
@@ -113,44 +110,40 @@ export const dataset = {
 };
 
 const Demographic = () => {
-  const [simulatedPopulation, setSimulatedPopulation] = useState(0);
+  const [demographicData, setDemographicData] = useState({
+    simulatedPopulation: 0,
+    countries: 0,
+    youngPersonCount: 0,
+    oldPersonCount: 0,
+    youngerPercentageRomania: 0,
+    olderPercentageRomania: 0,
+    youngerPercentageWorld: 0,
+    olderPercentageWorld: 0,
+    lifeExpectancy: 0,
+    romaniaPopulation: 0,
+    youngerRomania: 0,
+    olderRomania: 0,
+    birthsWorld: 0,
+    estimatedBirths: 0,
+    birthsPerHour: 0,
+    worldLifeSpan: 0,
+    worldLifeSpanDate: 0,
+    countryLifeSpan: 0,
+    countryLifeSpanDate: 0,
+  });
+  const [billionMilestones, setBillionMilestones] = useState({
+    billions: [1_000_000_000, 2_000_000_000, 3_000_000_000, 4_000_000_000, 5_000_000_000, 6_000_000_000, 7_000_000_000, 8_000_000_000, 9_000_000_000, 10_000_000_000],
+    date: [],
+  });
   const [dayChoice, setDayChoice] = useState("");
   const [monthChoice, setMonthChoice] = useState(0);
   const [yearChoice, setYearChoice] = useState("");
   const [countryChoice, setCountryChoice] = useState("");
-  const [countries, setCountries] = useState([]);
   const [selected, setGender] = useState("male");
   const [region, setRegion] = useState("World");
   const [validated, setValidated] = useState(false);
-  const [youngPersonCount, setYoungPersonCount] = useState(0);
-  const [oldPersonCount, setOldPersonCount] = useState(0);
-  const [olderPercentageRomania, setOlderPercentageRomania] = useState(0);
-  const [olderPercentageWorld, setOlderPercentageWorld] = useState(0);
-  const [youngerPercentageWorld, setYoungerPercentageWorld] = useState(0);
-  const [youngerPercentageRomania, setYoungerPercentageRomania] = useState(0);
-  const [lifeExpectancy, setLifeExpectancy] = useState(0);
-  const [romaniaPopulation, setRomaniaPopulation] = useState(0);
-  const [youngerRomania, setYoungerRomania] = useState(0);
-  const [olderRomania, setOlderRomania] = useState(0);
   const [testBool, setTestBool] = useState(false);
-  const [birthsWorld, setBirthsWorld] = useState(0);
-  const [estimatedBirths, setEstimatedBirths] = useState(0);
-  const [birthsPerHour, setBirthsPerHour] = useState(0);
-  const [worldLifeSpan, setWorldLifeSpan] = useState("");
-  const [worldLifeSpanDate, setWorldLifeSpanDate] = useState("");
-  const [countryLifeSpan, setCountryLifeSpan] = useState();
-  const [countryLifeSpanDate, setCountryLifeSpanDate] = useState("");
   const [billionMilestone, setBillionMilestone] = useState(0);
-  const [firstBillion, setFirstBillion] = useState(0);
-  const [secondBillion, setSecondBillion] = useState(0);
-  const [thirdBillion, setThirdBillion] = useState(0);
-  const [fourthBillion, setFourthBillion] = useState(0);
-  const [fifthBillion, setFifthBillion] = useState(0);
-  const [sixthBillion, setSixthBillion] = useState(0);
-  const [seventhBillion, setSeventhBillion] = useState(0);
-  const [eighthBillion, setEighthBillion] = useState(0);
-  const [ninthBillion, setNinthBillion] = useState(0);
-  const [tenthBillion, setTenthBillion] = useState(0);
   const [eighteenthBirthday, setEighteenthBirthday] = useState("");
   const [abbrMonth, setAbbrMonth] = useState("");
 
@@ -162,22 +155,25 @@ const Demographic = () => {
     getCountries();
     fetchLifeExpectancy("World", 2023);
     fetchYoungerOlderWorld();
+    calculateMilestones();
   }, []);
 
   async function fetchPopulation() {
-    const response = await fetch(
-      LOCALHOST + "population/" + "World" + "/" + "2023" + "/"
-    );
+    const response = await fetch(LOCALHOST + "population/World/2023/");
     const jsonData = await response.json();
-    setSimulatedPopulation(jsonData);
+    setDemographicData((prevData) => ({
+      ...prevData,
+      simulatedPopulation: jsonData,
+    }));
   }
 
   async function fetchRomaniaPopulation() {
-    const response = await fetch(
-      LOCALHOST + "population/" + "Romania" + "/" + "2023" + "/"
-    );
+    const response = await fetch(LOCALHOST + "population/Romania/2023/");
     const jsonData = await response.json();
-    setRomaniaPopulation(jsonData);
+    setDemographicData((prevData) => ({
+      ...prevData,
+      romaniaPopulation: jsonData,
+    }));
   }
 
   async function fetchLifeExpectancy(country, year) {
@@ -185,14 +181,20 @@ const Demographic = () => {
       LOCALHOST + "lifeExpectancy/" + country + "/" + year + "/"
     );
     const jsonData = await response.json();
-    setLifeExpectancy(jsonData);
+    setDemographicData((prevData) => ({
+      ...prevData,
+      lifeExpectancy: jsonData,
+    }));
   }
 
   async function getCountries() {
     const response = await fetch(LOCALHOST + "countries");
     const jsonData = await response.json();
     jsonData.map((country, index) =>
-      setCountries((countries) => [...countries, country])
+      setDemographicData((prevData) => ({
+        ...prevData,
+        countries: jsonData,
+      }))
     );
   }
 
@@ -201,7 +203,10 @@ const Demographic = () => {
       LOCALHOST + "lifeExpectancy/" + countryChoice + "/" + yearChoice + "/"
     );
     const jsonData = await response.json();
-    setCountryLifeSpan(jsonData);
+    setDemographicData((prevData) => ({
+      ...prevData,
+      countryLifeSpan: jsonData,
+    }));
   }
 
   async function getWorldLifeSpan() {
@@ -209,20 +214,28 @@ const Demographic = () => {
       LOCALHOST + "lifeExpectancy/World/" + yearChoice + "/"
     );
     const jsonData = await response.json();
-    setWorldLifeSpan(jsonData);
+    setDemographicData((prevData) => ({
+      ...prevData,
+      worldLifeSpan: jsonData,
+    }));
   }
 
   async function calculateLifeSpan() {
     getCountryLifeSpan("Romania", 2023);
     getWorldLifeSpan();
     getCountryLifeSpan();
-    const intYear = parseInt(yearChoice) + parseInt(worldLifeSpan);
-    const intYearCountry = parseInt(yearChoice) + parseInt(countryLifeSpan);
+    const intYear =
+      parseInt(yearChoice) + parseInt(demographicData.worldLifeSpan);
+    const intYearCountry =
+      parseInt(yearChoice) + parseInt(demographicData.countryLifeSpan);
     const worldLifeSpanDate = dayChoice + "/" + monthChoice + "/" + intYear;
     const countryLifeSpanDate =
       dayChoice + "/" + monthChoice + "/" + intYearCountry;
-    setCountryLifeSpanDate(countryLifeSpanDate);
-    setWorldLifeSpanDate(worldLifeSpanDate);
+    setDemographicData((prevData) => ({
+      ...prevData,
+      countryLifeSpanDate,
+      worldLifeSpanDate,
+    }));
   }
 
   async function calculateEstimatedPeopleBorn() {
@@ -242,137 +255,34 @@ const Demographic = () => {
   function calculateMilestones() {
     const millisecondsPerYear = 1000 * 60 * 60 * 24 * 365.25;
     const averageBirthsPerYear = 130_000_000;
-    const billionEstimate = 1_000_000_000 / averageBirthsPerYear;
-    const twoBillionEstimate = 2_000_000_000 / averageBirthsPerYear;
-    const threeBillionEstimate = 3_000_000_000 / averageBirthsPerYear;
-    const fourBillionEstimate = 4_000_000_000 / averageBirthsPerYear;
-    const fiveBillionEstimate = 5_000_000_000 / averageBirthsPerYear;
-    const sixBillionEstimate = 6_000_000_000 / averageBirthsPerYear;
-    const sevenBillionEstimate = 7_000_000_000 / averageBirthsPerYear;
-    const eightBillionEstimate = 8_000_000_000 / averageBirthsPerYear;
-    const nineBillionEstimate = 9_000_000_000 / averageBirthsPerYear;
-    const tenBillionEstimate = 10_000_000_000 / averageBirthsPerYear;
-    const firstBillion = new Date(
-      birthdate.getTime() + billionEstimate * millisecondsPerYear
-    );
-    const secondBillion = new Date(
-      birthdate.getTime() + twoBillionEstimate * millisecondsPerYear
-    );
-    const thirdBillion = new Date(
-      birthdate.getTime() + threeBillionEstimate * millisecondsPerYear
-    );
-    const fourthBillion = new Date(
-      birthdate.getTime() + fourBillionEstimate * millisecondsPerYear
-    );
-    const fifthBillion = new Date(
-      birthdate.getTime() + fiveBillionEstimate * millisecondsPerYear
-    );
-    const sixthBillion = new Date(
-      birthdate.getTime() + sixBillionEstimate * millisecondsPerYear
-    );
-    const seventhBillion = new Date(
-      birthdate.getTime() + sevenBillionEstimate * millisecondsPerYear
-    );
-    const eighthBillion = new Date(
-      birthdate.getTime() + eightBillionEstimate * millisecondsPerYear
-    );
-    const ninthBillion = new Date(
-      birthdate.getTime() + nineBillionEstimate * millisecondsPerYear
-    );
-    const tenthBillion = new Date(
-      birthdate.getTime() + tenBillionEstimate * millisecondsPerYear
-    );
-    const tenthBillionMonth = tenthBillion.getMonth() + 1;
-    const ninthBillionMonth = ninthBillion.getMonth() + 1;
-    const eighthBillionMonth = eighthBillion.getMonth() + 1;
-    const seventhBillionMonth = seventhBillion.getMonth() + 1;
-    const sixthBillionMonth = sixthBillion.getMonth() + 1;
-    const fifthBillionMonth = fifthBillion.getMonth() + 1;
-    const fourthBillionMonth = fourthBillion.getMonth() + 1;
-    const thirdBillionMonth = thirdBillion.getMonth() + 1;
-    const secondBillionMonth = secondBillion.getMonth() + 1;
-    const firstBillionMonth = firstBillion.getMonth() + 1;
-    setFirstBillion(
-      firstBillion.getDate() +
-        "/" +
-        firstBillionMonth +
-        "/" +
-        firstBillion.getFullYear()
-    );
-    setSecondBillion(
-      secondBillion.getDate() +
-        "/" +
-        secondBillionMonth +
-        "/" +
-        secondBillion.getFullYear()
-    );
-    setThirdBillion(
-      thirdBillion.getDate() +
-        "/" +
-        thirdBillionMonth +
-        "/" +
-        thirdBillion.getFullYear()
-    );
-    setFourthBillion(
-      fourthBillion.getDate() +
-        "/" +
-        fourthBillionMonth +
-        "/" +
-        fourthBillion.getFullYear()
-    );
-    setFifthBillion(
-      fifthBillion.getDate() +
-        "/" +
-        fifthBillionMonth +
-        "/" +
-        fifthBillion.getFullYear()
-    );
-    setSixthBillion(
-      sixthBillion.getDate() +
-        "/" +
-        sixthBillionMonth +
-        "/" +
-        sixthBillion.getFullYear()
-    );
-    setSeventhBillion(
-      seventhBillion.getDate() +
-        "/" +
-        seventhBillionMonth +
-        "/" +
-        seventhBillion.getFullYear()
-    );
-    setEighthBillion(
-      eighthBillion.getDate() +
-        "/" +
-        eighthBillionMonth +
-        "/" +
-        eighthBillion.getFullYear()
-    );
-    setNinthBillion(
-      ninthBillion.getDate() +
-        "/" +
-        ninthBillionMonth +
-        "/" +
-        ninthBillion.getFullYear()
-    );
-    setTenthBillion(
-      tenthBillion.getDate() +
-        "/" +
-        tenthBillionMonth +
-        "/" +
-        tenthBillion.getFullYear()
-    );
-  }
-
+    const updatedBillionMilestones = billionMilestones.billions.map((milestone) => {
+      let day = new Date(birthdate.getTime() + milestone / averageBirthsPerYear * millisecondsPerYear).getDate()
+      let month = new Date(birthdate.getDate() + milestone / averageBirthsPerYear * millisecondsPerYear).getMonth() + 1
+      let year = new Date(birthdate.getTime() + milestone / averageBirthsPerYear * millisecondsPerYear).getFullYear()
+      return (
+        day + "/" + month + "/" + year
+      )
+     })
+     setBillionMilestones((prev) => ({...prev, date: updatedBillionMilestones }));
+     console.log(billionMilestones)
+    }
+  
   async function calculateSharedBirths() {
     if (countryChoice && yearChoice) {
-      const avgDailyBirthRate = (birthsWorld / simulatedPopulation) * 1000;
-      setBirthsPerHour(parseInt(birthsWorld / 8760).toLocaleString());
+      const avgDailyBirthRate =
+        (demographicData.birthsWorld / demographicData.simulatedPopulation) *
+        1000;
+      const birthsPerHour = parseInt(
+        demographicData.birthsWorld / 8760
+      ).toLocaleString();
+      setDemographicData((prevData) => ({ ...prevData, birthsPerHour }));
+
       const avgBirthRate = (avgDailyBirthRate / 1000) * 365;
       const proportionBirths = 1 / 365;
       const estimatedBirths =
-        ((avgBirthRate * proportionBirths) / 100) * simulatedPopulation;
-      setEstimatedBirths(estimatedBirths);
+        ((avgBirthRate * proportionBirths) / 100) *
+        demographicData.simulatedPopulation;
+      setDemographicData((prevData) => ({ ...prevData, estimatedBirths }));
       calculateLifeSpan();
       calculateEstimatedPeopleBorn();
     }
@@ -381,35 +291,47 @@ const Demographic = () => {
   async function fetchYoungerOlderWorld() {
     const response = await fetch(LOCALHOST + "youngerOlderInfo/World/2023/");
     const jsonData = await response.json();
-    setBirthsWorld(jsonData);
+    setDemographicData((prev) => ({ ...prev, jsonData }));
   }
 
-  async function calculateCounts() {
+  function calculateCounts() {
     calculateEstimatedPeopleBorn();
     calculateMilestones();
     calculateSharedBirths();
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  function calculateProportion() {
     const age = 2023 - yearChoice;
     const birthday = parseInt(yearChoice) + 18;
+    const proportion = parseFloat(age) / demographicData.lifeExpectancy;
+    const younger = Math.floor(
+      demographicData.simulatedPopulation * proportion
+    );
+    const youngerRomania = Math.floor(
+      demographicData.romaniaPopulation * proportion
+    );
+    const olderRomania = demographicData.romaniaPopulation - youngerRomania;
+    const older = demographicData.simulatedPopulation - younger;
+    const youngerPercentageWorld =
+      (older / demographicData.simulatedPopulation) * 100;
     setEighteenthBirthday(birthday);
-    const proportion = parseFloat(age) / lifeExpectancy;
-    const younger = Math.floor(simulatedPopulation * proportion);
-    const youngerRomania = Math.floor(romaniaPopulation * proportion);
-    const olderRomania = romaniaPopulation - youngerRomania;
-    const older = simulatedPopulation - younger;
-    const youngerPercentageWorld = (older / simulatedPopulation) * 100;
-    const youngerPercentageRomania = (olderRomania / romaniaPopulation) * 100;
-    setYoungerPercentageRomania(youngerPercentageRomania);
-    setYoungerPercentageWorld(youngerPercentageWorld);
-    setYoungerRomania(youngerRomania);
-    setOlderRomania(olderRomania);
-    setYoungPersonCount(younger);
-    setOldPersonCount(older);
-    setOlderPercentageWorld((younger / simulatedPopulation) * 100);
-    setOlderPercentageRomania((youngerRomania / romaniaPopulation) * 100);
+    setDemographicData((prev) => ({
+      ...prev,
+      youngerRomania,
+      youngerPercentageWorld,
+      olderRomania,
+      youngPersonCount: younger,
+      oldPersonCount: older,
+      olderPercentageWorld:
+        (younger / demographicData.simulatedPopulation) * 100,
+      olderPercentageRomania:
+        (younger / demographicData.romaniaPopulation) * 100,
+    }));
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    calculateProportion();
     calculateCounts();
     setValidated(true);
   };
@@ -490,11 +412,15 @@ const Demographic = () => {
               value={countryChoice}
               onChange={handleCountry}
             >
-              {countries.map((country, countrykey) => (
-                <option key={countrykey} value={country}>
-                  {country}
-                </option>
-              ))}
+              {Array.isArray(demographicData.countries) ? (
+                demographicData.countries.map((country, countrykey) => (
+                  <option key={countrykey} value={country}>
+                    {country}
+                  </option>
+                ))
+              ) : (
+                <option> Error</option>
+              )}
             </select>
             <div className="toggle">
               <button
@@ -522,12 +448,16 @@ const Demographic = () => {
           <div className="youngOld">
             <h3>
               Do you think you belong to the young or old? You are the{" "}
-              <span>{youngPersonCount.toLocaleString()}</span> person alive on
-              the planet. This means that you are{" "}
-              <span>older than {olderPercentageWorld.toFixed(2)}%</span> of the
-              world's population and{" "}
-              <span>older than {youngerRomania.toLocaleString()}</span> people
-              in Romania.
+              <span>{demographicData.youngPersonCount.toLocaleString()}</span>{" "}
+              person alive on the planet. This means that you are{" "}
+              <span>
+                older than {demographicData.olderPercentageWorld.toFixed(2)}%
+              </span>{" "}
+              of the world's population and{" "}
+              <span>
+                older than {demographicData.youngerRomania.toLocaleString()}
+              </span>{" "}
+              people in Romania.
             </h3>
             <div className="toggleRegion">
               <button
@@ -550,14 +480,14 @@ const Demographic = () => {
               <div className="younger-you">
                 <div className="younger-num">
                   {testBool === true
-                    ? youngerRomania.toLocaleString()
-                    : youngPersonCount.toLocaleString()}
+                    ? demographicData.youngerRomania.toLocaleString()
+                    : demographicData.youngPersonCount.toLocaleString()}
                 </div>
                 <p>
                   People younger than you (
                   {testBool === true
-                    ? olderPercentageRomania.toFixed(2)
-                    : olderPercentageWorld.toFixed(2)}
+                    ? demographicData.olderPercentageRomania.toFixed(2)
+                    : demographicData.olderPercentageWorld.toFixed(2)}
                   %)
                 </p>
               </div>
@@ -587,14 +517,14 @@ const Demographic = () => {
               <div className="older-you">
                 <div className="older-num">
                   {testBool === true
-                    ? olderRomania.toLocaleString()
-                    : oldPersonCount.toLocaleString()}
+                    ? demographicData.olderRomania.toLocaleString()
+                    : demographicData.oldPersonCount.toLocaleString()}
                 </div>
                 <p>
                   People older than you (
                   {testBool === true
-                    ? youngerPercentageRomania.toFixed(2)
-                    : youngerPercentageWorld.toFixed(2)}
+                    ? demographicData.youngerPercentageRomania.toFixed(2)
+                    : demographicData.youngerPercentageWorld.toFixed(2)}
                   %)
                 </p>
               </div>
@@ -602,10 +532,11 @@ const Demographic = () => {
             <div className="line_graph">
               <Line options={options} data={dataset} />
             </div>
+
             <div className="milestones">
               <h1>What are the big milestones to expect in your life?</h1>
               <h1>
-                Your next milestone is <span>{thirdBillion}</span> when you'll
+                Your next milestone is <span>{billionMilestones.date[3]}</span> when you'll
                 be the <span>{billionMilestone}</span> person to be alive in the
                 world.
               </h1>
@@ -627,7 +558,7 @@ const Demographic = () => {
               <li className="projection">
                 <div className="check-line"></div>
                 <div className="date">
-                  <h2 className="day-date">{firstBillion}</h2>
+                  <h2 className="day-date">{billionMilestones.date[0]}</h2>
                 </div>
                 <div className="message-date">
                   <h2>1 billionth person</h2>
@@ -636,7 +567,7 @@ const Demographic = () => {
               <li className="projection">
                 <div className="check-line"></div>
                 <div className="date">
-                  <h2 className="day-date">{secondBillion}</h2>
+                  <h2 className="day-date">{billionMilestones.date[1]}</h2>
                 </div>
                 <div className="message-date">
                   <h2>2 billionth person</h2>
@@ -660,7 +591,7 @@ const Demographic = () => {
               <li className="projection">
                 <div className="check-line"></div>
                 <div className="date">
-                  <h2 className="day-date">{thirdBillion}</h2>
+                  <h2 className="day-date">{billionMilestones.date[2]}</h2>
                 </div>
                 <div className="message-date">
                   <h2>3 billionth person</h2>
@@ -669,7 +600,7 @@ const Demographic = () => {
               <li className="projection">
                 <div className="check-line"></div>
                 <div className="date">
-                  <h2 className="day-date">{fourthBillion}</h2>
+                  <h2 className="day-date">{billionMilestones.date[3]}</h2>
                 </div>
                 <div className="message-date">
                   <h2>4 billionth person</h2>
@@ -678,7 +609,7 @@ const Demographic = () => {
               <li className="projection">
                 <div className="check-line"></div>
                 <div className="date">
-                  <h2 className="day-date">{fifthBillion}</h2>
+                  <h2 className="day-date">{billionMilestones.date[4]}</h2>
                 </div>
                 <div className="message-date">
                   <h2>5 billionth person</h2>
@@ -687,7 +618,7 @@ const Demographic = () => {
               <li className="projection">
                 <div className="check-line"></div>
                 <div className="date">
-                  <h2 className="day-date">{sixthBillion}</h2>
+                  <h2 className="day-date">{billionMilestones.date[5]}</h2>
                 </div>
                 <div className="message-date">
                   <h2>6 billionth person</h2>
@@ -696,7 +627,7 @@ const Demographic = () => {
               <li className="projection">
                 <div className="check-line"></div>
                 <div className="date">
-                  <h2 className="day-date">{seventhBillion}</h2>
+                  <h2 className="day-date">{billionMilestones.date[6]}</h2>
                 </div>
                 <div className="message-date">
                   <h2>7 billionth person</h2>
@@ -705,7 +636,7 @@ const Demographic = () => {
               <li className="projection">
                 <div className="check-line"></div>
                 <div className="date">
-                  <h2 className="day-date">{eighthBillion}</h2>
+                  <h2 className="day-date">{billionMilestones.date[7]}</h2>
                 </div>
                 <div className="message-date">
                   <h2>8 billionth person</h2>
@@ -714,7 +645,9 @@ const Demographic = () => {
               <li className="projection">
                 <div className="check-line"></div>
                 <div className="date">
-                  <h2 className="day-date">{worldLifeSpanDate}</h2>
+                  <h2 className="day-date">
+                    {demographicData.worldLifeSpanDate}
+                  </h2>
                 </div>
                 <div className="message-date">
                   <h2>Your projected life expectancy in World</h2>
@@ -723,7 +656,7 @@ const Demographic = () => {
               <li className="projection">
                 <div className="check-line"></div>
                 <div className="date">
-                  <h2 className="day-date">{ninthBillion}</h2>
+                  <h2 className="day-date">{billionMilestones.date[8]}</h2>
                 </div>
                 <div className="message-date">
                   <h2>9 billionth person</h2>
@@ -732,7 +665,9 @@ const Demographic = () => {
               <li className="projection">
                 <div className="check-line"></div>
                 <div className="date">
-                  <h2 className="day-date">{countryLifeSpanDate}</h2>
+                  <h2 className="day-date">
+                    {demographicData.countryLifeSpanDate}
+                  </h2>
                 </div>
                 <div className="message-date">
                   <h2>Your projected life expectancy in {countryChoice}</h2>
@@ -741,7 +676,7 @@ const Demographic = () => {
               <li className="projection">
                 <div className="check-line"></div>
                 <div className="date">
-                  <h2 className="day-date">{tenthBillion}</h2>
+                  <h2 className="day-date">{billionMilestones.date[9]}</h2>
                 </div>
                 <div className="message-date">
                   <h2>10 billionth person</h2>
@@ -750,10 +685,13 @@ const Demographic = () => {
             </ul>
             <div className="milestones">
               <h1>
-                Did you know that you share a birthday with about{" "}
-                <span>{parseInt(estimatedBirths).toLocaleString()}</span> people
-                around the world and that approximately{" "}
-                <span>{birthsPerHour}</span> people were born in the same hour?
+                Did you know that you share a birthday with about
+                <span>
+                  {parseInt(demographicData.estimatedBirths).toLocaleString()}
+                </span>
+                people around the world and that approximately
+                <span>{demographicData.birthsPerHour}</span> people were born in
+                the same hour?
               </h1>
             </div>
             <div className="line_graph">
@@ -762,13 +700,14 @@ const Demographic = () => {
                 <PieChart />
               </div>
             </div>
-            <div className="timeline"></div>
             <div className="lifespan">
               <h1>
                 We estimate that you will live until{" "}
-                <span>{parseInt(worldLifeSpan)}</span> if you were an average
-                world citizen. Whereas in <span>{countryChoice}</span> it would
-                be until <span>{parseInt(countryLifeSpan)}</span> years old.
+                <span>{parseInt(demographicData.worldLifeSpan)}</span> if you
+                were an average world citizen. Whereas in{" "}
+                <span>{countryChoice}</span> it would be until{" "}
+                <span>{parseInt(demographicData.countryLifeSpan)}</span> years
+                old.
               </h1>
               <h3>
                 <Graph />
@@ -780,5 +719,4 @@ const Demographic = () => {
     </>
   );
 };
-
 export default Demographic;

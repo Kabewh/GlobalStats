@@ -686,9 +686,8 @@ const BubbleChart = () => {
     };
     return (
       <h2 className="bubble">
-        <p>Birthdays in Europe</p>
+        <p>Births in Europe</p>
         <div className="bchart">
-          {console.log(estimatedBirthsWorld)}
           <Bubble options={options} data={data} />
         </div>
       </h2>
