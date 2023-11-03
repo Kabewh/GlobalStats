@@ -75,7 +75,7 @@ const BubbleChart = () => {
   useEffect(() => {
     fetchYoungerOlderWorld();
     sharedBirthsWorld();
-  }, []);
+  }, [estimatedBirthsWorld]);
 
   async function fetchYoungerOlderWorld() {
     const promises = countries.map(async (country) => {
@@ -110,8 +110,9 @@ const BubbleChart = () => {
           ((avgBirthRate * proportionBirths) / 100) * country.population;
         return { country: country.country, births: estimatedBirths };
       });
-      setEstimatedBirthsWorld(population);
-      console.log(estimatedBirthsWorld);
+      if (JSON.stringify(population) !== JSON.stringify(estimatedBirthsWorld)) {
+        setEstimatedBirthsWorld(population);
+      }
     }
   }
 
@@ -159,583 +160,540 @@ const BubbleChart = () => {
     },
   };
 
-  const data = {
-    datasets: [
-      {
-        label: `Births in United Kigndom: ${estimatedBirthsWorld
-          .find((country) => country.country === "United Kingdom")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 50,
-            y: 80,
-            r: 54,
-            label: "United Kingdom",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Germany: ${estimatedBirthsWorld
-          .find((country) => country.country === "Germany")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 36,
-            y: 80,
-            r: 60,
-            label: "Germany",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Estonia: ${estimatedBirthsWorld
-          .find((country) => country.country === "Estonia")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 30,
-            y: 64,
-            r: 20,
-            label: "Estonia",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Lithuania: ${estimatedBirthsWorld
-          .find((country) => country.country === "Lithuania")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 43,
-            y: 65,
-            r: 25,
-            label: "Lithuania",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Finland: ${estimatedBirthsWorld
-          .find((country) => country.country === "Finland")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 35,
-            y: 58,
-            r: 22,
-            label: "Finland",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Croatia: ${estimatedBirthsWorld
-          .find((country) => country.country === "Croatia")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 50,
-            y: 60,
-            r: 20,
-            label: "Croatia",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Iceland: ${estimatedBirthsWorld
-          .find((country) => country.country === "Iceland")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 55,
-            y: 65,
-            r: 15,
-            label: "ISL",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Malta: ${estimatedBirthsWorld
-          .find((country) => country.country === "Malta")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 54.2,
-            y: 58,
-            r: 15,
-            label: "Malta",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Spain: ${estimatedBirthsWorld
-          .find((country) => country.country === "Spain")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 62,
-            y: 50,
-            r: 55,
-            label: "Spain",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Slovakia: ${estimatedBirthsWorld
-          .find((country) => country.country === "Slovakia")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 27,
-            y: 55,
-            r: 23,
-            label: "Slovakia",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Montenegro: ${estimatedBirthsWorld
-          .find((country) => country.country === "Montenegro")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 40,
-            y: 57,
-            r: 15,
-            label: "MNE",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Switzerland: ${estimatedBirthsWorld
-          .find((country) => country.country === "Switzerland")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 45,
-            y: 54,
-            r: 22,
-            label: "SWZ",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Sweden: ${estimatedBirthsWorld
-          .find((country) => country.country === "Sweden")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 52,
-            y: 48,
-            r: 30,
-            label: "Sweden",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Serbia: ${estimatedBirthsWorld
-          .find((country) => country.country === "Serbia")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 23,
-            y: 47,
-            r: 25,
-            label: "Serbia",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Slovenia: ${estimatedBirthsWorld
-          .find((country) => country.country === "Slovenia")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 28,
-            y: 43,
-            r: 17,
-            label: "SLV",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Bulgary: ${estimatedBirthsWorld
-          .find((country) => country.country === "Bulgary")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 31.5,
-            y: 50,
-            r: 20,
-            label: "BLG",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Belarus: ${estimatedBirthsWorld
-          .find((country) => country.country === "Belarus")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 38,
-            y: 47,
-            r: 25,
-            label: "Belarus",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Luxembourg: ${estimatedBirthsWorld
-          .find((country) => country.country === "Luxembourg")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 42,
-            y: 42,
-            r: 15,
-            label: "LUX",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Greece: ${estimatedBirthsWorld
-          .find((country) => country.country === "Greece")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 46.5,
-            y: 42,
-            r: 23,
-            label: "Greece",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Hungary: ${estimatedBirthsWorld
-          .find((country) => country.country === "Hungary")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 55,
-            y: 35,
-            r: 27,
-            label: "Hungary",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Czech: ${estimatedBirthsWorld
-          .find((country) => country.country === "Czechia")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 68,
-            y: 33,
-            r: 26,
-            label: "Czechia",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Romania: ${estimatedBirthsWorld
-          .find((country) => country.country === "Romania")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 61.5,
-            y: 28,
-            r: 32,
-            label: "Romania",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in France: ${estimatedBirthsWorld
-          .find((country) => country.country === "France")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 60,
-            y: 9,
-            r: 55,
-            label: "France",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Poland: ${estimatedBirthsWorld
-          .find((country) => country.country === "Poland")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 48,
-            y: 28,
-            r: 40,
-            label: "Poland",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Latvia: ${estimatedBirthsWorld
-          .find((country) => country.country === "Latvia")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 55,
-            y: 25,
-            r: 18,
-            label: "Latvia",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Portugal: ${estimatedBirthsWorld
-          .find((country) => country.country === "Portugal")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 24,
-            y: 36,
-            r: 23,
-            label: "Portugal",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Ukraine: ${estimatedBirthsWorld
-          .find((country) => country.country === "Ukraine")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 33,
-            y: 37,
-            r: 30,
-            label: "Ukraine",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Denmark: ${estimatedBirthsWorld
-          .find((country) => country.country === "Denmark")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 28,
-            y: 30,
-            r: 18,
-            label: "DNM",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in The Netherlands: ${estimatedBirthsWorld
-          .find((country) => country.country === "Netherlands")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 40,
-            y: 32,
-            r: 30,
-            label: "NTL",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Moldavia: ${estimatedBirthsWorld
-          .find((country) => country.country === "Moldavia")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 29,
-            y: 22,
-            r: 18,
-            label: "MLD",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Belgium: ${estimatedBirthsWorld
-          .find((country) => country.country === "Belgium")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 35,
-            y: 24,
-            r: 26,
-            label: "Belgium",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Albania: ${estimatedBirthsWorld
-          .find((country) => country.country === "Albania")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 41,
-            y: 21,
-            r: 20,
-            label: "Albania",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Italy: ${estimatedBirthsWorld
-          .find((country) => country.country === "Italy")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 32,
-            y: 10,
-            r: 40,
-            label: "Italy",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Ireland: ${estimatedBirthsWorld
-          .find((country) => country.country === "Ireland")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 39,
-            y: 12,
-            r: 20,
-            label: "Ireland",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Bosnia and Herzegovina: ${estimatedBirthsWorld
-          .find((country) => country.country === "Bosnia and Herzegovina")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 45,
-            y: 15,
-            r: 20,
-            label: "BIH",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: `Births in Austria: ${estimatedBirthsWorld
-          .find((country) => country.country === "Austria")
-          .toLocaleString()}`,
-        data: [
-          {
-            x: 48,
-            y: 7,
-            r: 20,
-            label: "Austria",
-          },
-        ],
-        backgroundColor: "#bdaee9",
-        borderColor: "#666",
-      },
-      {
-        label: "Births in world:",
-        data: [
-          {
-            x: 1,
-            y: 10,
-            r: "",
-          },
-        ],
-        backgroundColor: "#fff",
-        borderColor: "#fff",
-      },
-      {
-        data: [
-          {
-            x: 80,
-            y: 80,
-            r: "",
-          },
-        ],
-        color: "#fff",
-        backgroundColor: "#fff",
-        borderColor: "#fff",
-      },
-    ],
-  };
-
-  return (
-    <h2 className="bubble">
-      <p>Birthdays in Europe</p>
-      <div className="bchart">
-        <Bubble options={options} data={data} />
-      </div>
-    </h2>
-  );
+  if (estimatedBirthsWorld && estimatedBirthsWorld.length > 0) {
+    const data = {
+      datasets: [
+        {
+          label: `Births in United Kigndom: ${estimatedBirthsWorld
+            .find((country) => country.country === "United Kingdom")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 50,
+              y: 80,
+              r: 54,
+              label: "United Kingdom",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Germany: ${estimatedBirthsWorld
+            .find((country) => country.country === "Germany")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 36,
+              y: 80,
+              r: 60,
+              label: "Germany",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Estonia: ${estimatedBirthsWorld
+            .find((country) => country.country === "Estonia")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 30,
+              y: 64,
+              r: 20,
+              label: "Estonia",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Lithuania: ${estimatedBirthsWorld
+            .find((country) => country.country === "Lithuania")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 43,
+              y: 65,
+              r: 25,
+              label: "Lithuania",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Finland: ${estimatedBirthsWorld
+            .find((country) => country.country === "Finland")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 35,
+              y: 58,
+              r: 22,
+              label: "Finland",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Croatia: ${estimatedBirthsWorld
+            .find((country) => country.country === "Croatia")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 50,
+              y: 60,
+              r: 20,
+              label: "Croatia",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Iceland: ${estimatedBirthsWorld
+            .find((country) => country.country === "Iceland")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 55,
+              y: 65,
+              r: 15,
+              label: "ISL",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Malta: ${estimatedBirthsWorld
+            .find((country) => country.country === "Malta")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 54.2,
+              y: 58,
+              r: 15,
+              label: "Malta",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Spain: ${estimatedBirthsWorld
+            .find((country) => country.country === "Spain")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 62,
+              y: 50,
+              r: 55,
+              label: "Spain",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Slovakia: ${estimatedBirthsWorld
+            .find((country) => country.country === "Slovakia")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 27,
+              y: 55,
+              r: 23,
+              label: "Slovakia",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Montenegro: ${estimatedBirthsWorld
+            .find((country) => country.country === "Montenegro")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 40,
+              y: 57,
+              r: 15,
+              label: "MNE",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Switzerland: ${estimatedBirthsWorld
+            .find((country) => country.country === "Switzerland")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 45,
+              y: 54,
+              r: 22,
+              label: "SWZ",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Sweden: ${estimatedBirthsWorld
+            .find((country) => country.country === "Sweden")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 52,
+              y: 48,
+              r: 30,
+              label: "Sweden",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Serbia: ${estimatedBirthsWorld
+            .find((country) => country.country === "Serbia")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 23,
+              y: 47,
+              r: 25,
+              label: "Serbia",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Slovenia: ${estimatedBirthsWorld
+            .find((country) => country.country === "Slovenia")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 28,
+              y: 43,
+              r: 17,
+              label: "SLV",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Bulgary: ${estimatedBirthsWorld
+            .find((country) => country.country === "Bulgaria")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 31.5,
+              y: 50,
+              r: 20,
+              label: "BLG",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Belarus: ${estimatedBirthsWorld
+            .find((country) => country.country === "Belarus")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 38,
+              y: 47,
+              r: 25,
+              label: "Belarus",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Luxembourg: ${estimatedBirthsWorld
+            .find((country) => country.country === "Luxembourg")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 42,
+              y: 42,
+              r: 15,
+              label: "LUX",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Greece: ${estimatedBirthsWorld
+            .find((country) => country.country === "Greece")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 46.5,
+              y: 42,
+              r: 23,
+              label: "Greece",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Hungary: ${estimatedBirthsWorld
+            .find((country) => country.country === "Hungary")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 55,
+              y: 35,
+              r: 27,
+              label: "Hungary",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Czech: ${estimatedBirthsWorld
+            .find((country) => country.country === "Czechia")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 68,
+              y: 33,
+              r: 26,
+              label: "Czechia",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Romania: ${estimatedBirthsWorld
+            .find((country) => country.country === "Romania")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 61.5,
+              y: 28,
+              r: 32,
+              label: "Romania",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in France: ${estimatedBirthsWorld
+            .find((country) => country.country === "France")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 60,
+              y: 9,
+              r: 55,
+              label: "France",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Poland: ${estimatedBirthsWorld
+            .find((country) => country.country === "Poland")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 48,
+              y: 28,
+              r: 40,
+              label: "Poland",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Latvia: ${estimatedBirthsWorld
+            .find((country) => country.country === "Latvia")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 55,
+              y: 25,
+              r: 18,
+              label: "Latvia",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Portugal: ${estimatedBirthsWorld
+            .find((country) => country.country === "Portugal")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 24,
+              y: 36,
+              r: 23,
+              label: "Portugal",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Denmark: ${estimatedBirthsWorld
+            .find((country) => country.country === "Denmark")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 28,
+              y: 30,
+              r: 18,
+              label: "DNM",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in The Netherlands: ${estimatedBirthsWorld
+            .find((country) => country.country === "Netherlands")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 40,
+              y: 32,
+              r: 30,
+              label: "NTL",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Albania: ${estimatedBirthsWorld
+            .find((country) => country.country === "Albania")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 41,
+              y: 21,
+              r: 20,
+              label: "Albania",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Italy: ${estimatedBirthsWorld
+            .find((country) => country.country === "Italy")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 32,
+              y: 10,
+              r: 40,
+              label: "Italy",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Ireland: ${estimatedBirthsWorld
+            .find((country) => country.country === "Ireland")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 39,
+              y: 12,
+              r: 20,
+              label: "Ireland",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Bosnia and Herzegovina: ${estimatedBirthsWorld
+            .find((country) => country.country === "Bosnia and Herzegovina")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 45,
+              y: 15,
+              r: 20,
+              label: "BIH",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: `Births in Austria: ${estimatedBirthsWorld
+            .find((country) => country.country === "Austria")
+            .births.toLocaleString()}`,
+          data: [
+            {
+              x: 48,
+              y: 7,
+              r: 20,
+              label: "Austria",
+            },
+          ],
+          backgroundColor: "#bdaee9",
+          borderColor: "#666",
+        },
+        {
+          label: "Births in world:",
+          data: [
+            {
+              x: 1,
+              y: 10,
+              r: "",
+            },
+          ],
+          backgroundColor: "#fff",
+          borderColor: "#fff",
+        },
+        {
+          data: [
+            {
+              x: 80,
+              y: 80,
+              r: "",
+            },
+          ],
+          color: "#fff",
+          backgroundColor: "#fff",
+          borderColor: "#fff",
+        },
+      ],
+    };
+    return (
+      <h2 className="bubble">
+        <p>Birthdays in Europe</p>
+        <div className="bchart">
+          {console.log(estimatedBirthsWorld)}
+          <Bubble options={options} data={data} />
+        </div>
+      </h2>
+    );
+  }
 };
 
 export default BubbleChart;

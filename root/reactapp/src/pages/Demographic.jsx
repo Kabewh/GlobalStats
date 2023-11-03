@@ -382,7 +382,6 @@ const Demographic = () => {
     const response = await fetch(LOCALHOST + "youngerOlderInfo/World/2023/");
     const jsonData = await response.json();
     setBirthsWorld(jsonData);
-    console.log("birthsWorld: ", birthsWorld);
   }
 
   async function calculateCounts() {
@@ -397,7 +396,6 @@ const Demographic = () => {
     const birthday = parseInt(yearChoice) + 18;
     setEighteenthBirthday(birthday);
     const proportion = parseFloat(age) / lifeExpectancy;
-    console.log("proportion", birthday);
     const younger = Math.floor(simulatedPopulation * proportion);
     const youngerRomania = Math.floor(romaniaPopulation * proportion);
     const olderRomania = romaniaPopulation - youngerRomania;
