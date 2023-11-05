@@ -116,6 +116,7 @@ const Demographic = () => {
       LOCALHOST + "lifeExpectancy/" + countryChoice + "/" + yearChoice + "/"
     );
     const jsonData = await response.json();
+    console.log(jsonData)
     setDemographicData((prevData) => ({
       ...prevData,
       countryLifeSpan: jsonData,
@@ -134,7 +135,6 @@ const Demographic = () => {
   }
 
   async function calculateLifeSpan() {
-    getCountryLifeSpan("Romania", 2023);
     getWorldLifeSpan();
     getCountryLifeSpan();
     const intYear =
