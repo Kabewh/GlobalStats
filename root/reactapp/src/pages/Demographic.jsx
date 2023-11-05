@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import { age_population_data } from "../data/age_population_data";
-import { Line } from "react-chartjs-2";
 import Graph from "../components/Graph";
 import BubbleChart from "../components/BubbleChart";
 import PieChart from "../components/PieChart";
@@ -18,6 +16,7 @@ import {
   Filler,
   Legend,
 } from "chart.js";
+import LineGraph from "../components/LineGraph";
 
 ChartJS.register(
   CategoryScale,
@@ -46,69 +45,6 @@ const months = [
 ];
 
 const LOCALHOST = "http://localhost:8000/";
-
-export const options = {
-  responsive: true,
-  elements: {
-    point: {
-      radius: 2,
-    },
-  },
-  scales: {
-    x: {
-      grid: {
-        display: false,
-      },
-    },
-    y: {
-      grid: {
-        display: false,
-      },
-    },
-  },
-  plugins: {
-    datalabels: {
-      display: false,
-      color: "white",
-    },
-    legend: {
-      display: "false",
-    },
-    title: {
-      display: false,
-      text: "Chart.js Line Chart",
-    },
-    tooltip: {
-      enabled: true,
-      poision: "nearest",
-      intersect: false,
-    },
-  },
-};
-
-const labels = Array.from({ length: 81 }, (_, index) => index);
-
-const modifiedData = age_population_data.map((item) => {
-  return {
-    age: item.age,
-    population: item.population,
-  };
-});
-
-export const dataset = {
-  labels,
-  datasets: [
-    {
-      fill: true,
-      label: "population",
-      data: modifiedData.map((item) => {
-        return item.population;
-      }),
-      borderColor: "#333",
-      backgroundColor: "rgba(97, 63, 194, 0.5)",
-    },
-  ],
-};
 
 const Demographic = () => {
   const [demographicData, setDemographicData] = useState({
@@ -530,7 +466,7 @@ const Demographic = () => {
               </div>
             </div>
             <div className="line_graph">
-              <Line options={options} data={dataset} />
+                <LineGraph/>
             </div>
 
             <div className="milestones">
