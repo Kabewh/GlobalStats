@@ -5,6 +5,8 @@ import BubbleChart from "../components/BubbleChart";
 import PieChart from "../components/PieChart";
 import WorldClock from "../components/WorldClock";
 import Timeline from "../components/Timeline";
+import { LOCALHOST, fetchPopulation, fetchLifeExpectancy, fetchCountries } from "../utils/api";
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -17,6 +19,7 @@ import {
   Legend,
 } from "chart.js";
 import LineGraph from "../components/LineGraph";
+import YoungOrOld from "../components/YoungOrOld";
 
 ChartJS.register(
   CategoryScale,
@@ -44,7 +47,6 @@ const months = [
   "December",
 ];
 
-const LOCALHOST = "http://localhost:8000/";
 
 const Demographic = () => {
   const [demographicData, setDemographicData] = useState({
@@ -88,52 +90,25 @@ const Demographic = () => {
   const birthdate = new Date("2002-02-12");
 
   useEffect(() => {
-    fetchPopulation();
-    fetchRomaniaPopulation();
-    getCountries();
-    fetchLifeExpectancy("World", 2023);
+    fetchData();
     fetchYoungerOlderWorld();
     calculateMilestones();
   }, []);
 
-  async function fetchPopulation() {
-    const response = await fetch(LOCALHOST + "population/World/2023/");
-    const jsonData = await response.json();
+  async function fetchData() {
+    const simulatedPopulation = await fetchPopulation('World');
+    const romaniaPopulation = await fetchPopulation('Romania');
+    const lifeExpectancy = await fetchLifeExpectancy('World', 2023);
+    const countries = await fetchCountries();
+
     setDemographicData((prevData) => ({
       ...prevData,
-      simulatedPopulation: jsonData,
-    }));
-  }
+      simulatedPopulation,
+      romaniaPopulation,
+      lifeExpectancy,
+      countries,
 
-  async function fetchRomaniaPopulation() {
-    const response = await fetch(LOCALHOST + "population/Romania/2023/");
-    const jsonData = await response.json();
-    setDemographicData((prevData) => ({
-      ...prevData,
-      romaniaPopulation: jsonData,
     }));
-  }
-
-  async function fetchLifeExpectancy(country, year) {
-    const response = await fetch(
-      LOCALHOST + "lifeExpectancy/" + country + "/" + year + "/"
-    );
-    const jsonData = await response.json();
-    setDemographicData((prevData) => ({
-      ...prevData,
-      lifeExpectancy: jsonData,
-    }));
-  }
-
-  async function getCountries() {
-    const response = await fetch(LOCALHOST + "countries");
-    const jsonData = await response.json();
-    jsonData.map((country, index) =>
-      setDemographicData((prevData) => ({
-        ...prevData,
-        countries: jsonData,
-      }))
-    );
   }
 
   async function getCountryLifeSpan() {
@@ -382,36 +357,7 @@ const Demographic = () => {
         </div>
         {validated ? (
           <div className="youngOld">
-            <h3>
-              Do you think you belong to the young or old? You are the{" "}
-              <span>{demographicData.youngPersonCount.toLocaleString()}</span>{" "}
-              person alive on the planet. This means that you are{" "}
-              <span>
-                older than {demographicData.olderPercentageWorld.toFixed(2)}%
-              </span>{" "}
-              of the world's population and{" "}
-              <span>
-                older than {demographicData.youngerRomania.toLocaleString()}
-              </span>{" "}
-              people in Romania.
-            </h3>
-            <div className="toggleRegion">
-              <button
-                type="button"
-                id="option1Btn"
-                className={region === "World" ? "selected" : "notSelected"}
-                onClick={() => handleToggleRegion("World")}
-              >
-                World
-              </button>
-              <button
-                type="button"
-                className={testBool === true ? "selected" : "notSelected"}
-                onClick={() => handleToggleRegion({ region })}
-              >
-                {countryChoice}
-              </button>
-            </div>
+            <YoungOrOld demographicData={demographicData} region={region} handleToggleRegion={handleToggleRegion} testBool={testBool} countryChoice={countryChoice}/>
             <div className="younger-older-you">
               <div className="younger-you">
                 <div className="younger-num">
