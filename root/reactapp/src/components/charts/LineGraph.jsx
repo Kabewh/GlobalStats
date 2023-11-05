@@ -1,5 +1,5 @@
 import React from 'react'
-import { age_population_data } from "../data/age_population_data";
+import { age_population_data } from "../../data/age_population_data";
 import { Line } from "react-chartjs-2";
 
 export const options = {

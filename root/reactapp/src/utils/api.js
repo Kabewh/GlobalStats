@@ -20,3 +20,19 @@ export async function fetchCountries() {
   const jsonData = await response.json();
   return jsonData;
 }
+
+export async function getWorldLifeSpan(yearChoice) {
+  const response = await fetch(
+    LOCALHOST + "lifeExpectancy/World/" + yearChoice + "/"
+  );
+  const jsonData = await response.json();
+  return jsonData
+}
+
+export async function getCountryLifeSpan(countryChoice, yearChoice) {
+  const response = await fetch(
+    LOCALHOST + "lifeExpectancy/" + countryChoice + "/" + yearChoice + "/"
+  );
+  const jsonData = await response.json()
+  return jsonData
+}

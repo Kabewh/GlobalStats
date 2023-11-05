@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import Graph from "../components/Graph";
-import BubbleChart from "../components/BubbleChart";
-import PieChart from "../components/PieChart";
+import Graph from "../components/charts/Graph";
+import BubbleChart from "../components/charts/BubbleChart";
+import PieChart from "../components/charts/PieChart";
 import WorldClock from "../components/WorldClock";
 import Timeline from "../components/Timeline";
-import { LOCALHOST, fetchPopulation, fetchLifeExpectancy, fetchCountries } from "../utils/api";
+import { LOCALHOST, fetchPopulation, fetchLifeExpectancy, fetchCountries, getWorldLifeSpan, getCountryLifeSpan } from "../utils/api";
 
 import {
   Chart as ChartJS,
@@ -18,7 +18,7 @@ import {
   Filler,
   Legend,
 } from "chart.js";
-import LineGraph from "../components/LineGraph";
+import LineGraph from "../components/charts/LineGraph";
 import YoungOrOld from "../components/YoungOrOld";
 
 ChartJS.register(
@@ -107,38 +107,21 @@ const Demographic = () => {
       romaniaPopulation,
       lifeExpectancy,
       countries,
-
-    }));
-  }
-
-  async function getCountryLifeSpan() {
-    const response = await fetch(
-      LOCALHOST + "lifeExpectancy/" + countryChoice + "/" + yearChoice + "/"
-    );
-    const jsonData = await response.json();
-    console.log(jsonData)
-    setDemographicData((prevData) => ({
-      ...prevData,
-      countryLifeSpan: jsonData,
-    }));
-  }
-
-  async function getWorldLifeSpan() {
-    const response = await fetch(
-      LOCALHOST + "lifeExpectancy/World/" + yearChoice + "/"
-    );
-    const jsonData = await response.json();
-    setDemographicData((prevData) => ({
-      ...prevData,
-      worldLifeSpan: jsonData,
     }));
   }
 
   async function calculateLifeSpan() {
-    getWorldLifeSpan();
-    getCountryLifeSpan();
+    const worldLifeSpan = await getWorldLifeSpan(yearChoice);
+    const countryLifeSpan = await getCountryLifeSpan(countryChoice, yearChoice);
+
+    setDemographicData((prevData) => ({
+      ...prevData,
+      worldLifeSpan,
+      countryLifeSpan,
+    }));
+    
     const intYear =
-      parseInt(yearChoice) + parseInt(demographicData.worldLifeSpan);
+      parseInt(yearChoice) + parseInt(worldLifeSpan);
     const intYearCountry =
       parseInt(yearChoice) + parseInt(demographicData.countryLifeSpan);
     const worldLifeSpanDate = dayChoice + "/" + monthChoice + "/" + intYear;
@@ -205,12 +188,6 @@ const Demographic = () => {
     setDemographicData((prev) => ({ ...prev, birthsWorld: jsonData }));
   }
 
-  function calculateCounts() {
-    calculateEstimatedPeopleBorn();
-    calculateMilestones();
-    calculateSharedBirths();
-  }
-
   function calculateProportion() {
     const age = 2023 - yearChoice;
     const birthday = parseInt(yearChoice) + 18;
@@ -239,6 +216,13 @@ const Demographic = () => {
         (younger / demographicData.romaniaPopulation) * 100,
     }));
   }
+  
+  function calculateCounts() {
+    calculateEstimatedPeopleBorn();
+    calculateMilestones();
+    calculateSharedBirths();
+  }
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
