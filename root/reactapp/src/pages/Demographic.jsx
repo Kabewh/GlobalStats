@@ -6,6 +6,7 @@ import Graph from "../components/Graph";
 import BubbleChart from "../components/BubbleChart";
 import PieChart from "../components/PieChart";
 import WorldClock from "../components/WorldClock";
+import Timeline from "../components/Timeline";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -135,6 +136,7 @@ const Demographic = () => {
     billions: [1_000_000_000, 2_000_000_000, 3_000_000_000, 4_000_000_000, 5_000_000_000, 6_000_000_000, 7_000_000_000, 8_000_000_000, 9_000_000_000, 10_000_000_000],
     date: [],
   });
+
   const [dayChoice, setDayChoice] = useState("");
   const [monthChoice, setMonthChoice] = useState(0);
   const [yearChoice, setYearChoice] = useState("");
@@ -264,7 +266,6 @@ const Demographic = () => {
       )
      })
      setBillionMilestones((prev) => ({...prev, date: updatedBillionMilestones }));
-     console.log(billionMilestones)
     }
   
   async function calculateSharedBirths() {
@@ -276,7 +277,6 @@ const Demographic = () => {
         demographicData.birthsWorld / 8760
       ).toLocaleString();
       setDemographicData((prevData) => ({ ...prevData, birthsPerHour }));
-
       const avgBirthRate = (avgDailyBirthRate / 1000) * 365;
       const proportionBirths = 1 / 365;
       const estimatedBirths =
@@ -291,7 +291,7 @@ const Demographic = () => {
   async function fetchYoungerOlderWorld() {
     const response = await fetch(LOCALHOST + "youngerOlderInfo/World/2023/");
     const jsonData = await response.json();
-    setDemographicData((prev) => ({ ...prev, jsonData }));
+    setDemographicData((prev) => ({ ...prev, birthsWorld: jsonData }));
   }
 
   function calculateCounts() {
@@ -541,156 +541,17 @@ const Demographic = () => {
                 world.
               </h1>
             </div>
-
             <ul className="projections">
-              <h3>Timeline (Projections)</h3>
-              <li className="projection">
-                <div className="check-line"></div>
-                <div className="date">
-                  <h2 className="day-date">
-                    {dayChoice + "/" + abbrMonth + "/" + yearChoice}
-                  </h2>
-                </div>
-                <div className="message-date">
-                  <h2>Your birth!</h2>
-                </div>
-              </li>
-              <li className="projection">
-                <div className="check-line"></div>
-                <div className="date">
-                  <h2 className="day-date">{billionMilestones.date[0]}</h2>
-                </div>
-                <div className="message-date">
-                  <h2>1 billionth person</h2>
-                </div>
-              </li>
-              <li className="projection">
-                <div className="check-line"></div>
-                <div className="date">
-                  <h2 className="day-date">{billionMilestones.date[1]}</h2>
-                </div>
-                <div className="message-date">
-                  <h2>2 billionth person</h2>
-                </div>
-              </li>
-              <li className="projection">
-                <div className="check-line"></div>
-                <div className="date">
-                  <h2 className="day-date">
-                    {dayChoice +
-                      "/" +
-                      abbrMonth +
-                      "/" +
-                      eighteenthBirthday.toString()}
-                  </h2>
-                </div>
-                <div className="message-date">
-                  <h2>Your 18th birthday!</h2>
-                </div>
-              </li>
-              <li className="projection">
-                <div className="check-line"></div>
-                <div className="date">
-                  <h2 className="day-date">{billionMilestones.date[2]}</h2>
-                </div>
-                <div className="message-date">
-                  <h2>3 billionth person</h2>
-                </div>
-              </li>
-              <li className="projection">
-                <div className="check-line"></div>
-                <div className="date">
-                  <h2 className="day-date">{billionMilestones.date[3]}</h2>
-                </div>
-                <div className="message-date">
-                  <h2>4 billionth person</h2>
-                </div>
-              </li>
-              <li className="projection">
-                <div className="check-line"></div>
-                <div className="date">
-                  <h2 className="day-date">{billionMilestones.date[4]}</h2>
-                </div>
-                <div className="message-date">
-                  <h2>5 billionth person</h2>
-                </div>
-              </li>
-              <li className="projection">
-                <div className="check-line"></div>
-                <div className="date">
-                  <h2 className="day-date">{billionMilestones.date[5]}</h2>
-                </div>
-                <div className="message-date">
-                  <h2>6 billionth person</h2>
-                </div>
-              </li>
-              <li className="projection">
-                <div className="check-line"></div>
-                <div className="date">
-                  <h2 className="day-date">{billionMilestones.date[6]}</h2>
-                </div>
-                <div className="message-date">
-                  <h2>7 billionth person</h2>
-                </div>
-              </li>
-              <li className="projection">
-                <div className="check-line"></div>
-                <div className="date">
-                  <h2 className="day-date">{billionMilestones.date[7]}</h2>
-                </div>
-                <div className="message-date">
-                  <h2>8 billionth person</h2>
-                </div>
-              </li>
-              <li className="projection">
-                <div className="check-line"></div>
-                <div className="date">
-                  <h2 className="day-date">
-                    {demographicData.worldLifeSpanDate}
-                  </h2>
-                </div>
-                <div className="message-date">
-                  <h2>Your projected life expectancy in World</h2>
-                </div>
-              </li>
-              <li className="projection">
-                <div className="check-line"></div>
-                <div className="date">
-                  <h2 className="day-date">{billionMilestones.date[8]}</h2>
-                </div>
-                <div className="message-date">
-                  <h2>9 billionth person</h2>
-                </div>
-              </li>
-              <li className="projection">
-                <div className="check-line"></div>
-                <div className="date">
-                  <h2 className="day-date">
-                    {demographicData.countryLifeSpanDate}
-                  </h2>
-                </div>
-                <div className="message-date">
-                  <h2>Your projected life expectancy in {countryChoice}</h2>
-                </div>
-              </li>
-              <li className="projection">
-                <div className="check-line"></div>
-                <div className="date">
-                  <h2 className="day-date">{billionMilestones.date[9]}</h2>
-                </div>
-                <div className="message-date">
-                  <h2>10 billionth person</h2>
-                </div>
-              </li>
+              <Timeline dayChoice={dayChoice} abbrMonth={abbrMonth} yearChoice={yearChoice} countryChoice={countryChoice} billionMilestones={billionMilestones} eighteenthBirthday={eighteenthBirthday} demographicData={demographicData}/>
             </ul>
             <div className="milestones">
               <h1>
                 Did you know that you share a birthday with about
-                <span>
-                  {parseInt(demographicData.estimatedBirths).toLocaleString()}
-                </span>
-                people around the world and that approximately
-                <span>{demographicData.birthsPerHour}</span> people were born in
+                
+                <span> {parseInt(demographicData.estimatedBirths).toLocaleString()} </span>
+                
+                 people around the world and that approximately
+                <span> {demographicData.birthsPerHour}</span> people were born in
                 the same hour?
               </h1>
             </div>
@@ -719,4 +580,5 @@ const Demographic = () => {
     </>
   );
 };
+
 export default Demographic;
