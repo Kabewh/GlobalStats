@@ -4,7 +4,7 @@ import Timeline from "./Timeline";
 const Milestones = (props) => {
   return (
     <>
-      <div>
+      <div className="milestones">
         <h1>What are the big milestones to expect in your life?</h1>
         <h1>
           Your next milestone is <span>{props.billionMilestones.date[3]}</span>{" "}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import { age_population_data } from "../../data/age_population_data";
 import { Line } from "react-chartjs-2";
 
@@ -66,10 +66,11 @@ export const dataset = {
 };
 
 const LineGraph = () => {
-
   return (
-    <Line options={options} data={dataset} />
-  )
-}
+    <div className="line_graph">
+      <Line options={options} data={dataset} />
+    </div>
+  );
+};
 
-export default LineGraph
+export default LineGraph;
