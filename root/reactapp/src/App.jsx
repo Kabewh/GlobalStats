@@ -1,11 +1,6 @@
-import './style.css';
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes
-} from "react-router-dom";
-import Demographic from './pages/Demographic';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Demographic from "./pages/Demographic";
 
 function App() {
   return (
